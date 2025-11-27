@@ -1,0 +1,916 @@
+\documentclass[10pt]{report} 
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\selectlanguage{english}
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+
+\addtolength{\topmargin}{-0.875in}
+\addtolength{\textheight}{1.75in}
+\usepackage{graphicx} 
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{physics}
+\usepackage{slashed}
+\usepackage{dingbat}
+\usepackage{scalerel,amssymb}
+\usepackage{fontawesome5}
+
+%\usepackage{hyperref}
+
+\parskip 1em
+%time new roman
+\usepackage{mathptmx}
+\usepackage{stackengine}
+% \usepackage{mattens} % often unavailable; commented out to avoid compilation error
+\usepackage{eucal}
+\usepackage{amsmath,amssymb}
+\usepackage[usenames, dvipsnames]{color}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Ioanna Stamou}
+\lhead{Notes}
+\rfoot{ \thepage}
+
+% ---------- Front page info ----------
+\title{No-Scale Supergravity and Supersymmetry Notes}
+\author{Gianna Stamou}
+\date{} % empty = no date on title page
+ 
+\begin{document}
+
+% ---------- Front page ----------
+\maketitle
+\thispagestyle{empty}
+
+\bigskip
+
+\begin{center}
+\textbf{Note on Sources}\\[0.5em]
+\begin{minipage}{0.85\textwidth}
+\small
+These notes are made for my personal understanding of the topic and are based on 
+\emph{Cambridge Lectures on Supersymmetry and Extra Dimensions},\\
+Sven Krippendorf, Fernando Quevedo, Oliver Schlotterer,\\
+\texttt{https://arxiv.org/abs/1011.1491}.
+\end{minipage}
+\end{center}
+
+\clearpage
+
+\chapter*{No-scale}
+
+\section*{1. Basic Aspects of Supersymmetry Algebra}
+
+In this section we recall the Poincare algebra and its supersymmetric extension. 
+The idea is that supersymmetry extends spacetime symmetries by adding fermionic generators $Q_\alpha$ that relate bosons and fermions, while still being consistent with relativistic invariance.
+
+Physics Theories are invariant under the Poincare group. The Poincare group corresponds to the basic symmetries of special relativity:
+\begin{equation}
+x^{\mu} \rightarrow x'^{\mu}= \underbrace{{\Lambda^{\mu}}_{\nu}}_\text{Lorentz}x^{\nu}+\underbrace{\alpha^{\mu}}_\text{translation}
+\label{01}
+\end{equation}
+\noindent
+The generators of the Poincare group is the momentum $P^{\mu}$ (translations) and the angular momentum $M^{\mu\nu}$ (rotations $+$ boosts). These satisfy the Lie algebra:
+
+\begin{equation}
+\begin{split}
+[P^{\mu},P^{\nu}]=0\\
+[M^{\mu\nu},P^{\sigma}]=i(P^{\mu}\eta^{\nu \sigma} -P^{\nu}\eta^{\mu \sigma})\\
+[M^{\mu\nu},M^{\rho\sigma}]=i(M^{\mu\sigma}\eta^{\nu\rho}+M^{\nu\rho}\eta^{\mu\sigma}-M^{\mu\rho}\eta^{\nu\rho}-M^{\nu\rho}\eta^{\mu\rho})
+\end{split}
+\label{02}
+\end{equation}
+
+\noindent
+where $P^{\mu}=i \partial^{\mu}$ and ${(M^{\rho \sigma})^\mu}_\nu=i(\eta^{\mu \nu}{\delta^{\rho}}_\nu- \eta^{\rho \mu}{\delta^{\sigma}}_\nu)$.
+\par 
+\faHandPointRight~$P^\mu$ generates translations in spacetime and $M^{\mu\nu}$ generates Lorentz transformations. The commutation relations above encode the structure of the Poincare group at the level of operators.
+
+\medskip
+\noindent
+\textbf{Coleman--Mandula ``no-go'' theorem.} 
+\par
+The “no go” theorem (Coleman–Mandula) states that it is impossible to mix internal symmetries with Poincare symmetry in a nontrivial way if all symmetries are bosonic. The maximal symmetry of the $S$-matrix is the direct product of the Poincare symmetry with the internal symmetry. If $G_i$ are the generators of the internal symmetry then they commute with the generators $P_{\mu}$ and $M_{\mu \nu}$:
+\begin{center}
+$[P_{\mu},G_i]=[M_{\mu \nu},G_i]=0$
+\end{center}
+\emph{Supersymmetry evades this theorem by introducing \emph{fermionic} generators $Q_\alpha$, enlarging the algebra to a graded Lie algebra.}
+
+\par
+Grand Lie Algebra  (GLA)  contains both commutators (even elements) and anticommutators (odd elements). The $N=1$ supersymmetry algebra contains the Poincare Algebra ($P^{\mu}$ and $M^{\mu\nu}$) which are even elements and four spinorial charges $Q_\alpha$ which are odd elements.
+\par
+The extension of Poincare Algebra to GLA is given by the commutators (\ref{02}):
+
+\begin{equation}
+\begin{split}
+[Q_{\alpha},P^{\mu}]=[\bar{Q}^{\dot \alpha},P^{\mu}]=0\\
+[Q_{\alpha},M^{\mu \nu}]={(\sigma^{\mu \nu})_{\alpha}}^{\beta} Q_\beta\\
+\{Q_{\alpha},Q_{\beta} \}= 0\\
+\{Q_{\alpha},\bar{Q}_{\dot \beta} \}= 2 {(\sigma ^{\mu})}_{\alpha \dot \beta} P_{\mu}
+\end{split}
+\label{04}
+\end{equation}
+
+\faHandPointRight~The last anticommutator $\{Q_{\alpha},\bar{Q}_{\dot\beta}\} \propto P_\mu$ shows that the supersymmetry generators are ``square roots’’ of translations: acting twice with $Q$ gives a spacetime translation. This is the key structural property of SUSY.
+
+\section*{2. Superfields and Superspace}
+
+\subsection*{2.1 Grasmann algebra}
+
+In order to encode fermionic degrees of freedom in a way compatible with Lorentz invariance and supersymmetry, we introduce Grassmann variables. These are anticommuting numbers that square to zero and are the building blocks of superspace.
+
+Grasmann algebra $\mathcal{A} $ on $\mathbb{R}$ or $\mathbb{C}$ is a function with generators the unit and $n_i$ which satisfy the following anti-commutators:
+
+\begin{center}
+$n_in_j+n_jn_i=0$
+\end{center}
+\noindent
+Grassmann Algebra is used to describe fermions and  $n_i^2=0$.
+\par
+
+Consider a variable $\theta$. Expand to an analytic function $f(\theta)$ with $\theta^2=0$. We obtain the followings:
+
+\begin{itemize}
+	\item The series is given by:
+	\begin{center} $f(\theta)= \sum^\infty _{k=0}f_k \theta^k =f_0+f_1 \theta +f_2 \theta^2=f_0+f_1 \theta$ \end{center}
+	So the most general function is linear $f(\theta)$:
+	\begin{equation}
+	\boxed{f(\theta)=f_0+f_1 \theta}
+	\end{equation}
+	and its derivation: $\frac{df}{d\theta}=f_1$.
+	
+	\faHandPointRight~Because $\theta^2=0$, all higher powers vanish and a Grassmann-analytic function is always at most linear in $\theta$.
+	
+	\item The integral of this derivative is zero (no boundary terms):
+	\begin{equation}
+	\boxed{\int d \theta \frac{df}{d\theta}=0 \Rightarrow \int d \theta =0}
+	\end{equation}
+	A non trivial result:
+	$\int d \theta  \theta =1\Rightarrow  \delta(\theta)= \theta$ 
+	
+	\item The integral over a function $f(\theta)$ is equals to its derivative 
+	\begin{equation}
+	\int d\theta f(\theta) =\int d\theta (f_0 + f_1 \theta) =f_1 =\frac{df}{d \theta}
+	\end{equation}
+	
+	\faHandPointRight~Integration over Grassmann variables behaves like differentiation. This is the basic rule that allows us to write actions in superspace using Grassmann integrals.
+	
+	\item Let $\theta^\alpha$  and $\bar \theta _{\dot \alpha}$ be Grassmann spinors.
+	We observe the followings:
+	\begin{center}
+	$\theta \theta  = \theta^{\alpha} \theta_{\alpha} $  or $\theta^{\alpha} \theta^{\beta} = \frac{1}{2} \epsilon^{\alpha \beta} \theta \theta$\\
+	$\bar \theta \bar\theta  = \bar \theta^{\dot \alpha}  \bar \theta_{\dot \alpha}$  or  $\bar\theta^{\dot{\alpha}} \bar \theta^{{\dot{\beta}}} = \frac{1}{2} \epsilon^{\dot \alpha \dot \beta} \bar \theta \bar\theta$
+	\end{center}
+	Derivatives:
+	\begin{center}
+	$ \boxed{{\frac{\partial\theta^\beta}{\partial\theta^ \alpha}}=\delta_\alpha ^\beta}$ \quad $ \boxed{{\frac{\partial\bar \theta^{\dot\beta}}{\partial\bar \theta^ {\dot\alpha}}}=\delta_{\dot\alpha} ^{\dot \beta}}$
+	\end{center}
+	Multi integrals:
+	\begin{center}
+	$\int d \theta ^1 \int d \theta^2 \theta^2 \theta^1 = \frac{1}{2} \int d \theta^1 \int d \theta^2 \theta \theta=1$
+	\end{center}
+	Some useful definition:
+	\begin{center}
+	$\frac{1}{2} \int d \theta^1  \int d  \theta^2 =  \int d^2 \theta$,  $\int d ^2 \theta \theta =1$, $\int d^2 \theta \int d ^2 \bar{\theta} (\theta \theta) (\bar \theta  \bar \theta)=1$
+	\end{center}
+	
+	\begin{center}
+        $d^2 \theta= -\frac{1}{4}d \theta^{\alpha} d{\theta ^\beta}\epsilon_{\alpha \beta}$, 
+        $d^2 \bar \theta= -\frac{1}{4}d \bar \theta^{\dot{\alpha}} d \bar \theta^{\dot{\beta}}\epsilon_{\dot{\alpha} \dot{\beta}}$
+	\end{center}
+\end{itemize}
+
+\subsection*{2.2 Superfields}
+
+Superfields provide an elegant and compact description of supersymmetry representations. They are useful to construct supersymmetric Langrangian as we will see in the next section.
+\par
+We remind some basic properties of scalar field $\varphi({ x ^\mu})$:
+\begin{itemize}
+\item It is function of space time coordinates $x ^\mu$.
+\item It transforms under $Poincare$:
+\begin{center}
+$\varphi \rightarrow \exp( -i \alpha _{\mu} P^{\mu}) \, \varphi \, \exp(i \alpha _{\mu} P^{\mu})$
+\end{center}
+It is a Hilbert  vector acting on space $\mathcal{F}$, hence it is written as:
+\begin{center}
+$\varphi \rightarrow \exp( -i \alpha _{\mu} P^{\mu}) \varphi (x^\mu)= \varphi (x ^\mu - \alpha ^ \mu) \rightarrow P_{\mu}= i \partial _{\mu}$
+\end{center}
+\end{itemize}
+
+\faHandPointRight~A superfield generalizes this idea by depending not only on $x^\mu$ but also on the Grassmann coordinates $\theta, \bar{\theta}$. Its components contain both bosons and fermions in a SUSY multiplet.
+
+The superfield $S(x^{\mu},\theta,\bar \theta)$ is function on superspace and it can be written in a series of $\theta$ and $ \bar \theta$:
+\begin{equation}
+\boxed{\begin{split}
+S(x^{\mu},\theta,\bar \theta)= f(x)+\theta \phi(x)+\bar \theta \bar \chi (x)+ \theta \theta m(x)+\bar \theta \bar \theta n(x)+ \\
+\theta \sigma^ \mu \bar \theta u_{\mu}(x)+ 
+\theta \theta \bar \theta \bar \lambda (x) +\bar \theta \bar \theta \theta \psi(x)+\theta \theta \bar \theta \bar \theta D(x)
+\end{split}}
+\label{2a}
+\end{equation}
+all higher powers $\theta,\bar \theta$ vanish. The properties of the superfield is given by :
+\begin{itemize}
+\item  The spacetime coordinates transforms as:
+\begin{center}
+$x^\mu \rightarrow x^\mu - i ( \epsilon \sigma ^ \mu \bar \theta) + i( \sigma ^ \mu  \theta \bar\epsilon )  $
+\end{center}
+\item
+Under the transformation Poincare:
+\begin{center}
+$\boxed{ S(x^\mu,\theta,\bar \theta) \rightarrow \exp(-i(\epsilon Q+ \bar \epsilon \bar Q)) \, S \, \exp(i(\epsilon Q+\bar \epsilon \bar Q))}$
+\end{center}
+\noindent
+
+As a $Hilbert$ vector:
+\begin{center}
+$S(x^\mu,\theta,\bar \theta) \rightarrow \exp(-i(\epsilon Q+ \bar \epsilon \bar Q)) S(x^{\mu},\theta,\bar \theta) =S(x^\mu - i ( \epsilon \sigma ^ \mu \bar \theta) + i( \sigma ^ \mu \bar \theta \epsilon ),\theta+\epsilon,\bar \theta+ \epsilon)$
+\end{center}
+\end{itemize}
+The operators $Q,\bar Q,P_\mu$ are given by:
+\begin{equation}
+\boxed{\begin{split}
+Q_\alpha =-i \frac{\partial}{\partial \theta ^ \alpha}- \sigma^{\mu }_{\alpha \dot \beta} \bar \theta ^{\dot \beta}\frac{\partial}{\partial x ^\mu}\\
+\bar Q_{\dot \alpha}=i \frac{\partial}{\partial \bar \theta ^ \alpha}- \theta ^\mu \sigma^{\mu }_{\beta \dot \alpha} \frac{\partial}{\partial x ^\mu}\\
+P_{\mu}=- i\partial  _{\mu}
+\end{split}}
+\end{equation}
+\noindent
+The transformation law of symmetry is defined as follows:
+\begin{equation}
+\boxed{i [S, \epsilon Q+ \bar \epsilon \bar Q]=i(\epsilon Q+ \bar \epsilon \bar Q)S= \delta S}
+\end{equation}
+ If we replace $Q$ and $\bar Q$ we take $\delta S$.  Specifically, we observe the relations:
+ \begin{equation}
+ \begin{split}
+ \delta f=\epsilon \phi +\bar \epsilon \bar \chi\\
+ \delta \phi =2 \epsilon m+ \sigma^{\mu} \bar \epsilon (i \partial _{\mu} f+u_m)\\
+ \delta \bar \chi=2 \epsilon n+ \sigma^{\mu} \bar \epsilon (i \partial _{\mu} f-u_m)\\
+ \delta m=\bar \epsilon \bar \lambda - \frac{i}{2}\partial_{\mu}\phi \sigma^{\mu} \bar \epsilon \\ 
+ \delta n=\epsilon \psi +\frac{i}{2} \epsilon \sigma ^{\mu}\partial_{\mu} \bar \chi \\ 
+ \delta u_\mu= \epsilon \sigma _\mu \bar\lambda +\psi \sigma_{\mu} \bar \epsilon +\frac{i}{2}(\partial^{\nu}\phi \sigma_{\mu} \bar  \sigma_{\nu} \epsilon- \bar \epsilon \bar\sigma_{\nu}\sigma_{\mu }\partial^{\nu}\bar \chi)\\
+ \delta \bar \lambda= 2 \bar \epsilon D +\frac{i}{2}(\bar \sigma^{\nu} \sigma_{\mu} \bar \epsilon)\partial_{\mu}u_{\nu}+i \bar \sigma^{\mu} \epsilon \partial_{\mu}m\\
+ \delta \psi= 2 \epsilon D +\frac{i}{2}( \sigma^{\nu} \bar \sigma_{\mu}  \epsilon)\partial_{\mu}u_{\nu}+i \sigma^{\mu} \bar \epsilon \partial_{\mu}n\\
+ \delta D=\frac{i}{2}\partial_{\mu}(\epsilon  \sigma^{\mu} \bar \lambda- \psi \sigma^{\mu} \bar \epsilon)
+ \end{split}
+ \end{equation}
+ \par Remarks:
+ \begin{itemize}
+ \item If $S_1$ and $S_2$ are superfields, their product is also superfield.
+ \item Linear combination of superfield is superfield.
+ \item $\partial_{\mu} S$  when $\mu$ spacetime coordinate is superfield but   $\partial_{\alpha} S$ where $\alpha$  coordinate of the superfield is not.
+ \item $S=f(x)$ is superfield if and only if $f=$ const, otherwise $\delta \psi \propto \partial^{\mu} f$.  
+ \end{itemize}
+\noindent
+Thus we can define linear representation of supersymmetric algebra. In general the representations are highly reducible. We can eliminate the extra components by imposing covariant constraints such as $\bar DS=0 $ or $S=S^\dag$. Superfields shift the problem of finding supersymmetry representation to that of finding appropriate constraints.
+
+\subsection*{2.3 Chiral superfields}
+
+Chiral superfields are the superfield multiplets that contain a complex scalar, a Weyl fermion and an auxiliary field. They are crucial for modeling matter fields in supersymmetric theories.
+
+Chiral superfields are characterized by the condition:
+\begin{equation}
+\bar D _{\dot \alpha} \Phi=0
+\label{3a}
+\end{equation}
+\noindent
+We want to find the components of a superfield $\Phi$. This constraint above can be satisfied easy if we define:
+\begin{equation}
+y^{\mu}= x^{\mu}+i \theta \sigma^{\mu} \bar \theta
+\end{equation}
+
+\noindent
+The function of this form satisfying (\ref{3a}) is given in the general form:
+\begin{equation}
+\boxed{\begin{split}
+\Phi= \phi(y)+ \sqrt{2} \theta \psi(y)+ \theta \theta F(y)
+=A(x)+i \theta \sigma^{\mu} \bar \theta \partial_{\mu}A(x)
++ \frac{1}{4}\theta \theta \bar \theta \bar \theta \square A(x) \\
++\sqrt{2}\theta \psi(x)- \frac{i}{\sqrt{2}} \theta \theta \partial_{\mu} \psi(x) \sigma^{\mu}\bar \theta +\theta \theta F(x)
+\end{split}}
+\label{3c}
+\end{equation}
+
+\faHandPointRight~Here $A(x)$ is the complex scalar, $\psi(x)$ is its fermionic partner and $F(x)$ is an auxiliary (non-propagating) field that will be eliminated by its equation of motion when building the Lagrangian.
+
+\noindent
+Then most general solution may be observed if we consider $\Phi=\Phi(y,\theta,\bar \theta)$ and we get from the relations:
+
+\begin{center}
+$D_{\alpha}= \partial_{\alpha}+i (\sigma^{\mu})_{\alpha \dot \beta}\bar \theta^{\dot \beta} \partial_{\mu}$ \quad 
+$\bar D_{\dot \alpha}=\frac{\partial}{\partial \bar{\theta}^{\dot{\alpha}}}=- \bar{\partial}_{\dot \alpha}-i\theta^{\beta} (\sigma^{\mu})_{\beta \dot \alpha} \partial_{\mu}$
+\end{center}
+\noindent
+Hence
+\begin{center}
+$D_{\dot \alpha} \Phi= -\bar \partial _{\dot \alpha} \Phi - \frac{\partial \Phi}{\partial y^{\mu}} \frac{\partial y^\mu}{\partial \bar \theta^{\dot \alpha}}- i \theta^{\beta}\sigma^{\mu}_{\beta \dot \alpha}\partial _{\mu}\Phi$\\
+$=-\bar \partial _{\dot \alpha} \Phi- \partial_{\mu}\Phi (-i \theta \sigma^{\mu})_{\dot \alpha}- i \theta^{\beta} \sigma^{\mu}_{\beta \dot \alpha}\partial_\mu \Phi$\\
+$=-\bar \partial _{\dot \alpha}\Phi=0$
+\end{center}
+
+\noindent
+The transformation is defined as follows:
+\begin{equation}
+\delta \Phi=i (\epsilon Q+\bar \epsilon \bar Q)\Phi
+\end{equation}
+\noindent
+We observe the followings:
+\begin{equation}
+\boxed{\begin{split}
+\delta \phi=\sqrt{2} \epsilon \psi \\ 
+\delta  \psi= i\sqrt{2} \sigma^{\mu} \bar \epsilon \partial _{\mu} A +\sqrt{2} \epsilon F\\
+\delta F= i \sqrt{2} \bar \epsilon \bar \sigma^{\mu} \partial_{\mu }A
+\end{split}}
+\end{equation}
+
+\faHandPointRight~These transformations show how supersymmetry relates the scalar $A$, the fermion $\psi$ and the auxiliary field $F$. Acting with SUSY on one component produces the others.
+
+Remarks:
+\begin{itemize}
+\item The product of chiral superfields is chiral superfield.
+\item If $\Phi$ is chiral then $\bar \Phi= \Phi^\dag$  is antichiral.
+\item $\Phi^ \dag \Phi$  and $\Phi + \Phi^ \dag$ are real superfields. 
+\end{itemize}
+
+\subsection*{2.4 Vector superfields}
+
+Vector superfield describe gauge multiplets: a gauge boson, its gaugino, and an auxiliary $D$ field.
+
+Vector superfield satisfy the condition:
+\begin{equation}
+V=V^\dag
+\label{4a}
+\end{equation}
+\noindent
+We can write in terms of $\theta$, $\bar{\theta}$ and the most general form is given:
+\begin{equation}
+\boxed{\begin{split}
+V(x, \theta, \bar \theta)= C(x)+i \theta \chi(x)-i\bar \theta \bar \chi(x)
++\frac{i}{2} \theta \theta (M(x)+iN(x))- \frac{i}{2} \bar \theta \bar \theta (M(x)- iN(x))
+-\theta \sigma^{\mu} \bar \theta u_{\mu}(x)\\ +i \theta \theta \bar \theta (\bar \lambda (x)+\frac{i}{2} \sigma^{\mu}\partial_{\mu} \chi(x))
+-i \bar \theta \bar \theta \theta(\lambda(x)  +\frac{i}{2}\sigma^{\mu}\partial_{\mu}\bar \chi (x))+\frac{1}{2} \theta \theta \bar \theta \bar \theta (D(x)+ \frac{1}{2} \square C(x))
+\end{split}}
+\label{4d}
+\end{equation}
+\noindent
+the components $C,D,M,N$  and $u_{\mu}$ should be real in order to satisfy the equation (\ref{4a}). We have to choose very particular combination of fields as coefficients of $\theta\theta\bar{\theta}$, $\bar{\theta}\bar{\theta}\theta$ and $\theta\theta\bar{\theta}\bar{\theta}$ component of $V$. We choose $\Phi+\Phi^\dag$ and under this choice we define the following supersymetric generalization of a gauge transformation:
+
+\begin{center}
+$V \rightarrow V +\Phi + \Phi^{\dag}$
+\end{center}
+
+\noindent
+Under this transformation we have:
+ \begin{equation}
+ \begin{split}
+ C \rightarrow C +A +A^*\\
+ \chi \rightarrow \chi - i \sqrt{2} \psi \\ 
+ M+iN\rightarrow M+iN -2iF\\
+ u_{\mu} \rightarrow u_{\mu}- i \partial _{\mu}(A-A^*)\\
+ \lambda \rightarrow \lambda\\
+ D \rightarrow D
+\end{split}
+\label{4e}
+ \end{equation}
+ 
+\textbf{Wess Zumino gauge:}
+This defines the Wess Zumino gauge $C=\chi=M=N=0$. By the equations (\ref{4e}) we can fix $A,\psi$ and $F$ to remove unphysical components. So (\ref{4d}) can be written:
+\begin{equation}
+V=-\theta \sigma^\mu \bar \theta u_\mu(x) +i \theta \theta \bar \theta \bar \lambda (x)- i \bar \theta \bar \theta \theta \lambda (x) +\frac{1}{2} \theta \theta \bar \theta \bar \theta D(x)
+\end{equation}
+\noindent
+The components of $u_\mu$ correspond to gauge particles ($\gamma$, $W^{\pm},$ $ Z,$ gluons),  $\lambda$, $\bar \lambda$ to gaugino and $D$ to auxiliary field. The Wess Zumino gauge is not supersymmetric, but it is very convenient for model building.
+
+\textbf{Abelian  field  strength superfield:}
+Let have a supersymmetric complex scalar field $\varphi$ and a gauge field $V_\mu$ via covariant derivatives $D_\mu=\partial_{\mu}- i q V_\mu$  which transforms under $U(1)$:
+\begin{center}
+$\varphi(x) \rightarrow \exp(iqa(x))\varphi(x)$ and $V_{\mu}(x) \rightarrow V_{\mu}(x) +\partial_{\mu} a(x)$
+\end{center}
+ \noindent
+Under supersymmetry these concepts generalize to chiral superfield $\Phi$ and vector superfields $V$. To construct a gauge invariant quantity out of $\Phi$ and $V$, we impose the following transformation properties:
+\begin{equation}
+\begin{split} \Phi \rightarrow \exp(iq \Lambda) \Phi\\ V \rightarrow V- \frac{i}{2} (\Lambda -\Lambda^{\dag})
+\end{split}\Big\} \Rightarrow \Phi^{\dag} \exp(2qV) \Phi  
+\end{equation}
+\noindent
+Here $\Lambda$ is the chiral superfield defining the generalized gauge transformations. Note that $\exp(iq\Lambda)$ is also chiral if $\Phi$ is. The abelian field strength is defined:
+ \begin{equation}
+ F_{\mu \nu}=\partial_\mu V_\nu- \partial_\nu V_\mu
+ \end{equation}
+\noindent
+Hence the supersymmetric analogue is:
+   \begin{equation}
+W_{\alpha}=-\frac{1}{4}( \bar D \bar D)D_{\alpha} V
+ \end{equation}
+\noindent
+which is both chiral and gauge covariant under generalized gauge transformations. 
+In order to find the components of  $W_{\alpha}$ we write $y^{\mu}= x^{\mu}+i\theta  \sigma^\mu \bar \theta$. Knowing that $D_\alpha =\partial_\alpha+2i(\sigma^\mu \bar \theta)_{\alpha}\partial_{\mu}$ and $\bar D _{\dot \alpha}= - \partial _{\dot \alpha}$ we conclude that:
+ \begin{equation}
+ W_\alpha (y,\theta)= \lambda_{\alpha}(y)+\theta_{\alpha}D(y)+(\sigma^{\mu \nu} \theta)_{\alpha}F_{\mu \nu}(y)- i (\theta \theta) (\sigma^\mu)_{\alpha \dot \beta} \partial_{\mu}
+ \bar \lambda^{\dot \beta}(y)
+  \end{equation}
+ 
+\section*{3. Supersymmetric Langrangians}
+
+In this section we show how to construct supersymmetric Lagrangians using superfields. The key idea is that certain components of superfields (the $F$-terms and $D$-terms) change by total derivatives under SUSY, so their spacetime integrals are invariant.
+
+\textbf{Chiral superfield Langrangian:}\\
+We need to determine coupling among $\Phi$, $V$ and $W_{\alpha}$ which include particles of S.M. For this reason we need a Langrangian which is invariant under supersymmetry transformation. Let a single chiral superfield.
+\par
+We need to find a object $\mathcal{L}(\Phi)$ such that $\delta \mathcal{L}$ is the total derivative under supersymmetric transformations: 
+\begin{itemize}
+\item  For a general scalar superfields by (\ref{2a}), $D$-term transforms like:
+\begin{equation}
+\boxed{\delta D= \frac{i}{2} \partial_{\mu}(\epsilon \sigma^{\mu} \bar \lambda- \psi \sigma^{\mu} \bar \epsilon)}
+\end{equation}
+\item  For a general chiral superfield by (\ref{3c}), $F$-term transforms like:
+\begin{equation}
+\boxed{\delta F= i \sqrt{2} \bar \epsilon \bar \sigma^{\mu} \partial_{\mu} A}
+\end{equation}
+
+\end{itemize}
+
+\faHandPointRight~Since these variations are total derivatives, the spacetime integrals of $D$- and $F$-terms are invariant under SUSY (up to boundary terms). This is why SUSY actions are built from these components.
+
+The most general  Langrangian for a chiral superfield  $\Phi$ is given by:
+
+\begin{equation}
+\boxed{\mathcal{L}= K( \Phi, \Phi^{\dag} )|_D + \Big(W(\Phi) |_F + h.c.\Big)}
+\end{equation} 
+ \noindent
+ where $K$ is called K\"ahler potential and it is real function of  $\Phi$, $\Phi^{\dag}$\\
+ and  $W$ is called superpotential and it is a holomorphic function of chiral superfields $\Phi$.
+\noindent 
+ We need the Langrangian has dimensionality 4, $dim=4$ hence $[\mathcal{L}]=4$ we get:
+ \begin{center}
+$[K_D] \leqslant4$, \quad $[W_F]\leqslant 4$
+\end{center}
+\noindent
+By knowing the dimensions:
+ \begin{center}
+ $[\Phi]=[\varphi]=1$,\quad $[\psi]=\frac{3}{2}$
+ \end{center}
+\noindent
+By the relation $\Phi=A(x)+i \theta \sigma^{\mu} \bar \theta \partial_{\mu}A(x)+ \frac{1}{4}\theta \theta \bar \theta \bar \theta \square A(x) +...$:
+ \begin{center}
+ $[\theta]=-\frac{1}{2}$, $[F]=2$
+ \end{center}
+\noindent
+If
+\noindent
+\begin{center}
+  $[K_D]\leqslant4 \quad \Rightarrow$ $K=...+ (\theta \theta)(\bar \theta \bar \theta)K_D$\quad  $\Rightarrow [K]\leqslant 2$\\
+  $[W_F]\leqslant 4 \quad \Rightarrow$ $W=...+(\theta \theta)W_F$ \quad$\Rightarrow  [W]\leqslant 3$\\
+\end{center}
+\noindent 
+A possible term of $K$ is $\Phi^{\dag}\Phi$ but no $\Phi^{\dag}+\Phi$ nor $\Phi \Phi$ because they are linear combination of chiral superfields.
+
+\noindent
+The most general expressions for K\"ahler potential and superpotential is:
+\begin{equation}
+K=\Phi^{\dag}\Phi,  \quad W=\alpha+\lambda \Phi +\frac{m}{2}\Phi^2 +\frac{g}{3} \Phi^3
+\end{equation}
+\noindent
+Hence the most general Langrngian known as Wess Zumino model is given by:
+ \begin{equation}
+ \begin{split}
+ \mathcal{L} =\Phi^\dag \Phi|_D+ \big(  (\alpha+\lambda \Phi +\frac{m}{2}\Phi^2 +\frac{g}{3} \Phi^3)|_F+h.c. \big)\\
+ = \partial ^\mu \varphi^* \partial_\mu \varphi - i \bar \psi \bar \sigma^{\mu} \partial_{\mu}\psi +FF^*+(\frac{ \partial W}{ \partial\phi}F+h.c)\\
+ -\frac{1}{2} \big(  \frac{\partial^2W}{\partial \varphi^2} \psi\psi +h.c.\big)
+ \end{split}
+ \end{equation}
+\noindent
+where $\Phi=A(x)+i \theta \sigma^{\mu} \bar \theta \partial_{\mu}A(x)+ \frac{1}{4}\theta \theta \bar \theta \bar \theta \square A(x) +...$. 
+\noindent
+The Langrangian depending on the auxiliary field $F$ can be written: 
+ 
+ \begin{center}
+  $\mathcal{L}_F: $ $F= FF^*+\frac{\partial W}{\partial \varphi}F+ \frac{\partial W^*}{\partial \varphi^*}F^*$
+ \end{center}
+\noindent
+In order to retrieve the equation of motion:
+ \begin{center}
+ $\frac{\delta S_{(F)}}{\delta F}=0 \Rightarrow F^*+\frac{\partial W}{\partial \varphi}=0$
+ \end{center}
+  \begin{center}
+ $\frac{\delta S_{(F)}}{\delta F^*}=0 \Rightarrow F+\frac{\partial W^*}{\partial \varphi^*}=0$
+ \end{center}
+ 
+\noindent
+Langrangian takes the form: 
+  \begin{center}
+  $\mathcal{L}_F \rightarrow - \big| \frac{\partial W}{\partial\varphi}\big|^2=- V_{(F)}(\varphi)$
+  \end{center}
+\noindent
+so
+\begin{equation}
+\big| \frac{\partial W}{\partial \varphi}\big|^2= V_{(F)}(\varphi)
+\end{equation}
+Moreover:
+ \begin{center}
+ $\big(   \frac{\partial ^2 K}{\partial_{\mu} \varphi^i \partial^{\mu}\phi^{\bar j*}} \big) \partial_{\mu}\varphi^i \partial^{\mu}\varphi^{\bar j*}= K_{i \bar j}\partial_{\mu}\varphi^i \partial^{\mu}\varphi^{\bar j*}$
+ \end{center}
+ 
+\noindent
+where $K_{i \bar j}$ is the K\"ahler metric and it is given in terms of $\phi^i$:
+\begin{equation}
+g_{i \bar j}=K_{i \bar j}= \frac{\partial ^2 K}{\partial_{\mu} \varphi^i \partial^{\mu}\varphi^{\bar j*}}
+\end{equation}  
+
+\textbf{Abelian Vector Superfield Langrangian:}\\
+We remind gauge invariance under local transformation $\varphi \rightarrow \exp(iq \alpha(x))$ in quantum field theory by introducing the covariant derivative $D_{\mu}$ and the gauge potential $A_{\mu}$:
+\begin{center}
+$\mathcal{L}_{kin}= D^{\mu}\varphi( D_{\mu}\varphi)^\dag +\frac{1}{4g^2}F_{\mu\nu}F^{\mu\nu}$
+\end{center}
+In SUSY if we have $K=\Phi^{\dag}\Phi$, it is not invariant under $\Phi \rightarrow \exp(iq\Lambda)\Phi$. Hence we introduce the following terms:
+
+\begin{itemize}
+\item We introduce $V$ such that $K=\Phi^{\dag}\exp(iq(\Lambda-\Lambda^{\dag}))\Phi\big|_D$ where $V \rightarrow \frac{i}{2}(\Lambda-\Lambda^{\dag})$. $K$ is invariant under gauge transformation.
+\item We add a kinetic term for $V$ with coupling  $\tau$ such that $f(\Phi)W^{\alpha}W_{\alpha}\big|_F+h.c.$ and  we set $\tau=f=1/4$.
+\item We introduce the Fayet–Illiopoulos term such as: $\mathcal{L}_{FI}=\xi V\big|_D=\frac{1}{2}\xi D$. The parameter $\xi$ is constant. This term is invariant under $U(1)$ and for non-abelian theories the FI term does not exist.
+\end{itemize}
+\noindent
+Hence the kinetic term of the Langrangian is given:
+\begin{equation}
+\mathcal{L}= \Phi^{\dag}\Phi \rightarrow \Phi^{\dag}\exp(iq(\Lambda-\Lambda^{\dag}))\Phi\big|_D +\big( W(\Phi)\big|_F+h.c \big) +\big( \frac{1}{4}W^{\alpha}W_{\alpha} +h.c. \big)+\xi V\big|_D
+\end{equation}
+\noindent
+We analyze the components:
+\begin{itemize}
+\item 
+$ \Phi^{\dag}\exp(iq(\Lambda-\Lambda^{\dag}))\Phi\big|_D= F^*F +\partial_{\mu}\varphi\partial^{\mu}\varphi^*+i \bar{\psi}\bar{\sigma}^{\mu}\partial_{\mu}\psi+q V^{\mu}(\bar{\psi}\bar{\sigma}_{\mu}\psi+i\varphi^*\partial_{\mu}\varphi-i\varphi \partial_{\mu}\varphi^*)$\\
+$+\sqrt{2}q(\varphi\bar{\lambda}\bar{\psi}+\varphi^*\lambda\psi)+q(D+qV_{\mu}V^{\mu})|\varphi|^2$.
+\item In gauge theories we need $W(\Phi)=0 $ if there is only one field.
+\item $W^{\alpha}W_{\alpha}|_F=D^2-\frac{1}{2}F_{\mu\nu}F^{\mu\nu}-2i\lambda \sigma^{\mu}\partial_{\mu}\bar{\lambda}+\frac{i}{2}
+F_{\mu\nu}F^{\mu\nu}$.
+ 
+\end{itemize}
+The collection of $D$ terms including FI term gives the Langrangian:
+\begin{center}
+$\mathcal{L}_D=qD|\varphi|^2+\frac{1}{2}D^2+\frac{1}{2}\xi D$
+\end{center}
+\noindent
+so the equation of motion is
+\begin{center}
+$\frac{\delta S_D}{\delta D}=0 \Rightarrow D=-\frac{\xi}{2}-q|\varphi|^2$
+\end{center}
+\noindent
+Together with $\mathcal{L}_F$ in the previous section, the total potential can be written by eliminating the equations of motion:
+\begin{equation}
+\boxed{V=V_F(\varphi)+V_D(\varphi)=F^*F+\frac{D^2}{2} \quad \text{or} \quad V=\Big|\frac{\partial W}{\partial \varphi} \Big|^2+\frac{1}{8}\Big(\xi+2q|\varphi|^2 \Big)^2}
+\label{35}
+\end{equation}
+
+\textbf{Action in superspace:}\\
+Generally the action is defined:
+\begin{center}
+$S=\int d^4 x \, \mathcal{L}$.
+\end{center}
+\noindent
+Knowing that $\int d^2\theta(\theta\theta)=1$ and $\int d^4 \theta(\theta \theta)(\bar{\theta}\bar{\theta})=1$ the Langrangian is written:
+\begin{center}
+$\mathcal{L}=K\Big|_D+\Big(W\Big|_F+h.c \Big)+\Big(W^\alpha W_{\alpha}\Big|_F+h.c.\Big)=$\\
+$=\int d^4 \theta K+\Big( \int d^2\theta W+h.c. \Big)+ \Big(  \int d^2 \theta W^{\alpha}W_{\alpha} +h.c\Big)$
+\end{center}
+\noindent
+Hence the Langrangian is given:
+\begin{equation}
+S=\int d^4 x \int d^4\theta(K+\xi V) +\int d^4x \int d^2\theta(W+fW^\alpha W_\alpha+h.c.)
+\end{equation}
+
+\section*{4. Supersymmetry Breaking}
+
+One can break the symmetry SUSY explicitly by adding terms in the Langrangian that are not invariant under SUSY. Of course, if we allow all types of interaction we may lose some benefits of SUSY such as improved ultraviolet behavior. A more desirable method, by which supersymmetric gauge theories find realistic applications, is through spontaneous symmetry breaking (SSB).
+
+\subsection*{4.1 Spontaneous Symmetry Breaking}
+
+The SSB is well understood if we notice which restrictions derived from supersymmetric algebra (\ref{04}). Let us have the Hamiltonian system:
+\begin{center}
+$H=\frac{1}{4}(\bar{Q}_{\alpha}Q_{\alpha}+\bar{Q}_{\beta}Q_{\beta})$.
+\end{center}
+\noindent
+This equation tells us that the vacuum expectation value (vev) for every state $|\Psi\rangle$ satisfies $\langle\Psi|H|\Psi\rangle  \geq  0$ and it tells us that states with vanishing energy density are supersymmetric ground states. Ground states of zero energy preserve supersymmetry while those of positive energy break it spontaneously. The Hamiltonian has two parts: the kinetic term and the potential. If we are not considering field configurations with nontrivial topology we can focus on the vev of the potential. Hence the restriction takes the form $\langle\Psi|V|\Psi\rangle  \geq  0$ where $V$ is given by (\ref{35}).
+\par
+Condition of SSB: Consider the potential (\ref{35}): $V=F^*F+\frac{D^2}{2}$. If we can find models where the equations $F_i=-\frac{\partial W}{\partial \phi_i}=0$ and $D^{\alpha}=0$ cannot be simultaneously solved then we have SSB. In that case the minimum of the potential has strictly positive energy and SUSY is spontaneously broken.
+
+\subsubsection*{4.1.1 F-term breaking}
+
+By the transformation law of the chiral superfield $\Phi$, if one of $\delta A$, $\delta \psi$, $\delta F \neq 0$ in the vacuum then the SUSY is broken. We need to preserve Lorentz invariance and so we require $\langle\psi\rangle=\langle\partial_{\mu}\varphi\rangle=0$. The condition for SSB F-term is given:
+\noindent 
+\begin{center}
+\fbox{SSB $ \iff $ $F=-\frac{\partial W}{\partial \phi}=0$ has no solution.}
+\end{center}
+\noindent 
+(Note that in the MSSM there is no left chiral superfield which is invariant under the gauge symmetry $SU(3)_c \times SU(2)_L \times U(1)_Y$ so a term linear in a chiral field like $C\Phi$ would break gauge invariance.)
+\par
+\textbf{O'Raifeartaigh Model:}\\
+Let us consider a triplet of chiral superfields $\Phi_1,\Phi_2,\Phi_3$ for which K\"ahler potential and superpotential are given:
+\begin{center}
+$K=\Phi^\dag\Phi$ \quad and \quad$W=g\Phi_1({\Phi_3}^2-m^2)+M\Phi_2\Phi_3$\quad with $M\gg m$.
+\end{center}
+\noindent 
+For the equation of motion in F-term we have:
+\begin{center}
+$-{F_1}^*=\frac{\partial W}{\partial \varphi _1}=g({\varphi_3}^2-m^2)$,\quad 
+$-{F_2}^*=\frac{\partial W}{\partial \varphi _2}=M\varphi^3$,\quad 
+$-{F_3}^*=\frac{\partial W}{\partial \varphi _3}=2g\varphi_1\varphi_2+M\varphi_2$.
+\end{center}
+\noindent 
+We cannot set all ${F_i}^*$ to zero simultaneously. Now we need to determine the mass spectrum:
+\begin{center}
+$V= \Big( \frac{\partial W}{\partial \varphi_i} \Big)\Big( \frac{\partial W}{\partial \varphi_i} \Big)^*=g^2|{\varphi_3}^2-m^2|^2+M^2|\varphi_3|^2+|2g\varphi_1\varphi_2+M\varphi_2|^2$.
+\end{center}
+\noindent 
+If $m^2<\frac{M^2}{2g^2}$ then the minimum is:
+\begin{center}
+$\langle\varphi_2\rangle=\langle\varphi_3\rangle=0$,\quad $\langle\varphi_1\rangle=$ arbitrary \quad$\Rightarrow \langle V\rangle=g^2m^4>0$.
+\end{center}
+\noindent 
+This arbitrariness of $\varphi_1$ implies zero mass, $m_{\varphi_1}=0$. For simplicity $\langle\phi_1\rangle=0$ and we compute the spectrum of fermions and scalars. Let us have the fermion mass term:
+\begin{center}
+$  \left\langle\frac{\partial ^2 W}{\partial \varphi_i\partial \varphi_j}\right\rangle\psi_i\psi_j=
+  \begin{bmatrix}
+    0 & 0 & 0  \\
+    0 & 0 & M \\
+    0 & M & 0  
+  \end{bmatrix}\psi_i\psi_j$.
+\end{center}
+\noindent 
+In the Langrangian this gives $\psi_1$ mass $m_{\psi_1}=0$, $m_{\psi_2}=m_{\psi_3}=M$. To determine scalar masses, look at the quadratic term in $V$:
+\begin{center}
+$V_{quad}=-m^2 g^2(\varphi_3^2 +\varphi_3^{*2})+M^2|\varphi_3|^2+M^2|\varphi_2|^2 \Rightarrow m_{\varphi_1} =0 \quad m_{\varphi_2}=M$ \\and\quad  ${m^2}_{\mathrm{Re}\,\varphi_3}=M^2-2g^2m^2$,\quad  ${m^2}_{\mathrm{Im}\,\varphi_3}=M^2+2g^2m^2$.
+\end{center}
+If SUSY is unbroken at tree level, then it is also unbroken to all orders in perturbation theory. This means that in order to break supersymmetry we often need to consider non-perturbative effects in more complicated models.
+ \par
+ Supertrace is defined as:
+ \begin{center}
+ $$STr(\mathcal{M}^2)=\sum_{\text{particle}}(-1)^{2s}(2s+1){m^2}_{\text{particle}}$$
+ \end{center}
+\noindent 
+The sum is performed over all the physical particles appearing in the theory and $s$ denotes the spin of the particle.
+
+\subsubsection*{4.1.2 D-term breaking}
+
+This type is considered if there is at least one Fayet–Illiopoulos term (or at least one $U(1)$ gauge field).
+\noindent 
+\begin{center}
+\fbox{SSB $ \iff$  $D \neq 0$ in the vacuum.}
+\end{center}
+\noindent 
+By the equation of motion for the $D$ term we derived  $V_D=\frac{1}{8}(\xi+2q|\varphi|^2)^2$, which has no solution with $V_D=0$ for suitable parameters. This leads to D-term SUSY breaking.
+
+\section*{5. Introduction to supergravity}
+
+In global SUSY the transformation parameter $\epsilon$ is constant. Supergravity (SUGRA) is the theory where supersymmetry is made local, $\epsilon=\epsilon(x)$, and then necessarily includes gravity (the graviton) and its superpartner, the gravitino.
+
+\begin{itemize}
+\item SUSY: a chiral superfield transforms as $\delta \Phi=i(\epsilon Q+\bar{\epsilon}\bar{Q})\Phi$ where $\epsilon=$global.
+\item SUGRA: $\epsilon \rightarrow \epsilon(x)$ and we introduce local symmetries.
+\end{itemize}
+
+We consider the SUSY Langrangian:
+\begin{equation}
+\mathcal{L} = \partial ^{\mu} \varphi^* \partial_{\mu}\varphi +\frac{1}{2} i \bar{\psi} \slashed{\partial} \psi
+\end{equation}
+which describes a massless, free multiplet where $\psi$ is a Majorana spinor, $\varphi$ is a complex scalar field $\varphi= \frac{1}{\sqrt{2}} (A +i B)$. We eliminate that the auxiliary field is zero due to the equation of motion. 
+In order to derive Fermi–Bose symmetries we consider the following transformation ($A \rightarrow A ' = A+ \delta A$):
+\begin{equation}
+\begin{split}
+\delta A =  \bar{\epsilon} \psi\\ 
+\delta B = i \bar{\epsilon} \gamma_5 \psi\\
+\delta \psi= -  i \gamma^{\mu} [\partial_{\mu}(A+i \gamma_5 B)]\epsilon
+\end{split}
+\end{equation}
+
+\begin{itemize}
+\item SUSY transformation: $\epsilon=$constant\\
+We find:
+\begin{equation}
+\delta \mathcal{L} =\partial_\mu \left[\frac{1}{2} \bar{\epsilon} \gamma^{\mu} \slashed{\partial} (A+i \gamma_5 B)\psi\right]
+\end{equation}
+so the Langangian is invariant under global transformation.
+
+\item SUGRA transformation: $\epsilon=\epsilon(x)$\\
+We find an additional term:
+\begin{equation}
+\delta \mathcal{L} = (\partial_{\mu} \bar{\epsilon}) [\gamma^{\nu} \gamma^{\mu} {\partial_{\nu}} (A+i \gamma_5 B)\psi]
+\end{equation}
+In order to reclaim invariance we add to the Langrangian the term:
+\begin{equation}
+\mathcal{L}'= - \kappa \bar{\psi}_{\mu} [\gamma^{\nu} \gamma^{\mu} {{\partial_{\nu}} (A+i \gamma_5 B)}\psi]
+\end{equation}
+and the new Majorana field $\psi_{\mu}$ has the following transformation rule:
+\begin{equation}
+\delta \psi_{\mu}=\frac{1}{\kappa} \partial_{\mu} \epsilon
+\end{equation}
+An important notice is that the coupling constant $\kappa$ has dimensions $(\text{mass})^{-1}$ (in contradiction with the electric charge $e$ in the vector gauge field $A_\mu$ which is dimensionless).
+Finally, to ensure the invariance by the adding term $\mathcal{L}'$ we take:
+\begin{equation}
+\delta \mathcal{L}' =i \kappa \bar{\psi}_\nu \gamma_\mu T^{\mu \nu} \epsilon
+\end{equation}
+where $T^{\mu \nu}$ is the energy momentum tensor.
+The contribution of $\delta \mathcal{L}'$ is eliminated by the term:
+\begin{equation}
+\mathcal{L}_g= -g_{\mu \nu}T^{\mu \nu}
+\end{equation}
+where $\delta g_{\mu\nu}= \frac{1}{2} i \kappa ( \bar{\psi}_\mu \gamma_{\nu} +\bar{\psi}_\nu \gamma_{\mu}) \epsilon$.
+\end{itemize}
+
+One problematic feature is the difference of scale, because gravity is very weak compared to the other forces.
+The Planck mass is given: $M_P = (8 \pi)^{1/2} / \kappa$.
+
+\par
+\textbf{The linear supergravity multiplet with global supersymmetry:}\\
+The spin-3/2 gravitino is decribed by the gauge invariant Rarita–Schwinger action:
+\begin{equation}
+S_{RS}[\psi]:=\frac{1}{2} \int d^4 x \epsilon^{\mu \nu \rho \sigma}\bar{\psi}_\mu \gamma_5\gamma_{\nu} \partial_{\rho}\psi_{\sigma}
+\end{equation}
+\noindent 
+The gravitino can be easily combined with a linearized graviton excitation:
+\begin{center}
+$g_{\mu \nu}=\eta_{\mu \nu}+\kappa h_{\mu \nu}$\quad $\kappa^2=\frac{8\pi}{M^2_{Pl}}$
+\end{center}
+\noindent 
+into the linearized supergravity multiplet $(h_{\mu \nu},\Psi_\mu)$. This is govered by the Einstein–Hilbert action for spin-2 graviton ($g_{\mu \nu}$):
+\begin{equation}
+S_{EH}[h]:=-\frac{1}{2} \int d^4 x h^{\mu\nu}(R^L_{\mu\nu}-\frac{1}{2}\eta_{\mu\nu}R^L)
+\end{equation}
+\noindent 
+with the Ricci tensor $R^L_{\mu\nu}$ and Ricci scalar $R^L$:
+\begin{center}
+$R^L_{\mu\nu}:=\frac{1}{2}(\partial_{\mu}\partial_{\lambda} {h^\lambda}_{\nu}+\partial_{\nu}\partial_{\lambda} {h^\lambda}_{\mu}-\partial_{\mu}\partial_{\nu} {h^\lambda}_{\lambda}-\partial^2 h_{\mu\nu})$,\quad $R^L:=\eta^{\mu\nu}R^L_{\mu\nu}$.
+\end{center}
+\noindent 
+There is a spin-two gauge invariance under
+\begin{center}
+$\delta^g_{\xi}h_{\mu\nu}=\partial_{\mu}\xi_{\nu}+\partial_{\nu}\xi_{\mu}$.
+\end{center}
+\noindent 
+By adding $S_{RS}+S_{EH}$ we have a field theory with global SUSY under variations:
+\begin{equation}
+\delta_{\epsilon}\Psi_{\mu}=\frac{1}{2}[\gamma^\rho,\gamma^\sigma]\epsilon \partial_{\rho}h_{\mu \sigma}, \quad
+\delta_{\epsilon}h_{\mu\nu}=-\frac{i}{2}\bar{\epsilon}(\gamma_\mu \Psi_\nu+\gamma_\nu \Psi_\mu).
+\end{equation}
+
+\par
+\textbf{The  supergravity multiplet with local supersymmetry:}\\
+If the supersymmetry transformation parameters of the linear supergravity multiplet $\delta_{\epsilon}(\Psi_{\mu},h_{\mu\nu})$ are promoted to spacetime functions $\epsilon=\epsilon(x)$, then its free action is modified:
+\begin{equation}
+\delta_{\epsilon}(S_{RS}+S_{EH})=\int d^4x \mathcal{J}^{\mu}\partial_{\mu}\epsilon.
+\end{equation}
+The supercurrent is given by:
+\begin{equation}
+\mathcal{J}^\mu=\frac{1}{4}\epsilon^{\mu\nu\rho\sigma}\bar{\Psi}_{\rho}\gamma_{5}\gamma_{\nu}[\gamma^{\lambda},\gamma^{\tau}]\partial_{\lambda}h_{\tau\sigma}.
+\end{equation}
+
+\textbf{Supergravity Action:}\\
+The supergravity action in Planck units can be written as:
+\begin{equation}
+S_{SG}=-3 \int d^8z \,\mathbf{E}=-\frac{1}{2} \int d^4x \, e \Big( R-\frac{1}{3}\bar{M}M+\frac{1}{3}b^{\alpha}b_{\alpha}+\frac{1}{2}
+\epsilon^{\mu\nu\rho\sigma} (\bar{\psi}_\mu \bar{\sigma}_\nu \mathcal{D}_\rho \psi_\sigma -{\psi}_\mu {\sigma}_\nu \mathcal{D}_\rho \bar\psi_\sigma ) \Big)
+\end{equation}
+Taking into account that
+\begin{center}
+$S=S_{SG}-{S(K,W,f,\xi)}$
+\end{center}
+\noindent 
+we can find the Langrangian as:
+\begin{equation}
+S=-3\int d^4x\,d^4\theta \,\varphi \bar{\varphi} e^{-K/3}+\Big(  \int d^4 x \, d^2 \theta \,\varphi^3 W +h.c \Big)
+\end{equation}
+\noindent 
+In order to derive the scalar potential we need to evaluate the equation of motion for auxiliary $F$ fields. The Langrangian is given:
+\begin{center}
+$\mathcal{L}=-3 \int d^4 \theta \,\varphi \bar{\varphi}e^{-K/3}+(\int d^2 \theta \varphi^3 W+h.c.) \Rightarrow$\\
+$\Rightarrow -3 \int d ^2 \bar{\theta} (\bar{\varphi} e^{-K/3}F^{\varphi} -\frac{1}{3}\bar{\varphi}\varphi e^{-K/3}K_iF^i)+3\varphi^2F^{\varphi}W+\varphi^3 F^iW_i+\int d^2 \bar{\theta}\bar{\varphi}^3 \bar{W}$.
+\end{center}
+\noindent 
+By the equation of motion for auxiliary $F$ fields:
+\begin{center}
+$\frac{\partial \mathcal{L}}{\partial \bar{F^{\varphi}}}=0 \Rightarrow-3e^{-K/3}(F^{\varphi}-\frac{1}{3}\varphi K_i F^i)+3\bar{\varphi}^2 \bar{W}=0$,
+\end{center}
+\begin{center}
+$\frac{\partial  \mathcal{L}}{\partial F^{i}}=0 \Rightarrow\varphi^3 \mathcal{D}_iW +e^{-K/3}\varphi \bar{\varphi} K_{i\bar{j}}F^{\bar{j}}=0$,
+\end{center}
+\begin{center}
+$\frac{\partial  \mathcal{L}}{\partial F^{\varphi}}=0 \Rightarrow - e^{-K/3}(F^{\bar{\varphi}}-\varphi K_iF^{\bar{i}})+3\varphi^2W=0$,
+\end{center}
+\begin{center}
+$\frac{\partial  \mathcal{L}}{\partial F^{\bar{i}}}=0 \Rightarrow- e^{-K/3}K_{i\bar{j}}F^i+\bar{\varphi}^3W_i=0$.
+\end{center}
+\noindent 
+We solve the equations above in order to find the $F$ fields and we substitute them in the Langrangian. To get the canonical form we need the scalar component of the chiral compensator $\bar{\varphi}=\varphi=e^{K/6}$. Hence the F-term scalar potential is:
+\begin{equation}
+\boxed{V=e^{K}(K^{i\bar{j}}\mathcal{D}_iW\mathcal{D}_{\bar{j}}\bar{W}-3|W|^2)}
+\end{equation}
+\noindent 
+where the covariant derivative is given:
+\begin{equation}
+\mathcal{D}_i W:=\partial_i W+(\partial_i K)W.
+\end{equation}
+
+\newpage
+\section*{6. Spontaneous symmetry breaking, the vanishing of cosmological constant and the super Higgs effect}
+
+We demand the cosmological constant to vanish, as we are interested in theories in Minkowski space time. In supergravity models the vanishing cosmological constant is obtained if the following condition is satisfied:
+\begin{center}
+$e^K(D_iWD_iW^*- 3W^*W)+\frac{1}{2}g^2D^{\alpha}D^{\alpha}=0$.
+\end{center}
+\noindent 
+The gravitino mass is given by $m_{3/2} = e^{K/2}W$ and hence the condition for the vanishing cosmological constant requires non vanishing gravitino mass.
+
+\faHandPointRight~The super-Higgs effect is the mechanism by which the goldstino (the fermion associated with SUSY breaking) is eaten by the gravitino, which becomes massive. The requirement of zero cosmological constant constrains the SUSY breaking scale and the gravitino mass.
+
+\newpage
+\section*{7. No scale model-formalism}
+
+The cosmological constant vanishes because the following equation is satisfied:
+\begin{center}
+$e^G(G_iG_{\bar{i}}-3)=0$
+\end{center}
+\noindent 
+The vanishing cosmological constant requires non vanishing gravitino mass.
+\par 
+There is an elegant way of guaranteeing a flat potential, with $V=0$, by using a non-trivial form of the K\"ahler potential :
+\begin{equation}
+K(z,\bar{z})=-3\ln (z +\bar{z})
+\end{equation}
+\noindent 
+The Langrangian is restricted by a nontrivial kinetic term:
+\begin{equation}
+\mathcal{L}= 3\frac{1}{(z +\bar{z})}\partial^{\mu}z\partial_{\mu}\bar{z}
+\end{equation}
+\noindent 
+Hence we obtain the gravitino mass 
+\begin{center}
+$m_{3/2}=\langle e^{K/2}\rangle=\langle(z+\bar{z})^{-3/2}\rangle $
+\end{center}
+\noindent 
+which is not fixed by the minimization of $V$.
+In order to discuss the symmetries associated with such a Langrangian we define $z=(y+1)/(y-1)$ and hence the K\"ahler potential can be written as:
+\begin{equation}
+K= -3\ln \left(1-\frac{y^2}{3}\right)
+\end{equation}
+\noindent 
+and it is invariant under:
+\begin{equation}
+y \rightarrow \frac{ay+b}{\bar{b}y +\bar{a}}, \quad |a|^2+|b|^2=1
+\end{equation}
+\noindent 
+This defines the noncompact group $SU(1,1)$. In terms of the variables $z$ this $SU(1,1)$ symmetry reads:
+\begin{equation}
+z\rightarrow \frac{\alpha z+i \beta}{i\gamma z +\delta}, \quad \alpha \delta+\beta \gamma =1, \quad \alpha,\beta,\gamma,\delta  \in   \mathbb{R}
+\end{equation}
+\noindent 
+This includes:
+\begin{enumerate}
+\item imaginary translations forming a noncompact $\tilde{U}(1)_{\alpha}$ group: $z\rightarrow z+i \alpha$,
+\item dilatations: $z \rightarrow \beta^2 z$,
+\item conformal transormations: $z \rightarrow (z+i \tan\theta)/(i \tan\theta+1)$.
+\end{enumerate}
+\par 
+We have supposed the electroweak symmetry breaking to be at scale of gravitino mass, which therefore has to be $O(M_W)$. However a gravitino of this mass appears to be excluded by the cosmological arguments that suggest $m_{3/2}$ must be less than $1\,\mathrm{keV}$ or very heavy so that its number density will be greatly diluted by inflation. The solution to these problems comes from the no-scale models where the symmetry breaking arises not from the gravitino but from gaugino masses which are determined by radiative corrections to be $O(M_W)$.
+\par
+A particular choice of K\"ahler potential is made to ensure that the emerging low energy sector remains globally supersymmetric. The no-scale model is described by:
+\begin{equation}
+K=-3 \ln\left(T+\bar{T}-\frac{\varphi \bar{\varphi}}{3}\right)
+\label{ns0}
+\end{equation}
+\noindent 
+and the cosmological constant vanishes due to the identity $K^{I\bar{J}}K_IK_{\bar{J}}=3$.
+\par
+The inverse K\"ahler metric is given:
+\begin{equation}
+K^{ij}=\left(
+\begin{array}{cc}
+ \frac{1}{3} \left(T+\bar{T}-\frac{\varphi  \bar{\varphi }}{3}\right)^3 \left(\frac{\varphi  \bar{\varphi }}{3 \left(T+\bar{T}-\frac{\varphi
+    \bar{\varphi }}{3}\right)^2}+\frac{1}{T+\bar{T}-\frac{\varphi  \bar{\varphi }}{3}}\right) & \frac{1}{3} \varphi 
+   \left(T+\bar{T}-\frac{\varphi  \bar{\varphi }}{3}\right) \\
+ \frac{1}{3} \bar{\varphi } \left(T+\bar{T}-\frac{\varphi  \bar{\varphi }}{3}\right) & T+\bar{T}-\frac{\varphi  \bar{\varphi }}{3} \\
+\end{array}
+\right)
+\label{ns1}
+\end{equation}
+
+\begin{equation}
+K^{T\bar{T}}K_TK_{\bar{T}}+K^{T\bar{\varphi}}K_{T}K_{\bar{\varphi}}+K^{\varphi\bar{T}}K_{\varphi}K_{\bar{T}}+K^{\varphi\bar{\varphi}}K_{\varphi}K_{\bar{\varphi}}=\frac{3 \bar{\varphi } \left(\bar{T}+T-\varphi \right)+3 \left(3 \bar{T}+3 T+\varphi \right)-(\varphi +3) \bar{\varphi }^2}{3
+   \left(\bar{T}+T\right)-\varphi  \bar{\varphi }}
+\label{ns2}   
+\end{equation}
+\noindent 
+The scalar potential is given by:
+\begin{center}
+$V=e^{K}(K^{i\bar{j}}\mathcal{D}_iW\mathcal{D}_{\bar{j}}\bar{W}-3|W|^2)=e^{K}(K^{T\bar{T}}\mathcal{D}_TW\mathcal{D}_{\bar{T}}\bar{W}  +  K^{T\bar{\varphi}}\mathcal{D}_TW\mathcal{D}_{\bar{\varphi}}\bar{W}+  K^{\varphi\bar{T}}\mathcal{D}_\varphi W\mathcal{D}_{\bar{T}}\bar{W}+     K^{\varphi\bar{\varphi}}\mathcal{D}_\varphi W\mathcal{D}_{\bar{\varphi}}\bar{W}-3|W|^2)
+ $
+\end{center}
+\noindent 
+where $\mathcal{D}$ denotes the covariant derivative. If $\varphi=0$ the equation
+\begin{center}
+$K^{T\bar{T}}K_TK_{\bar{T}}+K^{T\bar{\varphi}}K_TK_{\bar{\varphi}}+K^{{\varphi}\bar{T}}K_{\varphi}K_{\bar{T}}+K^{\varphi\bar{\varphi}}K_{\varphi}K_{\bar{\varphi}}=3$
+\end{center}
+\noindent 
+and the $3|W|^2$ term cancels. The vacuum energy of the potential then vanishes at its minimum. The field $T$ is called a modulus field since we can vary it freely and still remain at the minimum of the potential. Moduli fields denote flat directions in the potential.
+
+\end{document}
