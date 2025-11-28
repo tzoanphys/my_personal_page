@@ -1,0 +1,1149 @@
+\documentclass[12pt]{report}
+
+% ---------- Basic setup ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+\usepackage{amsmath,amssymb}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{mathptmx}          % Times-like font
+\usepackage{fontawesome5}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage[most]{tcolorbox}
+
+\geometry{a4paper, margin=2.0cm}
+\setlength{\parskip}{0.7em}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ---------- Colors ----------
+\definecolor{MLTeal}{HTML}{00897B}     % main teal
+\definecolor{MLTealLight}{HTML}{E0F2F1}% light teal background
+\definecolor{MLGray}{HTML}{455A64}     % dark gray for text accents
+
+% ---------- Chapter style ----------
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries}
+  {%
+    \colorbox{MLTeal}{%
+      \makebox[\textwidth][l]{\hspace{1em}\color{white}\thechapter}%
+    }%
+  }
+  {1ex}
+  {\Huge}
+
+\titlespacing*{\chapter}{0pt}{4ex}{3ex}
+
+% ---------- Section styles ----------
+\titleformat{\section}
+  {\Large\bfseries\color{MLTeal}}
+  {\thesection}{0.8em}{}
+
+\titleformat{\subsection}
+  {\large\bfseries\color{MLGray}}
+  {\thesubsection}{0.6em}{}
+
+% ---------- Header / footer ----------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\textcolor{MLGray}{Notes for Understanding Machine Learning}}
+\fancyhead[R]{\textcolor{MLTeal}{\thepage}}
+\fancyfoot{}
+
+% ---------- tcolorbox styles ----------
+\tcbset{
+  sharp corners,
+  boxrule=0.8pt,
+  colframe=MLTeal,
+  colback=MLTealLight,
+  left=1em,right=1em,top=0.7em,bottom=0.7em,
+  enhanced,
+}
+
+\newtcolorbox{mlidea}[1][]{
+  title={\faLightbulb[regular]~Key Idea},
+  fonttitle=\bfseries,
+  coltitle=MLGray,
+  colback=MLTealLight,
+  colframe=MLTeal,
+  breakable,
+  #1
+}
+
+\newtcolorbox{mlexample}[1][]{
+  title={\faChartLine~Example},
+  fonttitle=\bfseries,
+  coltitle=MLGray,
+  colback=white,
+  colframe=MLTeal,
+  breakable,
+  #1
+}
+
+\newtcolorbox{mlnote}[1][]{
+  title={\faStickyNote[regular]~Note},
+  fonttitle=\bfseries,
+  coltitle=MLGray,
+  colback=MLTealLight,
+  colframe=MLTeal,
+  breakable,
+  #1
+}
+
+% ---------- Title ----------
+\title{%
+  \vspace{1cm}
+  {\Huge\bfseries Notes for Understanding}\\[0.3cm]
+  {\Huge\bfseries\color{MLTeal} Machine Learning}\\[0.3cm]
+  {\large\itshape A personal learning textbook}
+}
+\author{{\Large\bfseries Ioanna Stamou}}
+\date{\vspace{-0.5cm}}
+
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\clearpage
+
+% ---------- Introduction ----------
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
+
+Imagine you have a robot friend.
+
+You give the robot a task:
+
+\medskip
+\centerline{\emph{“Look at these examples, learn the pattern, and make predictions.”}}
+
+\medskip
+This is machine learning.
+
+\begin{center}
+\textbf{Machine learning = finding patterns in data.}
+\end{center}
+
+Example:
+
+You give a model 1000 houses with their \emph{price}, \emph{size}, and \emph{number of rooms}.  
+The model learns the relationship between these features and the price.  
+Then, when you give it a \emph{new} house, it predicts the price.
+
+That’s all.
+
+\begin{mlidea}
+Machine learning is not magic.
+It is a systematic way to:
+\begin{enumerate}
+  \item collect data,
+  \item find patterns,
+  \item use those patterns to make predictions or decisions.
+\end{enumerate}
+\end{mlidea}
+
+The rest of these notes are about:
+\begin{itemize}
+  \item the \textbf{statistics} you need to talk precisely about patterns,
+  \item the \textbf{Python tools} you will use to work with data,
+  \item the \textbf{machine learning algorithms} that actually learn from examples.
+\end{itemize}
+
+\clearpage
+
+% =======================
+\chapter{Statistics You Need for Machine Learning}
+
+In this chapter we will develop the basic statistical ideas that appear everywhere in
+machine learning: random variables, distributions, expectation, variance, covariance,
+correlation, and a few key theorems that explain why learning from data can work.
+
+
+\section{Types of Variables}
+
+\subsection*{Numerical Variables}
+Numerical variables take quantitative values.
+
+\begin{itemize}
+    \item \textbf{Continuous:} $x \in \mathbb{R}$  
+          Examples: height, temperature, house price.
+    \item \textbf{Discrete:} $x \in \mathbb{Z}$  
+          Examples: number of rooms, number of customers.
+\end{itemize}
+
+\subsection*{Categorical Variables}
+Categorical variables represent non-numerical classes.
+
+\begin{itemize}
+    \item \textbf{Nominal (unordered)}  
+          Examples: color, country, type of food.
+    \item \textbf{Ordinal (ordered)}  
+          Examples: rating levels, education level.
+\end{itemize}
+
+\textbf{Important:} Machine learning models expect numerical inputs.  
+Categorical variables must be encoded (one-hot, label encoding, etc.).
+
+% ------------------------------------------------------
+
+\section{Descriptive Statistics}
+
+\subsection{Mean}
+The mean (average) of $n$ observations is:
+\[
+\mu = \frac{1}{n} \sum_{i=1}^n x_i.
+\]
+
+\subsection{Median}
+The median is the middle value of the sorted data.  
+It is more robust to outliers than the mean.
+
+\subsection{Variance}
+Variance measures how far the values are spread from the mean:
+\[
+\mathrm{Var}(X) = \frac{1}{n}\sum_{i=1}^n (x_i - \mu)^2.
+\]
+
+\subsection{Standard Deviation}
+Standard deviation is the square root of the variance:
+\[
+\sigma = \sqrt{\mathrm{Var}(X)}.
+\]
+It measures the typical deviation from the mean.
+
+\subsection{Covariance}
+
+Variance tells us how a single variable varies.  
+Covariance tells us how \emph{two} variables vary \emph{together}.
+
+\[
+\mathrm{Cov}(X, Y) = \mathbb{E}\left[(X - \mu_X)(Y - \mu_Y)\right].
+\]
+
+Interpretation:
+
+\begin{itemize}
+    \item Positive covariance: when $X$ is above its mean, $Y$ tends to be above its mean.
+    \item Negative covariance: when $X$ is above its mean, $Y$ tends to be below its mean.
+    \item Zero covariance: no linear relationship.
+\end{itemize}
+% ------------------------------------------------------
+
+\section{Correlation}
+
+Correlation measures the strength of linear dependence between two variables.
+
+\begin{itemize}
+    \item Range: $[-1,1]$
+    \item Indicates how two variables move together
+\end{itemize}
+
+\[
+\rho_{XY} = \frac{\mathrm{Cov}(X,Y)}{\sigma_X \sigma_Y}.
+\]
+
+\begin{itemize}
+    \item $+1$: perfect positive relationship  
+    \item $0$: no linear relationship  
+    \item $-1$: perfect negative relationship  
+\end{itemize}
+
+Machine learning uses correlation to select and weight relevant features.
+
+% ------------------------------------------------------
+
+\section{Probability Theory Basics}
+
+Machine learning models predict probabilities.  
+Even regression models assume probabilistic noise.
+
+Key ideas:
+\begin{itemize}
+    \item \textbf{Joint probabilities}: describe combined events.
+    \item \textbf{Conditional probabilities}: describe relationships.
+    \item \textbf{Marginal probabilities}: describe overall tendencies.
+\end{itemize}
+
+This logic becomes the backbone of all ML algorithms.
+
+% ------------------------------------------------------
+
+\subsection{Joint Probability}
+For events $A$ and $B$:
+\[
+P(A,B) = P(A \cap B).
+\]
+
+\subsection{Conditional Probability}
+\[
+P(A \mid B) = \frac{P(A,B)}{P(B)}.
+\]
+
+\subsection{Marginal Probability}
+
+\textbf{Discrete:}
+\[
+P(A) = \sum_b P(A,b).
+\]
+
+\textbf{Continuous:}
+\[
+P(A) = \int P(A,b)\, db.
+\]
+
+Probability quantifies uncertainty.  
+Conditional probability expresses relationships between events.
+
+% ------------------------------------------------------
+
+\section{Bayes' Theorem: Updating Beliefs from Data}
+
+\subsection{Formula}
+
+Bayes' theorem describes how we update our belief about an event $A$
+after observing some evidence $B$:
+
+\[
+P(A \mid B) = \frac{P(B \mid A) \, P(A)}{P(B)}.
+\]
+
+\subsection*{What does this mean?}
+
+Bayes' theorem tells us:
+
+\begin{center}
+\textbf{Posterior = Likelihood $\times$ Prior \; / \; Evidence}
+\end{center}
+
+More explicitly:
+\begin{mlidea}
+\[
+P(A \mid B)
+= 
+\underbrace{P(B \mid A)}_{\text{How well $A$ explains the data}}
+\;
+\underbrace{P(A)}_{\text{What we believed before}}
+\;
+\Big/
+\;
+\underbrace{P(B)}_{\text{How expected the data is overall}}.
+\]
+
+\begin{itemize}
+    \item $P(A)$ [ \textbf{prior}]  :
+          What we believed before seeing any data.
+    \item $P(B \mid A)$ [\textbf{likelihood}]  :
+          How compatible the observed data $B$ is with our hypothesis $A$.
+    \item $P(B)$ [\textbf{evidence}]  :
+          The probability of seeing the data under all possible explanations.
+    \item $P(A \mid B)$  [\textbf{posterior}]  :
+          Our updated belief about $A$ after incorporating evidence $B$.
+\end{itemize}
+\end{mlidea}
+
+\subsection*{Intuition}
+
+Bayes' theorem answers the question:
+
+\begin{center}
+\emph{“Given what I just observed, how should I update what I believe?”}
+\end{center}
+
+It combines two ideas:
+
+\begin{enumerate}
+    \item \textbf{What we believed before} (the prior)
+    \item \textbf{How surprising the data is under each hypothesis} (the likelihood)
+\end{enumerate}
+
+The evidence $P(B)$ ensures everything stays a valid probability distribution (sums to 1).
+
+\subsection*{Why this matters in Machine Learning}
+
+Bayes' theorem is the foundation of:
+
+\begin{itemize}
+    \item Naive Bayes classifier
+    \item Bayesian Linear Regression
+    \item Bayesian Neural Networks
+    \item All probabilistic and generative models
+\end{itemize}
+
+It formalizes \textbf{learning from data}.  
+We start with a belief (prior), then see data, and update our belief (posterior).
+
+
+% ------------------------------------------------------
+
+
+% ------------------------------------------------------
+
+\section{Likelihood}
+
+The concept of \textbf{likelihood} answers a very important question in
+statistics and machine learning:
+
+\begin{mlidea}
+\begin{center}
+\emph{“If this parameter $\theta$ were true, how well would it explain the data I observed?”}
+\end{center}
+\end{mlidea}
+
+This is different from asking about the probability of future events.
+Likelihood is specifically about evaluating how plausible a parameter
+is, given the data we already have.
+
+\subsection*{Definition}
+
+For a dataset $x = (x_1, x_2, \dots, x_n)$ and a model with parameter $\theta$, the likelihood is defined as:
+
+\[
+L(\theta \mid x) = P(x \mid \theta)
+\]
+
+This expression should be read as:
+
+\begin{itemize}
+    \item[] \textbf{“Given $\theta$, what is the probability of observing the dataset $x$?”}
+\end{itemize}
+
+\subsection*{Interpretation}
+
+\begin{itemize}
+    \item $x = (x_1, x_2, \dots, x_n)$: the observed data.  
+          These values are \textbf{fixed}. We already saw them.
+    \item $\theta$: the parameter of the model.  
+          This is \textbf{unknown} and is what we want to estimate.
+    \item $P(x \mid \theta)$: the model’s prediction about how likely the data is, if $\theta$ were the true parameter.
+\end{itemize}
+
+\subsection*{Important Distinction: Probability vs. Likelihood}
+
+\begin{itemize}
+    \item \textbf{Probability:} $\theta$ is fixed, data is random.  
+          (Used to predict future observations.)
+    \item \textbf{Likelihood:} data is fixed, $\theta$ is variable.  
+          (Used to evaluate or estimate parameters.)
+\end{itemize}
+
+This is a subtle but essential idea in statistical learning.
+
+\subsection*{The Likelihood Function}
+\begin{mlnote}
+The likelihood function is simply the probability of the data, viewed as a function of the parameter:
+
+\[
+L(x ; \theta) = P(x \mid \theta)
+\]
+
+It tells us how much support the data gives to each possible value of $\theta$.
+
+\begin{center}
+\emph{“Better-fitting parameters give higher likelihood.”}
+\end{center}
+
+\textbf{Crucially:} likelihood is \emph{not} a probability distribution over $\theta$.  
+It does \textbf{not} integrate to 1.  
+It is just a scoring function that says which values of $\theta$ explain the data best.
+\end{mlnote}
+
+\subsection*{The i.i.d. Assumption}
+
+In most machine learning models, the data points are assumed to be:
+
+\begin{itemize}
+    \item \textbf{independent:} knowing one datapoint tells nothing about another,
+    \item \textbf{identically distributed:} all datapoints come from the same distribution.
+\end{itemize}
+
+Under this assumption:
+
+\[
+L(x \mid \theta) = \prod_{i=1}^n P(x_i \mid \theta)
+\]
+
+Why a product?
+
+Because the joint probability of independent events equals the product of their individual probabilities.
+
+This is a key simplification that makes likelihood computation possible for large datasets.
+
+\subsection*{Summary}
+
+\begin{itemize}
+    \item Likelihood measures how well a model with parameter $\theta$ explains the observed data.
+    \item It is the central tool for parameter estimation.
+    \item Almost all ML algorithms rely on likelihood:
+    \begin{itemize}
+        \item Linear Regression  
+        \item Logistic Regression  
+        \item Neural Networks  
+        \item Decision Trees and Random Forests (implicitly)  
+        \item XGBoost  
+    \end{itemize}
+    \item Training a model often means:
+    \[
+    \text{maximize likelihood} \quad \text{or} \quad \text{minimize negative log-likelihood}.
+    \]
+\end{itemize}
+
+In short, likelihood connects your model to your data.
+It is the mathematical backbone of statistical learning.
+
+% ------------------------------------------------------
+\section{Probability Distributions: Shape of Data}
+
+A probability distribution describes \textbf{how data behaves}.  
+It tells us which values are likely, which are rare, and what kind of
+uncertainty or randomness we should expect in the data.
+
+Machine learning models often assume certain distributions because
+they determine the model's behavior and how it handles noise.
+
+% --------------------------------------------------------
+\subsection{Discrete Distributions}
+
+Discrete distributions describe random variables that take values
+from a finite or countable set (e.g., 0, 1, 2, 3, ...).
+
+% -------------------
+\paragraph{Bernoulli Distribution}
+
+A Bernoulli variable represents a single binary outcome:
+
+\[
+P(X = x) = p^x (1-p)^{1-x}, \qquad x \in \{0,1\}.
+\]
+
+Interpretation:
+
+\begin{itemize}
+    \item Models ``success or failure'' events.
+    \item Examples: coin flip, email is spam/not spam, churning/not churning customer.
+    \item Parameter $p$ is the probability of success.
+\end{itemize}
+
+% -------------------
+\paragraph{Binomial Distribution}
+
+The binomial distribution models the number of successes in $n$
+independent Bernoulli trials:
+
+\[
+P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}.
+\]
+
+Interpretation:
+
+\begin{itemize}
+    \item Repeating the same experiment $n$ times.
+    \item Examples: number of heads in $n$ coin flips,
+                    number of defective items in a batch.
+    \item Gives the distribution of the \emph{count of successes}.
+\end{itemize}
+
+% -------------------
+\paragraph{Poisson Distribution}
+
+The Poisson distribution models the number of events occurring
+in a fixed time or space interval:
+
+\[
+P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}.
+\]
+
+Interpretation:
+
+\begin{itemize}
+    \item Used for rare events happening unpredictably.
+    \item Examples: number of incoming calls per minute,
+                    number of website hits per second,
+                    number of accidents per day.
+    \item Parameter $\lambda$ is both the mean and the variance.
+\end{itemize}
+
+% --------------------------------------------------------
+\subsection{Continuous Distributions}
+
+Continuous distributions describe variables that take real-number values
+(e.g., height, temperature, time).
+
+% -------------------
+\paragraph{Gaussian (Normal Distribution)}
+
+\[
+f(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}}
+\exp\left( -\frac{(x-\mu)^2}{2\sigma^{2}} \right)
+\]
+
+Interpretation:
+
+\begin{itemize}
+    \item The most important distribution in statistics.
+    \item Data clusters around a mean $\mu$ with spread $\sigma$.
+    \item Many ML models assume Gaussian noise.
+    \item Examples: measurement error, natural variations, height.
+\end{itemize}
+
+% -------------------
+\paragraph{Exponential Distribution}
+
+\[
+f(x) = \lambda e^{-\lambda x}
+\]
+
+Interpretation:
+
+\begin{itemize}
+    \item Models the time between independent random events.
+    \item Examples: time until next earthquake, time until customer arrival.
+    \item Memoryless property: past values do not change future probability.
+\end{itemize}
+
+% -------------------
+\paragraph{Multivariate Gaussian}
+
+\[
+f(x) = \frac{1}{(2\pi)^{d/2} |\Sigma|^{1/2}}
+\exp\left( -\frac{1}{2}(x - \mu)^T \Sigma^{-1}(x - \mu) \right)
+\]
+
+Interpretation:
+
+\begin{itemize}
+    \item A Gaussian distribution in multiple dimensions.
+    \item $\mu$ is a mean vector, $\Sigma$ is a covariance matrix.
+    \item Models correlated variables.
+    \item Used heavily in:
+    \begin{itemize}
+        \item PCA (Principal Component Analysis)
+        \item Gaussian Mixture Models (GMMs)
+        \item Bayesian inference
+    \end{itemize}
+\end{itemize}
+
+% --------------------------------------------------------
+\subsection*{Why Distributions Matter in Machine Learning}
+
+Different distributions encode different assumptions about uncertainty:
+
+\begin{itemize}
+    \item Bernoulli / Binomial → binary or count data  
+    \item Gaussian → continuous data with natural noise  
+    \item Poisson → rare event counts  
+    \item Exponential → waiting times  
+    \item Multivariate Gaussian → correlated continuous data  
+\end{itemize}
+
+Choosing an appropriate distribution helps us build models that
+accurately reflect the data-generating process.
+
+% ------------------------------------------------------
+\section{Statistical Inference: Learning Parameters From Data}
+
+Statistical inference is about using data to learn the best values for the
+parameters of a model. In machine learning, almost every algorithm can be
+understood as an inference method.
+
+We focus on two fundamental ideas:
+\begin{itemize}
+    \item \textbf{Maximum Likelihood Estimation (MLE)}
+    \item \textbf{Maximum A Posteriori Estimation (MAP)}
+\end{itemize}
+
+These appear throughout regression, classification, probabilistic models,
+and even deep learning.
+
+% ---------------------------------------------------------
+\subsection{Maximum Likelihood Estimation (MLE)}
+
+MLE answers a simple question:
+
+\begin{mlidea}
+\begin{center}
+\emph{“Which parameter value makes the observed data the most likely?”}
+\end{center}
+\end{mlidea}
+
+If $x = (x_1, \dots, x_n)$ is the observed data and $\theta$ is an unknown parameter,
+the MLE estimate is:
+
+\[
+\hat{\theta}_{\mathrm{MLE}} = \arg\max_{\theta} L(\theta \mid x)
+\]
+
+where
+
+\[
+L(\theta \mid x) = P(x \mid \theta)
+\]
+
+is the likelihood of the data under the parameter $\theta$.
+
+\subsubsection*{Why do we take the log?}
+
+Because products of probabilities become sums:
+
+\[
+\hat{\theta}_{\mathrm{MLE}}
+= \arg\max_{\theta} \log L(\theta \mid x)
+\]
+
+This is numerically stable and makes optimization easier.
+
+\subsubsection*{Intuition}
+
+\begin{itemize}
+    \item The data $x$ is considered fixed.
+    \item The parameter $\theta$ varies.
+    \item We choose the $\theta$ that best \emph{explains} the data.
+\end{itemize}
+
+This idea lies behind most ML algorithms:
+
+\begin{itemize}
+    \item Linear regression (least squares)
+    \item Logistic regression
+    \item Naive Bayes
+    \item Neural networks (via cross-entropy)
+\end{itemize}
+
+All of them optimize a likelihood or its negative log.
+
+% ---------------------------------------------------------
+\subsection{Maximum A Posteriori Estimation (MAP)}
+
+MAP estimation is the Bayesian version of learning parameters.
+
+Instead of asking:
+
+\begin{center}
+\emph{“Which parameter makes the data most likely?”}
+\end{center}
+
+we ask:
+
+\begin{mlidea}
+\begin{center}
+\emph{“Which parameter is most plausible, given the data and my prior beliefs?”}
+\end{center}
+\end{mlidea}
+
+The MAP estimate is:
+
+\[
+\hat{\theta}_{\mathrm{MAP}}
+= \arg\max_{\theta} P(\theta \mid x)
+\]
+
+Using Bayes’ theorem:
+
+\[
+P(\theta \mid x)
+= \frac{P(x \mid \theta)\, P(\theta)}{P(x)}
+\]
+
+Since $P(x)$ does not depend on $\theta$, we ignore it in maximization:
+
+\[
+\hat{\theta}_{\mathrm{MAP}}
+= \arg\max_{\theta}
+\left[ \log P(x \mid \theta) + \log P(\theta) \right]
+\]
+
+\subsubsection*{Interpretation}
+
+\begin{itemize}
+    \item \textbf{MLE}: only cares about the data.
+    \item \textbf{MAP}: cares about data \emph{and} prior knowledge.
+\end{itemize}
+
+\begin{mlexample}
+\textbf{Examples of priors:}
+
+Priors express what we believe about the parameter $\theta$ before seeing data.
+In machine learning, they often appear naturally as regularization.
+
+{1. Prior: “Parameters should be small”}
+
+This corresponds to a Gaussian prior:
+
+\[
+P(\theta) \propto \exp(-\theta^2),
+\]
+
+which leads to the penalty $\theta^2$ after taking $-\log$.  
+This is exactly **L2 regularization**.
+
+{2. Prior: “Many parameters should be zero”}
+
+This corresponds to a Laplace prior:
+
+\[
+P(\theta) \propto \exp(-|\theta|),
+\]
+
+which leads to the penalty $|\theta|$.  
+This is **L1 regularization**, which encourages sparsity.
+
+%{3. Prior: “Some parameter values are more plausible”}
+%
+%Here we choose $P(\theta)$ based on domain knowledge.  
+%MAP then balances:
+%
+%\[
+%\text{Posterior} \propto \text{Likelihood} \times \text{Prior}.
+%\]
+%
+%This expresses learning from data while incorporating prior beliefs.
+\end{mlexample}
+
+\subsubsection*{Connection between MLE and MAP}
+
+\[
+\text{Posterior} \propto \text{Likelihood} \times \text{Prior}
+\]
+
+\begin{itemize}
+    \item If the prior is flat (uninformative), MAP = MLE.
+    \item If the prior is strong, MAP pulls the estimate toward the prior belief.
+\end{itemize}
+
+MAP can be seen as:
+
+\[
+\text{MAP} = \text{MLE} + \text{regularization}.
+\]
+
+This is why many ML algorithms with regularization (ridge, lasso, weight decay)
+are actually MAP estimators in disguise.
+
+% ------------------------------------------------------
+\section{Linear Regression: Statistical Interpretation}
+
+Linear regression is one of the simplest and most fundamental models in 
+machine learning. It describes a relationship between input features and a 
+continuous output.
+
+% ------------------------------------------------------
+\subsection*{Model}
+
+We assume the data is generated according to:
+
+\[
+y = X\beta + \varepsilon
+\]
+
+\begin{itemize}
+    \item $X$ is the matrix of input features.
+    \item $\beta$ is a vector of unknown parameters.
+    \item $\varepsilon$ is random noise (unpredictable variation).
+\end{itemize}
+
+The key probabilistic assumption:
+
+\[
+\varepsilon \sim \mathcal{N}(0, \sigma^2 I)
+\]
+
+This means:
+\begin{itemize}
+    \item noise is Gaussian,
+    \item noise has zero mean,
+    \item noise is independent with constant variance.
+\end{itemize}
+
+With this assumption, each $y_i$ is normally distributed around 
+$X_i \beta$.
+
+% ------------------------------------------------------
+\subsection*{Least Squares Estimation}
+
+The most common way to estimate $\beta$ is to minimize the sum of squared 
+errors:
+
+\[
+\hat{\beta} = \arg\min_{\beta} \| y - X\beta \|^2
+\]
+
+This objective measures how well the model's predictions match the data.
+
+The minimizer has a closed-form solution:
+
+\[
+\hat{\beta} = (X^T X)^{-1} X^T y
+\]
+
+This solution exists when $X^T X$ is invertible.
+
+% ------------------------------------------------------
+\subsection*{Probabilistic Interpretation}
+
+Ordinary Least Squares (OLS) is not only a geometric method—it is also a 
+probabilistic one.
+
+If the noise is Gaussian, then the likelihood of observing $y$ given 
+$\beta$ is:
+
+\[
+P(y \mid X, \beta)
+= \frac{1}{(2\pi\sigma^2)^{n/2}}
+\exp\left( -\frac{1}{2\sigma^2} \| y - X\beta \|^2 \right)
+\]
+
+Maximizing this likelihood is equivalent to minimizing the squared error.
+
+Thus:
+
+\[
+\text{OLS} = \text{MLE under Gaussian noise}.
+\]
+
+\textbf{Interpretation:}
+
+\begin{itemize}
+    \item Linear regression assumes data is generated as a linear trend + Gaussian noise.
+    \item Fitting the model means choosing $\beta$ that makes the data most likely.
+    \item This gives a deep statistical foundation to the method.
+\end{itemize}
+
+Linear regression is therefore both:
+\begin{itemize}
+    \item a geometric projection problem,
+    \item a probabilistic parameter estimation problem.
+\end{itemize}
+
+% ======================================================
+\section{Logistic Regression: Probabilistic Classification}
+
+Linear regression predicts a continuous outcome.  
+Logistic regression adapts the idea to predict \emph{probabilities} for 
+binary outcomes (0 or 1).
+
+% ------------------------------------------------------
+\subsection*{Model}
+
+We model the probability of the outcome being 1 as:
+
+\[
+P(y=1 \mid x) = \sigma(w^T x)
+\]
+
+using the sigmoid function:
+
+\[
+\sigma(z) = \frac{1}{1 + e^{-z}}.
+\]
+
+Properties of the sigmoid:
+\begin{itemize}
+    \item outputs values between $0$ and $1$,
+    \item smoothly increases, S-shaped,
+    \item interpretable as a probability.
+\end{itemize}
+
+This means logistic regression predicts:
+
+\[
+\text{``How likely is it that } y=1 \text{ given the input } x?'' 
+\]
+
+% ------------------------------------------------------
+\subsection*{Log-Likelihood}
+
+Assume each data point $(x_i, y_i)$ is drawn independently.  
+The likelihood of the entire dataset under parameters $w$ is:
+
+\[
+\ell(w)
+= \sum_{i=1}^n
+\left[
+y_i \log \sigma(w^T x_i)
++ (1-y_i)\log(1-\sigma(w^T x_i))
+\right]
+\]
+
+This is the log-likelihood of the Bernoulli model.
+
+\textbf{Training = maximize the log-likelihood.}
+
+This chooses the $w$ that makes the observed labels most probable.
+
+% ------------------------------------------------------
+\subsection*{Connection to Cross-Entropy Loss}
+
+Instead of maximizing $\ell(w)$, we minimize its negative:
+
+\[
+\mathcal{L}(w)
+= -\ell(w)
+\]
+
+This is the **cross-entropy loss**, the most widely used loss in 
+classification and neural networks.
+
+\textbf{Interpretation:}
+
+\begin{itemize}
+    \item If the model assigns a high probability to the true label,
+          the loss is small.
+    \item If the model assigns a low probability to the true label,
+          the loss is large.
+\end{itemize}
+
+Thus training logistic regression is about making correct labels more 
+probable.
+
+% ------------------------------------------------------
+\subsection*{Summary}
+
+Logistic regression is:
+
+\begin{itemize}
+    \item a probabilistic model for binary classification,
+    \item trained via maximum likelihood,
+    \item equivalent to minimizing cross-entropy,
+    \item foundational for neural networks, softmax classifiers, and deep learning.
+\end{itemize}
+
+It takes the linear model $w^T x$ and turns it into a probability through 
+the sigmoid function.
+
+
+% ------------------------------------------------------
+\section{Bias–Variance Tradeoff: Why Models Fail}
+
+When we train a model, we want its predictions $\hat{f}(x)$ to be close to
+the true output $y$. A key question in machine learning is:
+
+\begin{center}
+\textbf{Why do models make errors, even after training?}
+\end{center}
+
+The answer is given by the bias–variance decomposition:
+
+\[
+\mathbb{E}[(y - \hat{f}(x))^2]
+= \underbrace{\text{Bias}[\hat{f}(x)]^2}_{\text{model too simple}}
++ \underbrace{\text{Var}[\hat{f}(x)]}_{\text{model too complex}}
++ \sigma^2_{\text{noise}}.
+\]
+
+This formula says that prediction error comes from \emph{three} different sources.
+
+% -----------------------------------------------------------
+\subsection*{1. Bias: Error from Wrong Assumptions}
+
+Bias measures how far the model's average prediction is from the true
+relationship.
+
+\begin{itemize}
+    \item High bias means the model is too simple.
+    \item It cannot capture the true pattern.
+    \item It makes the same mistakes no matter how much data we have.
+\end{itemize}
+
+Examples:
+\begin{itemize}
+    \item Using a straight line to fit a quadratic curve.
+    \item A linear model for data with strong nonlinear structure.
+\end{itemize}
+
+This is called \textbf{underfitting}.
+
+% -----------------------------------------------------------
+\subsection*{2. Variance: Error from Sensitivity to Data}
+
+Variance measures how much predictions change if we train on a different
+dataset.
+
+\begin{itemize}
+    \item High variance means the model is too flexible.
+    \item It memorizes random noise in the training data.
+    \item Small changes in the data lead to large changes in the model.
+\end{itemize}
+
+Examples:
+\begin{itemize}
+    \item A decision tree that grows too deep.
+    \item A neural network trained with too few data points.
+\end{itemize}
+
+This is called \textbf{overfitting}.
+
+% -----------------------------------------------------------
+\subsection*{3. Irreducible Noise}
+
+\[
+\sigma^2_{\text{noise}}
+\]
+
+This is randomness in the data that no model can ever explain.
+
+Examples:
+\begin{itemize}
+    \item Measurement error.
+    \item Natural variability in human behavior.
+    \item Random fluctuations in physical or economic systems.
+\end{itemize}
+
+Even a perfect model cannot reduce this part of the error.
+
+% -----------------------------------------------------------
+\subsection*{Why This Matters}
+
+The bias–variance tradeoff explains:
+
+\begin{itemize}
+    \item \textbf{Underfitting}: high bias, low variance.
+    \item \textbf{Overfitting}: low bias, high variance.
+    \item \textbf{Regularization}: reduces variance by simplifying the model.
+    \item \textbf{Cross-validation}: detects overfitting by testing on unseen data.
+    \item \textbf{Ensembles}: average predictions to reduce variance.
+\end{itemize}
+
+\begin{center}
+\textbf{The goal of learning is to find a model with a good balance:}  
+low bias \emph{and} low variance.
+\end{center}
+
+
+
+
+
+
+% (We will fill the detailed sections step by step together.)
+
+\clearpage
+
+% =======================
+\chapter{Python for Machine Learning}
+
+This chapter will introduce the practical tools in Python: 
+
+We will use them to load, explore, and visualise real datasets.
+
+\clearpage
+
+% =======================
+\chapter{Machine Learning Algorithms}
+
+Here we will study the main learning algorithms:
+linear regression, logistic regression, decision trees, ensembles,
+and neural networks, always connecting them back to the statistics
+and Python tools from the previous chapters.
+
+
+% =======================
+\chapter{Neural Networks \& Deep Learning}
+
+\end{document}
