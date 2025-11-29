@@ -58,9 +58,8 @@ function AboutPage() {
               fontSize: "18px"
             }}
           >
-            PhD scientist and developer with strong experience in Python, Java, and
-            machine learning. Passionate about building robust end-to-end systems
-            and continuously learning.
+           Hello! Welcome to my personal website. I’m a researcher in theoretical physics and a developer working with Python, Java, and machine learning. I enjoy building complete, reliable systems and learning new things along the way.
+           Here you’ll find my publications, projects, and notes from my work and interests.
           </p>
         </div>
       </div>
