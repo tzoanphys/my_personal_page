@@ -5,8 +5,12 @@ import './App.css';
 // Map skills to their notes (array of objects with title and pdfPath)
 // Each skill can have multiple notes
 const skillNotes = {
-  'Python': [], // Add notes like: [{ title: 'Python Basics', pdfPath: '/notes/python-basics.pdf' }]
-  'Java & Spring Boot': [],
+  'Python': [
+    { title: 'Big Data Analytics with Hadoop', pdfPath: '/notes/spark.pdf' }
+  ],
+  'Java & Spring Boot': [
+    { title: 'Java Spring Boot Notes', pdfPath: '/notes/java_spring.pdf' }
+  ],
   'Machine Learning': [
     { title: 'Notes for Understanding Machine Learning', pdfPath: '/notes/ml_notes.pdf' }
   ],
