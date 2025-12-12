@@ -102,7 +102,7 @@ function App() {
       >
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
           <img 
-            src="/unnamed.jpg" 
+            src="/unnamed1.jpg" 
             alt="Eagle Logo" 
             style={{
               width: "100px",

@@ -30,14 +30,14 @@ function AboutPage() {
           }}
         >
           <img
-            src="/WhatsApp%20Image%202025-11-25%20at%2023.05.08.jpeg"
+            src="/IMVVV.jpg"
             alt="Ioanna Stamou"
             style={{
               width: "160px",
               height: "160px",
               borderRadius: "50%",
               objectFit: "cover",
-              objectPosition: "center 60%",
+              objectPosition: "center 55%",
               border: "4px solid #00F5C4",
               boxShadow: "0 8px 24px rgba(0, 245, 196, 0.3)"
             }}
