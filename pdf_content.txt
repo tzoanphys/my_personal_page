@@ -1,0 +1,2313 @@
+Notes for Understanding
+Machine Learning
+Apersonallearningtextbook
+Ioanna Stamou
+Contents
+Introduction 3
+1 StatisticsYouNeedforMachineLearning 4
+1.1 TypesofVariables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+1.2 DescriptiveStatistics . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+1.3 Correlation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+1.4 ProbabilityTheoryBasics. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+1.5 Bayes’Theorem: UpdatingBeliefsfromData . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+1.6 Likelihood . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+1.7 ProbabilityDistributions: ShapeofData . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+1.8 StatisticalInference: LearningParametersFromData . . . . . . . . . . . . . . . . . . . . . . 12
+1.9 LinearRegression: StatisticalInterpretation . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+1.10 LogisticRegression: ProbabilisticClassification . . . . . . . . . . . . . . . . . . . . . . . . . 17
+1.11 Bias–VarianceTradeoff: WhyModelsFail . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+2 PythonforMachineLearning 25
+2.1 SupervisedData . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+2.2 LossFunctionandRiskMinimization . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+2.3 Train/Validation/Test . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 34
+2.4 PythonEcosystem . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 37
+3 MachineLearningAlgorithms 44
+3.1 DecisionTrees . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 45
+3.2 RandomForest . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 50
+3.3 GradientBoosting . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 55
+3.4 XGBoost: ExtremeGradientBoosting . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 59
+3.5 Summary: RecognizingandDistinguishingtheAlgorithms . . . . . . . . . . . . . . . . . . . 65
+1
+NotesforUnderstandingMachineLearning 2
+4 NeuralNetworks&DeepLearning 66
+4.1 ThePerceptron: TheSimplestNeuralUnit . . . . . . . . . . . . . . . . . . . . . . . . . . . . 66
+4.2 Multi–LayerPerceptron(MLP) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 67
+4.3 ForwardPassandLossFunction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 68
+4.4 Backpropagation: HowNeuralNetworksLearn . . . . . . . . . . . . . . . . . . . . . . . . . 68
+4.5 TrainingwithGradientDescent . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 69
+4.6 WhyDeepNetworksWork . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 69
+4.7 OverfittingandRegularizationinNeuralNetworks . . . . . . . . . . . . . . . . . . . . . . . 70
+4.8 PythonExample: NeuralNetworkforClassification(Keras) . . . . . . . . . . . . . . . . . . 71
+4.9 Summary: RecognizingNeuralNetworks . . . . . . . . . . . . . . . . . . . . . . . . . . . . 72
+5 PracticalML 74
+Introduction
+Imagineyouhavearobotfriend.
+Yougivetherobotatask:
+“Lookattheseexamples,learnthepattern,andmakepredictions.”
+Thisismachinelearning.
+Machinelearning=findingpatternsindata.
+Example:
+You give a model 1000 houses with their price, size, and number of rooms. The model learns the relationship
+betweenthesefeaturesandtheprice. Then,whenyougiveitanewhouse,itpredictstheprice.
+That’sall.
+(cid:15)KeyIdea
+Machinelearningisnotmagic. Itisasystematicwayto:
+1. collectdata,
+2. findpatterns,
+3. usethosepatternstomakepredictionsordecisions.
+Therestofthesenotesareabout:
+• thestatisticsyouneedtotalkpreciselyaboutpatterns,
+• thePythontoolsyouwillusetoworkwithdata,
+• themachinelearningalgorithmsthatactuallylearnfromexamples.
+3
+1
+Statistics You Need for Machine Learning
+Inthischapterwewilldevelopthebasicstatisticalideasthatappeareverywhereinmachinelearning: random
+variables,distributions,expectation,variance,covariance,correlation,andafewkeytheoremsthatexplainwhy
+learningfromdatacanwork.
+1.1 Types of Variables
+NumericalVariables
+Numericalvariablestakequantitativevalues.
+• Continuous: x∈RExamples: height,temperature,houseprice.
+• Discrete: x∈ZExamples: numberofrooms,numberofcustomers.
+CategoricalVariables
+Categoricalvariablesrepresentnon-numericalclasses.
+• Nominal(unordered)Examples: color,country,typeoffood.
+• Ordinal(ordered)Examples: ratinglevels,educationlevel.
+Important: Machine learning models expect numerical inputs. Categorical variables must be encoded (one-
+hot,labelencoding,etc.).
+1.2 Descriptive Statistics
+1.2.1 Mean
+Themean(average)ofnobservationsis:
+1 n
+µ = ∑x.
+i
+n
+i=1
+4
+NotesforUnderstandingMachineLearning 5
+1.2.2 Median
+Themedianisthemiddlevalueofthesorteddata. Itismorerobusttooutliersthanthemean.
+1.2.3 Variance
+Variancemeasureshowfarthevaluesarespreadfromthemean:
+1 n
+Var(X)= ∑(x −µ)2.
+i
+n
+i=1
+1.2.4 StandardDeviation
+Standarddeviationisthesquarerootofthevariance:
+(cid:112)
+σ = Var(X).
+Itmeasuresthetypicaldeviationfromthemean.
+1.2.5 Covariance
+Variancetellsushowasinglevariablevaries. Covariancetellsushowtwovariablesvarytogether.
+Cov(X,Y)=E[(X−µ )(Y−µ )].
+X Y
+Interpretation:
+• Positivecovariance: whenX isaboveitsmean,Y tendstobeaboveitsmean.
+• Negativecovariance: whenX isaboveitsmean,Y tendstobebelowitsmean.
+• Zerocovariance: nolinearrelationship.
+1.3 Correlation
+Correlationmeasuresthestrengthoflineardependencebetweentwovariables.
+• Range: [−1,1]
+• Indicateshowtwovariablesmovetogether
+Cov(X,Y)
+ρ = .
+XY
+σ σ
+X Y
+NotesforUnderstandingMachineLearning 6
+• +1: perfectpositiverelationship
+• 0: nolinearrelationship
+• −1: perfectnegativerelationship
+Machinelearningusescorrelationtoselectandweightrelevantfeatures.
+1.4 Probability Theory Basics
+Machinelearningmodelspredictprobabilities. Evenregressionmodelsassumeprobabilisticnoise.
+Keyideas:
+• Jointprobabilities: describecombinedevents.
+• Conditionalprobabilities: describerelationships.
+• Marginalprobabilities: describeoveralltendencies.
+ThislogicbecomesthebackboneofallMLalgorithms.
+1.4.1 JointProbability
+ForeventsAandB:
+P(A,B)=P(A∩B).
+1.4.2 ConditionalProbability
+P(A,B)
+P(A|B)= .
+P(B)
+1.4.3 MarginalProbability
+Discrete:
+P(A)=∑P(A,b).
+b
+Continuous:
+(cid:90)
+P(A)= P(A,b)db.
+Probabilityquantifiesuncertainty. Conditionalprobabilityexpressesrelationshipsbetweenevents.
+NotesforUnderstandingMachineLearning 7
+1.5 Bayes’ Theorem: Updating Beliefs from Data
+1.5.1 Formula
+Bayes’theoremdescribeshowweupdateourbeliefaboutaneventAafterobservingsomeevidenceB:
+P(B|A)P(A)
+P(A|B)= .
+P(B)
+Whatdoesthismean?
+Bayes’theoremtellsus:
+Posterior=Likelihood×Prior / Evidence
+Moreexplicitly:
+(cid:15)KeyIdea
+(cid:46)
+P(A|B)= P(B|A) P(A) P(B) .
+(cid:124) (cid:123)(cid:122) (cid:125) (cid:124)(cid:123)(cid:122)(cid:125) (cid:124)(cid:123)(cid:122)(cid:125)
+HowwellAexplainsthedata Whatwebelievedbefore Howexpectedthedataisoverall
+• P(A)[prior]: Whatwebelievedbeforeseeinganydata.
+• P(B|A)[likelihood]: HowcompatibletheobserveddataBiswithourhypothesisA.
+• P(B)[evidence]: Theprobabilityofseeingthedataunderallpossibleexplanations.
+• P(A|B)[posterior]: OurupdatedbeliefaboutAafterincorporatingevidenceB.
+Intuition
+Bayes’theoremanswersthequestion:
+“GivenwhatIjustobserved,howshouldIupdatewhatIbelieve?”
+Itcombinestwoideas:
+1. Whatwebelievedbefore(theprior)
+2. Howsurprisingthedataisundereachhypothesis(thelikelihood)
+TheevidenceP(B)ensureseverythingstaysavalidprobabilitydistribution(sumsto1).
+NotesforUnderstandingMachineLearning 8
+WhythismattersinMachineLearning
+Bayes’ theorem is the foundation of: Naive Bayes classifier, Bayesian Linear Regression, Bayesian Neural
+Networks,Allprobabilisticandgenerativemodels.
+Itformalizeslearningfromdata. Westartwithabelief(prior),thenseedata,andupdateourbelief(posterior).
+1.6 Likelihood
+Theconceptoflikelihoodanswersaveryimportantquestioninstatisticsandmachinelearning:
+(cid:15)KeyIdea
+“Ifthisparameterθ weretrue,howwellwoulditexplainthedataIobserved?”
+Thisisdifferentfromaskingabouttheprobabilityoffutureevents. Likelihoodisspecificallyaboutevaluating
+howplausibleaparameteris,giventhedatawealreadyhave.
+Definition
+Foradatasetx=(x ,x ,...,x )andamodelwithparameterθ,thelikelihoodisdefinedas:
+1 2 n
+L(θ |x)=P(x|θ)
+Thisexpressionshouldbereadas:
+“Givenθ,whatistheprobabilityofobservingthedatasetx?”
+Interpretation
+• x=(x ,x ,...,x ): theobserveddata. Thesevaluesarefixed. Wealreadysawthem.
+1 2 n
+• θ: theparameterofthemodel. Thisisunknownandiswhatwewanttoestimate.
+• P(x|θ): themodel’spredictionabouthowlikelythedatais,ifθ werethetrueparameter.
+ImportantDistinction: Probabilityvs. Likelihood
+• Probability: θ isfixed,dataisrandom. (Usedtopredictfutureobservations.)
+• Likelihood: dataisfixed,θ isvariable. (Usedtoevaluateorestimateparameters.)
+Thisisasubtlebutessentialideainstatisticallearning.
+NotesforUnderstandingMachineLearning 9
+TheLikelihoodFunction
+1Note
+Thelikelihoodfunctionissimplytheprobabilityofthedata,viewedasafunctionoftheparameter:
+L(x;θ)=P(x|θ)
+Ittellsushowmuchsupportthedatagivestoeachpossiblevalueofθ.
+“Better-fittingparametersgivehigherlikelihood.”
+Crucially: likelihood is not a probability distribution over θ. It does not integrate to 1. It is just a
+scoringfunctionthatsayswhichvaluesofθ explainthedatabest.
+Thei.i.d. Assumption
+Inmostmachinelearningmodels,thedatapointsareassumedtobe:
+• independent: knowingonedatapointtellsnothingaboutanother,
+• identicallydistributed: alldatapointscomefromthesamedistribution.
+Underthisassumption:
+n
+L(x|θ)=∏P(x |θ)
+i
+i=1
+Whyaproduct?
+Becausethejointprobabilityofindependenteventsequalstheproductoftheirindividualprobabilities.
+Thisisakeysimplificationthatmakeslikelihoodcomputationpossibleforlargedatasets.
+Summary
+• Likelihoodmeasureshowwellamodelwithparameterθ explainstheobserveddata.
+• Itisthecentraltoolforparameterestimation.
+• AlmostallMLalgorithmsrelyonlikelihood:
+– LinearRegression
+– LogisticRegression
+– NeuralNetworks
+– DecisionTreesandRandomForests(implicitly)
+– XGBoost
+NotesforUnderstandingMachineLearning 10
+• Trainingamodeloftenmeans:
+maximizelikelihood or minimizenegativelog-likelihood.
+Inshort,likelihoodconnectsyourmodeltoyourdata. Itisthemathematicalbackboneofstatisticallearning.
+1.7 Probability Distributions: Shape of Data
+Aprobabilitydistributiondescribeshowdatabehaves. Ittellsuswhichvaluesarelikely, whicharerare, and
+whatkindofuncertaintyorrandomnessweshouldexpectinthedata.
+Machine learning models often assume certain distributions because they determine the model’s behavior and
+howithandlesnoise.
+1.7.1 DiscreteDistributions
+Discretedistributionsdescriberandomvariablesthattakevaluesfromafiniteorcountableset(e.g., 0, 1, 2, 3,
+...).
+BernoulliDistribution ABernoullivariablerepresentsasinglebinaryoutcome:
+P(X =x)= px(1−p)1−x, x∈{0,1}.
+Interpretation:
+• Models“successorfailure”events.
+• Examples: coinflip,emailisspam/notspam,churning/notchurningcustomer.
+• Parameter pistheprobabilityofsuccess.
+BinomialDistribution ThebinomialdistributionmodelsthenumberofsuccessesinnindependentBernoulli
+trials:
+(cid:18) (cid:19)
+n
+P(X =k)= pk(1−p)n−k.
+k
+Interpretation:
+• Repeatingthesameexperimentntimes.
+• Examples: numberofheadsinncoinflips,numberofdefectiveitemsinabatch.
+• Givesthedistributionofthecountofsuccesses.
+NotesforUnderstandingMachineLearning 11
+PoissonDistribution ThePoissondistributionmodelsthenumberofeventsoccurringinafixedtimeorspace
+interval:
+λke−λ
+P(X =k)= .
+k!
+Interpretation:
+• Usedforrareeventshappeningunpredictably.
+• Examples: numberofincomingcallsperminute,numberofwebsitehitspersecond,numberofaccidents
+perday.
+• Parameterλ isboththemeanandthevariance.
+1.7.2 ContinuousDistributions
+Continuousdistributionsdescribevariablesthattakereal-numbervalues(e.g.,height,temperature,time).
+Gaussian(NormalDistribution)
+1
+(cid:18) (x−µ)2(cid:19)
+f(x)= √ exp −
+2πσ2 2σ2
+Interpretation:
+• Themostimportantdistributioninstatistics.
+• Dataclustersaroundameanµ withspreadσ.
+• ManyMLmodelsassumeGaussiannoise.
+• Examples: measurementerror,naturalvariations,height.
+ExponentialDistribution
+f(x)=λe−λx
+Interpretation:
+• Modelsthetimebetweenindependentrandomevents.
+• Examples: timeuntilnextearthquake,timeuntilcustomerarrival.
+• Memorylessproperty: pastvaluesdonotchangefutureprobability.
+NotesforUnderstandingMachineLearning 12
+MultivariateGaussian
+(cid:18) (cid:19)
+1 1
+f(x)= exp − (x−µ)TΣ−1(x−µ)
+(2π)d/2|Σ|1/2 2
+Interpretation:
+• AGaussiandistributioninmultipledimensions.
+• µ isameanvector,Σisacovariancematrix.
+• Modelscorrelatedvariables.
+• Usedheavilyin:
+– PCA(PrincipalComponentAnalysis)
+– GaussianMixtureModels(GMMs)
+– Bayesianinference
+WhyDistributionsMatterinMachineLearning
+Differentdistributionsencodedifferentassumptionsaboutuncertainty:
+• Bernoulli/Binomial→binaryorcountdata
+• Gaussian→continuousdatawithnaturalnoise
+• Poisson→rareeventcounts
+• Exponential→waitingtimes
+• MultivariateGaussian→correlatedcontinuousdata
+Choosinganappropriatedistributionhelpsusbuildmodelsthataccuratelyreflectthedata-generatingprocess.
+1.8 Statistical Inference: Learning Parameters From Data
+Statistical inference is about using data to learn the best values for the parameters of a model. In machine
+learning,almosteveryalgorithmcanbeunderstoodasaninferencemethod.
+Wefocusontwofundamentalideas:
+• MaximumLikelihoodEstimation(MLE)
+• MaximumAPosterioriEstimation(MAP)
+Theseappearthroughoutregression,classification,probabilisticmodels,andevendeeplearning.
+NotesforUnderstandingMachineLearning 13
+1.8.1 MaximumLikelihoodEstimation(MLE)
+MLEanswersasimplequestion:
+(cid:15)KeyIdea
+“Whichparametervaluemakestheobserveddatathemostlikely?”
+Ifx=(x ,...,x )istheobserveddataandθ isanunknownparameter,theMLEestimateis1:
+1 n
+θˆ =argmaxL(θ |x)
+MLE
+θ
+where
+L(θ |x)=P(x|θ)
+isthelikelihoodofthedataundertheparameterθ.
+Whydowetakethelog?
+Becauseproductsofprobabilitiesbecomesums:
+θˆ =argmaxlogL(θ |x)
+MLE
+θ
+Thisisnumericallystableandmakesoptimizationeasier.
+Intuition
+• Thedataxisconsideredfixed.
+• Theparameterθ varies.
+• Wechoosetheθ thatbestexplainsthedata.
+ThisidealiesbehindmostMLalgorithms: Linearregression(leastsquares),Logisticregression,NaiveBayes,
+Neuralnetworks(viacross-entropy).
+Allofthemoptimizealikelihoodoritsnegativelog.
+1.8.2 MaximumAPosterioriEstimation(MAP)
+MAPestimationistheBayesianversionoflearningparameters.
+Insteadofasking:
+1max→whatisthehighestvalue.argmax→whereisthehighestvalue
+NotesforUnderstandingMachineLearning 14
+“Whichparametermakesthedatamostlikely?”
+weask:
+(cid:15)KeyIdea
+“Whichparameterismostplausible,giventhedataandmypriorbeliefs?”
+TheMAPestimateis:
+θˆ =argmaxP(θ |x)
+MAP
+θ
+UsingBayes’theorem:
+P(x|θ)P(θ)
+P(θ |x)=
+P(x)
+SinceP(x)doesnotdependonθ,weignoreitinmaximization:
+θˆ =argmax[logP(x|θ)+logP(θ)]
+MAP
+θ
+Interpretation
+• MLE:onlycaresaboutthedata.
+• MAP:caresaboutdataand priorknowledge.
+(cid:160)Example
+Examplesofpriors:
+Priorsexpresswhatwebelieveabouttheparameterθ beforeseeingdata. Inmachinelearning,theyoften
+appearnaturallyasregularization.
+1. Prior: “Parametersshouldbesmall”
+ThiscorrespondstoaGaussianprior:
+P(θ)∝exp
+(cid:0) −θ2(cid:1)
+,
+whichleadstothepenaltyθ2 aftertaking−log. Thisisexactly**L2regularization**.
+2. Prior: “Manyparametersshouldbezero”
+ThiscorrespondstoaLaplaceprior:
+P(θ)∝exp(−|θ|),
+whichleadstothepenalty|θ|. Thisis**L1regularization**,whichencouragessparsity.
+NotesforUnderstandingMachineLearning 15
+ConnectionbetweenMLEandMAP
+Posterior∝Likelihood×Prior
+• Ifthepriorisflat(uninformative),MAP=MLE.
+• Ifthepriorisstrong,MAPpullstheestimatetowardthepriorbelief.
+MAPcanbeseenas:
+MAP=MLE+regularization.
+ThisiswhymanyMLalgorithmswithregularization(ridge,lasso,weightdecay)areactuallyMAPestimators
+indisguise.
+1.9 Linear Regression: Statistical Interpretation
+Linear regression is one of the simplest and most fundamental models in machine learning. It describes a
+relationshipbetweeninputfeaturesandacontinuousoutput.
+Model
+Weassumethedataisgeneratedaccordingto:
+y=Xβ+ε
+• X isthematrixofinputfeatures.
+• β isavectorofunknownparameters.
+• ε israndomnoise(unpredictablevariation).
+Thekeyprobabilisticassumption:
+ε ∼N (0,σ2I)
+Thismeans:
+• noiseisGaussian,
+• noisehaszeromean,
+• noiseisindependentwithconstantvariance.
+Withthisassumption,eachy isnormallydistributedaroundXβ.
+i i
+NotesforUnderstandingMachineLearning 16
+LeastSquaresEstimation
+Themostcommonwaytoestimateβ istominimizethesumofsquarederrors:
+β ˆ =argmin∥y−Xβ∥2
+β
+Thisobjectivemeasureshowwellthemodel’spredictionsmatchthedata.
+Theminimizerhasaclosed-formsolution:
+β ˆ =(XTX)−1XTy
+ThissolutionexistswhenXTX isinvertible.
+ProbabilisticInterpretation
+OrdinaryLeastSquares(OLS)isnotonlyageometricmethod—itisalsoaprobabilisticone.
+IfthenoiseisGaussian,thenthelikelihoodofobservingygivenβ is:
+(cid:18) (cid:19)
+1 1
+P(y|X,β)= exp − ∥y−Xβ∥2
+(2πσ2)n/2 2σ2
+Maximizingthislikelihoodisequivalenttominimizingthesquarederror.
+Thus:
+OLS=MLEunderGaussiannoise.
+Interpretation:
+• Linearregressionassumesdataisgeneratedasalineartrend+Gaussiannoise.
+• Fittingthemodelmeanschoosingβ thatmakesthedatamostlikely.
+• Thisgivesadeepstatisticalfoundationtothemethod.
+Linearregressionisthereforeboth:
+• ageometricprojectionproblem,
+• aprobabilisticparameterestimationproblem.
+NotesforUnderstandingMachineLearning 17
+(cid:15)KeyIdea
+Whatislinearregression?
+Linearregressionisasimplemodelthattriestodescribearelationshipbetweeninputvariables(features)
+andanoutputvariablebyfittingastraightline(orahyperplaneinhigherdimensions).
+• YougivethemodelinputdataX andoutputsy.
+• Themodeltriestofindparametersβ sothatthepredictionXβ isclosetoy.
+• Theassumptionisthattheunderlyingtruerelationshipisapproximatelylinear.
+Geometricview:
+• ThemodelprojectsyontothespacespannedbythecolumnsofX.
+• Theresultisthe“best-fittingline”intheleast-squaressense.
+Statisticalview:
+• Thedataisassumedtofollow
+y=Xβ+ε,
+whereε israndomnoisewithGaussiandistribution.
+• Fittingthemodelmeanschoosingβ thatmakestheobserveddatamostprobable.
+Linearregressionisafundamentaltoolbecauseitiseasytointerpret,computationallyefficient,andthe
+foundationofmoreadvancedmodels.
+1.10 Logistic Regression: Probabilistic Classification
+Linear regression predicts a continuous outcome. Logistic regression adapts the idea to predict probabilities
+forbinaryoutcomes(0or1).
+Model
+Wemodeltheprobabilityoftheoutcomebeing1as:
+P(y=1|x)=σ(wTx)
+usingthesigmoidfunction:
+1
+σ(z)= .
+1+e−z
+Propertiesofthesigmoid:
+NotesforUnderstandingMachineLearning 18
+• outputsvaluesbetween0and1,
+• smoothlyincreases,S-shaped,
+• interpretableasaprobability.
+Thismeanslogisticregressionpredicts:
+“Howlikelyisitthaty=1giventheinputx?′′
+Log-Likelihood
+Assumeeachdatapoint(x,y)isdrawnindependently. Thelikelihoodoftheentiredatasetunderparametersw
+i i
+is:
+n
+ℓ(w)= ∑ (cid:2) y logσ(wTx)+(1−y)log (cid:0) 1−σ(wTx) (cid:1)(cid:3)
+i i i i
+i=1
+Thisisthelog-likelihoodoftheBernoullimodel.
+Training=maximizethelog-likelihood.
+Thischoosesthewthatmakestheobservedlabelsmostprobable.
+ConnectiontoCross-EntropyLoss
+Insteadofmaximizingℓ(w),weminimizeitsnegative:
+L(w)=−ℓ(w)
+Thisisthe**cross-entropyloss**,themostwidelyusedlossinclassificationandneuralnetworks.
+Interpretation:
+• Ifthemodelassignsahighprobabilitytothetruelabel,thelossissmall.
+• Ifthemodelassignsalowprobabilitytothetruelabel,thelossislarge.
+Thustraininglogisticregressionisaboutmakingcorrectlabelsmoreprobable.
+Summary
+Logisticregressionis:
+• aprobabilisticmodelforbinaryclassification,
+NotesforUnderstandingMachineLearning 19
+• trainedviamaximumlikelihood,
+• equivalenttominimizingcross-entropy,
+• foundationalforneuralnetworks,softmaxclassifiers,anddeeplearning.
+IttakesthelinearmodelwTxandturnsitintoaprobabilitythroughthesigmoidfunction.
+1.11 Bias–Variance Tradeoff: Why Models Fail
+Whenwetrainamodel,wewantitspredictions fˆ(x)tobeclosetothetrueoutputy. Akeyquestioninmachine
+learningis:
+Whydomodelsmakeerrors,evenaftertraining?
+Theanswerisgivenbythebias–variancedecomposition:
+E[(y− fˆ(x))2]= Bias[fˆ(x)]2 + Var[fˆ(x)] +σ2 .
+noise
+(cid:124) (cid:123)(cid:122) (cid:125) (cid:124) (cid:123)(cid:122) (cid:125)
+modeltoosimple modeltoocomplex
+Thisformulasaysthatpredictionerrorcomesfromthreedifferentsources.
+1. Bias: ErrorfromWrongAssumptions
+Biasmeasureshowfarthemodel’saveragepredictionisfromthetruerelationship.
+• Highbiasmeansthemodelistoosimple.
+• Itcannotcapturethetruepattern.
+• Itmakesthesamemistakesnomatterhowmuchdatawehave.
+Examples:
+• Usingastraightlinetofitaquadraticcurve.
+• Alinearmodelfordatawithstrongnonlinearstructure.
+Thisiscalledunderfitting.
+2. Variance: ErrorfromSensitivitytoData
+Variancemeasureshowmuchpredictionschangeifwetrainonadifferentdataset.
+• Highvariancemeansthemodelistooflexible.
+NotesforUnderstandingMachineLearning 20
+• Itmemorizesrandomnoiseinthetrainingdata.
+• Smallchangesinthedataleadtolargechangesinthemodel.
+Examples:
+• Adecisiontreethatgrowstoodeep.
+• Aneuralnetworktrainedwithtoofewdatapoints.
+Thisiscalledoverfitting.
+3. IrreducibleNoise
+σ2
+noise
+Thisisrandomnessinthedatathatnomodelcaneverexplain.
+Examples:
+• Measurementerror.
+• Naturalvariabilityinhumanbehavior.
+• Randomfluctuationsinphysicaloreconomicsystems.
+Evenaperfectmodelcannotreducethispartoftheerror.
+WhyThisMatters
+Thebias–variancetradeoffexplains:
+• Underfitting: highbias,lowvariance.
+• Overfitting: lowbias,highvariance.
+• Regularization: reducesvariancebysimplifyingthemodel.
+• Cross-validation: detectsoverfittingbytestingonunseendata.
+• Ensembles: averagepredictionstoreducevariance.
+Thegoaloflearningistofindamodelwithagoodbalance: lowbiasand lowvariance.
+NotesforUnderstandingMachineLearning 21
+YExample-Recap
+Understanding Probability, Likelihood, MLE, MAP
+Wehaveacoin,andwetossitn=10times. Weobserve:
+x=HHTHHTHHHT ⇒ k=7heads, 3tails.
+Letθ =P(Heads)bethe(unknown)probabilitythatthecoinlandsHeads.
+1. Probability: parameterfixed,datarandom
+Hereweassumethatthecoinbiasisalreadyknown. Suppose:
+θ =0.6.
+Thenweask:
+“Ifthecoinhasθ =0.6,whatistheprobabilityofgettingexactly7headsin10tosses?”
+Thisisabinomialprobability:
+(cid:18) (cid:19)
+10
+P(X =7|θ =0.6)= (0.6)7(0.4)3.
+7
+Letusbreakdowneachpart:
+•
+(cid:0)10(cid:1)
+countshowmanysequencesof7headsand3tailsexist.
+7
+• (0.6)7 istheprobabilityofgettingHeads7times.
+• (0.4)3 istheprobabilityofgettingTails3times.
+Anumericalevaluation:
+(cid:18) (cid:19)
+10
+=120, (0.6)7≈0.02799, (0.4)3=0.064.
+7
+Thus:
+P(X =7|θ =0.6)=120×0.02799×0.064≈0.215.
+Soifθ =0.6,thisdataoccurswithprobabilityabout21.5%.
+Here:
+θ fixed, X random.
+Thisistheusual“forward”directioninprobability.
+2. Likelihood: datafixed,parametervaries
+Nowweswitchperspectivescompletely. Wealreadysawthedata:
+k=7.
+Wetreatthedataasfixed. Nowweask:
+NotesforUnderstandingMachineLearning 22
+“Forthisfixeddata(7Heads),howplausibleiseachpossiblevalueofθ?”
+Thisisthelikelihood:
+(cid:18) (cid:19)
+10
+L(θ |x)=P(x|θ)= θ7(1−θ)3.
+7
+Keyidea:
+• Thecombinatorialfactor
+(cid:0)10(cid:1)
+doesnotdependonθ.
+7
+• Sothelikelihoodisshapedby:
+θ7(1−θ)3.
+Interpretation:
+• Dataisfixed(k=7).
+• θ variesbetween0and1.
+• Thelikelihoodisascorefunction,notaprobabilitydistributionoverθ.
+ProbabilityvsLikelihood:
+Probability: fixθ, varydata.
+Likelihood: fixdata,varyθ.
+3. BayesianView: Prior,Likelihood,Posterior
+TheBayesianviewaddsonemoreingredient: aprioraboutθ.
+Instead of treating θ as an unknown but fixed number, we treat it as a random variable with its own
+distributionP(θ)(ourbeliefbeforeseeingthedata).
+Bayes’theoremconnects:
+P(x|θ)P(θ)
+P(θ |x)= .
+P(x)
+Inthisformula:
+• P(θ)istheprior: whatwebelieveaboutθ beforeseeingdata.
+• P(x|θ)isthelikelihood: howwelleachθ explainsthedata.
+• P(θ |x)istheposterior: updatedbeliefaboutθ afterseeingdata.
+• P(x)istheevidence: anormalizingconstanttomakeprobabilitiessumto1.
+Weoftenwritethisinproportionalform:
+P(θ |x)∝P(x|θ)P(θ).
+Soinwords:
+NotesforUnderstandingMachineLearning 23
+Posterior=Likelihood×Prior(uptoaconstant).
+Thelikelihoodfromstep2iswhattransformsthepriorintotheposterior.
+4. MaximumLikelihoodEstimation(MLE)
+MLEasksasimplequestion:
+“Whichvalueofθ makestheobserveddata(7heads)mostlikely?”
+Wetakethelikelihood:
+L(θ |x)=θ7(1−θ)3,
+andchoosetheθ thatmakesthisexpressionaslargeaspossible:
+θˆ =argmaxθ7(1−θ)3.
+MLE
+θ
+Forthebinomialmodel,theanswerisalways:
+k
+θˆ = .
+MLE
+n
+Here:
+7
+θˆ = =0.7.
+MLE
+10
+Meaning: MLEsimplyusesthedata. Itsays:
+“Yousawheads70%ofthetime. Somybestestimateisθ =0.7.”
+5. BayesianInferenceandMAP
+TheBayesianapproachaddsonemoreingredient: apriorbeliefaboutθ.
+Supposeourprioris:
+θ ∼Beta(5,5),
+whichexpressestheideathatthecoinisprobablyclosetofair(θ ≈0.5).a
+Afterseeingthedata(7headsoutof10),theposteriorbecomes:
+θ |x∼Beta(12,8).
+MAPestimate
+MAPchoosesthevalueofθ thatismostprobableundertheposterior:
+α′−1 12−1 11
+θˆ = = = ≈0.611.
+MAP α′+β′−2 12+8−2 18
+Meaning:
+• Thedatapushestheestimatetoward0.7.
+• Thepriorpullstheestimatetoward0.5.
+NotesforUnderstandingMachineLearning 24
+SoMAPbecomes:
+somethingbetween0.5and0.7,
+whichhereis≈0.611.
+MAP=“updateyourbeliefbymixingprior+data”.
+Ifthepriorwereweak(e.g.Beta(1,1)),MAPwouldbealmostthesameasMLE.
+6. Summary
+• ProbabilityP(x|θ): givenamodel,whatdataisexpected?
+• LikelihoodL(θ |x): givendata,howplausibleiseachparameter?
+• MLE:maximizelikelihood(dataonly).
+• BayesianUpdate: Posterior∝Likelihood×Prior.
+• MAP:maximizeposterior=MLE+priorinformation.
+aAbouttheBetadistributionandthemeaningofαandβ.
+The Beta distribution is a probability distribution defined on the interval [0,1]. It is widely used as a prior for unknown
+probabilities such as the bias θ of a coin, because it can represent many shapes: peaked, flat, symmetric, or skewed. It is
+written
+θ ∼Beta(α,β),
+wherethetwoparametersαandβ controltheshape.
+Asimpleandintuitiveinterpretationis:
+• αbehaveslikea“priorcountofheads”+1,
+• β behaveslikea“priorcountoftails”+1.
+Thus,aBeta(α,β)prioractsasif,beforeobservinganyrealdata,wehadalreadyseen:
+α−1imaginaryheads, β−1imaginarytails.
+Forexample,theprior
+Beta(5,5)
+actsasifwehadalreadyseen4headsand4tails. Thisexpressesabeliefthatthecoinisprobablyclosetofair(θ ≈0.5),but
+wearenotcompletelycertain.
+TheBetadistributionisimportantbecauseitisaconjugatepriorforthebinomialmodel: ifthepriorisBeta(α,β)andwe
+observekheadsandn−ktails,thentheposteriorisalsoaBetadistribution:
+θ |x∼Beta(α+k,β+n−k).
+ThismakesBayesianupdatingverysimple:wejustaddthenewcountstotheoldones.Inourexample:
+k=7
+Beta(5,5)−−→Beta(12,8).
+Theupdatedparametersα′=12andβ′=8summarizehowourpriorbeliefandthenewdatacombinetoformtheposterior.
+2
+Python for Machine Learning
+InthischapterwewilldiscussthebasicconceptionsforthecoreofMachineLearningofsuperviseddata,loss
+functionandriskminimazation. AlsowewillpresentthePythonworkflowweneed.
+2.1 Supervised Data
+Supervisedlearningreferstoasettingwhereweobserveacollectionofexamples,eachconsistingof:
+• aninput(alsocalledfeatures),and
+• anoutput(alsocalledlabelortarget).
+Thegoalistolearnarulethatmapsinputstooutputssothatwecanmakeaccuratepredictionsfornew,unseen
+data.
+(cid:15)KeyIdea
+“Weshowthemodelmanyexamplesofinput→correctoutput,
+andweaskittolearnthepatternsoitcanpredicttheoutputfornewinputs.”
+2.1.1 TheFormofSupervisedData
+Wearegivenadatasetconsistingofnlabeledexamples:
+D={(x ,y ),(x ,y ),...,(x ,y )}.
+1 1 2 2 n n
+Eachpair(x,y)contains:
+i i
+x ∈Rd (afeaturevectorwithd components),
+i
+y (atargetvaluewewanttopredict).
+i
+Thetargetvariablemaybe:
+• Real-valued(y ∈R)→regression
+i
+25
+NotesforUnderstandingMachineLearning 26
+• Categorical(y ∈{0,1}ory ∈{1,...,K})→classification
+i i
+Insupervisedlearning, thedatasetincludesbothinputsandcorrectoutputs. Thisiswhatdistinguishesitfrom
+unsupervisedlearning,whereweonlyhavetheinputsx andnolabels.
+i
+(cid:160)Example
+Example: HousePriceDataset
+• x =(size,number_of_rooms,age_of_house)∈R3
+i
+• y =priceofthehouse
+i
+Here:
+• Each(x,y)isonehouseinthedataset.
+i i
+• Supervisedlearningasks: “Giventhefeaturesofanewhouse,canwepredictitsprice?”
+• Unsupervised learning would only have x and would ask: “Do houses naturally form groups or
+i
+patterns?”
+2.1.2 TheObjectiveofSupervisedLearning
+Weassumethereexistsanunknownfunction f∗ thatrelatesinputstooutputs:
+y= f∗(x)+ε, (2.1)
+where:
+• f∗ isthetrue(butunknown)relationship,
+• ε israndomnoiseorunpredictablevariation.
+Amachinelearningmodelbuildsanapproximation f (x),parameterizedbyθ:
+θ
+yˆ= f (x). (2.2)
+θ
+Thegoalofsupervisedlearningistofindparametersθ suchthat f (x)approximates f∗(x)ascloselyaspossi-
+θ
+ble.
+(cid:15)KeyIdea
+Thinkof f∗ vs. f :
+θ
+• f∗: theidealrulethatnatureisusing(weneverseeitexactly).
+• f : ourmodel’sbestattempttoimitatethisruleusingdata.
+θ
+NotesforUnderstandingMachineLearning 27
+Training=adjustingθ sothat f (x)behaveslike f∗(x)onthedatawehave.
+θ
+2.1.3 Regressionvs.Classification
+Supervisedlearningproblemsfallintotwomaincategories.
+Regression Thetargetiscontinuous:
+y∈R.
+Examples: predictinghouseprices,estimatingtemperature,forecastingdemandorsales.
+Classification Thetargetisdiscrete:
+y∈{0,1} (binary), y∈{1,...,K} (multi-class).
+Examples: spamvs.notspam,imageclassification(cat/dog/car/...),medicaldiagnosis(diseasepresent/not
+present).
+1Note
+Sameinput,differenttask:
+Ifweusepatientdata(age,bloodpressure,etc.) topredictbloodsugarlevel⇒regression.
+Ifweusethesamedatatopredictdiabeticvs.notdiabetic⇒classification.
+Thedatacanbethesame,butthetypeoftargetchangesthelearningproblem.
+2.1.4 i.i.d.Assumption
+Supervisedlearningtypicallyassumesthatthesamples
+(x ,y ),...,(x ,y )
+1 1 n n
+arei.i.d. (independentandidenticallydistributed):
+• Independent: Eachexampleiscollectedindependentlyoftheothers. Onedatapointdoesnotinfluence
+another(e.g.onecustomer’spurchasedoesnotchangeanothercustomer’sfeatures).
+• Identically distributed: All samples come from the same underlying distribution (same population,
+samedata-generatingprocess).
+Machinelearningworksonlyifthemodelistrainedandtestedondatathatfollowthesamedistribution. Ifthis
+holds,then:
+NotesforUnderstandingMachineLearning 28
+trainingdata≈futuredata
+so good performance on training/validation data tells us something meaningful about performance on unseen
+data.
+(cid:15)KeyIdea
+Whyi.i.d.isimportant:
+i.i.d. is important because it guarantees that the data used for training, validation, and testing all come
+from the same underlying distribution. If this holds, then good performance on training/validation data
+is informative about performance on future data. If this does not hold (distribution shift), a model may
+performbadlyevenifitseemedtoworkwellduringtraining.
+The i.d.d, assumption underlies key ML methods such as: empirical risk minimization, maximum likelihood
+estimation,andcross-validation.
+2.1.5 FeaturesandTargetVariables
+Afeaturevectorcanbewrittenas:
+x =(x ,x ,...,x )⊤.
+i i1 i2 id
+Typesoffeaturesinclude:
+• Numerical: realnumbers(e.g.age,income,temperature)
+• Categorical: categories(e.g.country,color)encodedusingone-hotorlabelencoding
+• Ordinal: orderedcategories(e.g.low/medium/high)
+• Boolean: true/false(0or1)
+• Derived: newfeaturescreatedfromrawdata(e.g.BMIfromheightandweight,room_per_person,etc.)
+(cid:160)Example
+Example: FeatureVectorforaHouse
+x =(size,rooms,age,distance_to_center)⊤=(85,3,20,4.5)⊤
+i
+Ifwealsoknowthehousepricey,thepair(x,y)becomesonesupervisedexampleinourdataset.
+i i i
+Amachinelearningmodelusesthesefeaturestolearnpatternsthatgeneralizewelltonew,unseendata.
+2.1.6 TheLearningGoal
+Givensuperviseddata,weseekafunction f (x)that:
+θ
+NotesforUnderstandingMachineLearning 29
+• fitsthetrainingdatawell,
+• isnotoverlycomplex(toavoidoverfitting),
+• performswellonnew,unseendata.
+(cid:15)KeyIdea
+Coretensioninsupervisedlearning:
+• Ifthemodelistoosimple→itcannotcapturethepattern(underfitting).
+• Ifthemodelistoocomplex→itmemorizesnoise(overfitting).
+Theartofmachinelearningistofindamodelandtrainingprocedurethatcapturesthesignalinthedata
+whileignoringasmuchnoiseaspossible.
+2.2 Loss Function and Risk Minimization
+Insupervisedlearning,amodelproducespredictionsyˆ= f (x). Tomeasurehowgoodorbadthesepredictions
+θ
+are,weusealossfunction.
+Alossfunctionisamathematicalrulethatmeasurestheerrorbetweenthepredictedvalueyˆandthetruetarget
+y1:
+L(y,yˆ)∈R . (2.3)
+≥0
+Asmalllossmeansthepredictionisgood;alargelossmeansitisbad.
+1Note
+Meaningofthesymbols:
+• y: thetruetargetvaluefromthedataset.
+• yˆ= f (x): themodel’sprediction.
+θ
+• L(y,yˆ)orℓ(y,yˆ): thelossforoneexample,measuringhowwrongthepredictionis.
+1Importantnotationdistinction:
+• L(y,yˆ) (capital L): the loss function for a single example. It outputs a non-negative number that measures how wrong a
+predictionis.
+• ℓ(y,yˆ)(lowercaseℓ): simplyanalternativenotationforthesameper-examplelossusedbymanytextbooks. Inthischapter,L
+andℓbothrefertosingle-exampleloss.
+• L(θ)(capitalLappliedtoparameters):thetotallossorempiricalrisk,i.e.,theaveragelossovertheentiredataset.
+So:
+ℓ(y
+i
+,yˆi )=L(y
+i
+,yˆi ) (single-exampleloss),
+while
+1 n
+L(θ)= ∑ℓ(y
+i
+,yˆi ) (aggregateloss).
+n
+i=1
+Inthepreviouschapter,thesymbolL(θ |x)denotedthelikelihoodfunction.Here,L(y,yˆ)denotesthelossfunction.
+NotesforUnderstandingMachineLearning 30
+Trainingamodelmeans: makelossesassmallaspossible.
+2.2.1 LossforaSingleExample
+Foronetrainingexample(x,y),thelossis:
+i i
+L(y,f (x)).
+i θ i
+Thisquantifiesthepredictionerrorforthatsingledatapoint.
+Commonchoices:
+• Squaredloss(regression)
+L(y,yˆ)=(y−yˆ)2.
+• Absoluteloss
+L(y,yˆ)=|y−yˆ|.
+• Cross-entropyloss(classification)
+L(y,pˆ)=−[ylog(pˆ)+(1−y)log(1−pˆ)],
+where pˆisthepredictedprobabilityofthepositiveclass.
+Differentlossfunctionsproducedifferentlearningbehaviours.
+2.2.2 EmpiricalRisk: TotalLossontheDataset
+Becausewecannotcomputethetruerisk,weestimateitbyaveragingthelossoverthetrainingdata. Thisgives
+theempiricalrisk:
+1 n (cid:0) (cid:1)
+R (θ)= ∑ℓ y,f (x) . (2.4)
+emp i θ i
+n
+i=1
+Here,ℓ(y,f (x))isthelossforasingleexample,andR (θ)istheaveragelossoverallnexamples.
+i θ i emp
+Differenttasksusedifferentlosses:
+• regression:
+ℓ(y,yˆ)=(y −yˆ)2,
+i i i i
+• classification:
+ℓ(y,yˆ)=−[y logpˆ +(1−y)log(1−pˆ)],
+i i i i i i
+• robustregression:
+ℓ(y,yˆ)=|y −yˆ|.
+i i i i
+NotesforUnderstandingMachineLearning 31
+1Note
+Theempiricalriskistheaverageerroroveralltrainingsamples. Itisthequantitywecancomputein
+practice.
+2.2.3 RiskMinimization
+Trainingamodelmeanschoosingparametersθ thatminimizeempiricalrisk:
+θˆ =argminR (θ). (2.5)
+emp
+θ
+ThisiscalledEmpiricalRiskMinimization(ERM).
+(cid:15)KeyIdea
+ERM=“Choosetheparametersthatgivethelowestaveragelossonthetrainingdata.”
+Everymajorsupervisedlearningalgorithm(linearregression,logisticregression,trees,SVMs,neuralnetworks)
+followsthisprinciple.
+1Note
+Ideally,wewanttominimizethetruerisk:
+R(θ)=E [ℓ(y,f (x))].
+(x,y)∼P θ
+data
+ButwedonotknowthetruedistributionP . SoweminimizeR instead.a
+data emp
+Generalization methods (regularization, cross-validation) help us ensure that minimizing empirical risk
+alsoreducestruerisk.
+aThesymbolEdenotestheexpectation(averagevalue)takenoverthetruebutunknowndatadistributionP .Inwords:
+data
+E [ℓ(y,f (x))]=theaveragelosswewouldobtainonallpossibledatapoints.
+(x,y)∼Pdata θ
+SincewedonotknowP ,weapproximatethisexpectationusingtheempiricalaverageoverthetrainingdataset.
+data
+2.2.4 Example: LinearRegressionLoss
+(cid:160)Example
+Goal: Predictarealnumber(e.g.,houseprice).
+Linearregressionassumesthemodelpredictsusingalinearfunction:
+yˆ =w⊤x.
+i i
+Here:
+• x isthefeaturevectorofexamplei,
+i
+NotesforUnderstandingMachineLearning 32
+• wisthevectorofparameters(weights),
+• yˆ isthemodel’spredictedvalue.
+i
+Lossforoneexample.
+Wemeasurehowwrongthepredictionisusingthesquarederror:
+ℓ =(y −w⊤x)2.
+i i i
+Interpretation:
+• Ifpredictionyˆ isclosetothetruevaluey,thelossissmall.
+i i
+• Ifthepredictionisfarfromy,thelossbecomeslarge(becauseofthesquare).
+i
+Empiricalrisk(totalloss)istheaveragesquarederroroverallexamples:
+1 n
+R (w)= ∑(y −w⊤x)2.
+emp i i
+n
+i=1
+Traininglinearregressionmeans:
+Findtheweightswthatmaketheaveragesquarederrorassmallaspossible.
+Thisisclassicalleastsquares.
+2.2.5 Example: LogisticRegressionLoss
+(cid:160)Example
+Goal: Predictabinaryoutcome(0or1). Example: tumourismalignant(1)orbenign(0).
+Logisticregressionpredictsaprobability:
+pˆ =σ(w⊤x),
+i i
+whereσ(z)isthesigmoidfunction,whichalwaysreturnsavaluein(0,1).
+Interpretation:
+• w⊤x isalinearscore.
+i
+• σ(w⊤x)convertsthatscoreintoaprobability.
+i
+• pˆ isthemodel’sbeliefthatthecorrectlabelis1.
+i
+Lossforoneexample.
+Weusethecross-entropyloss:
+ℓ =−[y log(pˆ)+(1−y)log(1−pˆ)].
+i i i i i
+Pedagogicalmeaning:
+NotesforUnderstandingMachineLearning 33
+• Ify =1andthemodelpredicts pˆ closeto1,thenlog(pˆ)iscloseto0(good),solossissmall.
+i i i
+• Ify =1butthemodelpredicts pˆ closeto0,thenlog(pˆ)becomesverynegative,solossbecomes
+i i i
+large.
+• Ify =0,thelossbehavessymmetricallyusinglog(1−pˆ).
+i i
+Thus:
+Cross-entropylosspenalizesconfidentwrongpredictionsverystrongly.
+Thislosshasadeepconnectiontostatistics:
+Minimizingcross-entropy ⇐⇒ Maximizingthelog-likelihoodofaBernoullimodel.
+Inotherwords,logisticregressionisaprobabilisticmodeltrainedwithMLE.
+2.2.6 Regularization: ControllingModelComplexity
+Minimizing empirical risk alone often leads to overfitting: the model fits the training data too closely and
+performspoorlyonnewdata.
+Topreventthis,weaddaregularizationtermthatpenalizesoverlycomplexmodels:
+(cid:104) (cid:105)
+θˆ =argmin R (θ)+λΩ(θ) . (2.6)
+emp
+θ
+• λ >0controlsthestrengthofregularization(largeλ =strongerpenalty).
+• Ω(θ)isameasureofmodelcomplexity.
+Commonchoices:
+• L2regularization(Ridge):
+Ω(θ)=∥θ∥2
+2
+– discourageslargeparametervalues,
+– smoothsthemodel,
+– correspondstoaGaussianpriorinMAP.
+• L1regularization(Lasso):
+Ω(θ)=∥θ∥
+1
+– encouragessparsity(manyparametersbecomeexactlyzero),
+– performsimplicitfeatureselection,
+– correspondstoaLaplacepriorinMAP.
+Regularizationbalancestwogoals:
+NotesforUnderstandingMachineLearning 34
+• fitthedata(lowempiricalrisk),
+• remainsimpleenoughtogeneralize(lowcomplexity).
+2.2.7 Summarize
+Tosumup,untilnow:
+• Alossfunctionmeasurespredictionerrorforasingleexample.
+• Riskextendsthisideaoverthewholedatadistribution.
+• Becausethetruedistributionisunknown,weminimizetheempiricalriskonthetrainingset.
+• Toavoidoverfitting,weaddaregularizationtermthatpenalizesoverlycomplexmodels.
+Altogether,mostmachinelearningalgorithmssolveanoptimizationproblemoftheform:
+(cid:34) (cid:35)
+1 n
+θ∗=argmin ∑L(y,yˆ)+λΩ(θ) .
+i i
+θ n
+i=1
+This framework is the foundation of nearly all modern machine learning methods, from linear and logistic
+regressiontosupportvectormachinesanddeeplearning.
+2.3 Train / Validation / Test
+Whenwetrainamodel,weminimizetheempiricalriskonthetrainingset:
+1 n (cid:0) (cid:1)
+R (θ)= ∑L y, f (x) .
+emp i θ i
+n
+i=1
+However,amodelcanachieveverylowlossonthetrainingdataandstillperformpoorlyonnewdata. Thisis
+overfitting: themodelmemorizesthetrainingdatainsteadoflearninggeneralpatterns.
+(cid:15)KeyIdea
+Whysplitthedata?
+A model may perform very well on the data it was trained on simply because it has memorized it. To
+detect and prevent this overfitting, we must always evaluate the model on data that it has never seen
+before. Onlythencanweestimatehowwellitwillperformontrulynew,futuredata.
+2.3.1 TheThreeSplits
+1. TrainingSet
+• Usedtolearnthemodelparametersθ.
+NotesforUnderstandingMachineLearning 35
+• Examples:
+– Linearregressionlearnsweightsβ.
+– RandomForestlearnstreesplits.
+– Neuralnetworkslearnmillionsofparametersviagradientdescent.
+• Themodelupdatesitsparametersonlyusingthisdata.
+1Note
+Training=fittingtheparameters. Themodeltriestominimizethelossonthisset.
+2. Validation Set The validation set isnotused to update the model’s parameters. Instead, it evaluates how
+designchoicesaffectperformance.
+Usedfor:
+• hyperparametertuning(learningrate,regularizationλ,treedepth,...)
+• selectingthebestmodelarchitecture
+• earlystoppinginneuralnetworks
+Parametersvs.Hyperparameters
+• Parameterslearneddirectlyfromtrainingdata(weights,coefficients,thresholds)
+• Hyperparameterschosenusingthevalidationset(learningrate,regularizationstrength,numberoflay-
+ers,maxdepth)
+(cid:160)Example
+Example: Tryseveralmodelswithdifferentλ values. Choosetheonewiththelowestvalidationloss.
+3. TestSet Thetestsetprovidesthefinal,unbiasedevaluation.
+• Usedonlyonce,afteralltrainingandhyperparametertuningiscomplete.
+• Simulatesreal-world,futuredata.
+• Mustneverbeusedtomakedesigndecisions.
+1Note
+Neverleakinformationfromthetestset. Ifthetestsetinfluencestrainingdecisions,theperformance
+estimatebecomesinvalid.
+NotesforUnderstandingMachineLearning 36
+Summarise
+Atypicalsplit:
+70%train | 15%validation | 15%test
+Workflow:
+1. Trainset: Usedtofitthemodel’sparameters. Themodellearnspatternsdirectlyfromthisdata.
+2. Validation set: Used to tune hyperparameters and compare different model choices. It helps select the
+versionofthemodelthatgeneralizesbest.
+3. Testset: Usedonlyattheveryend,afteralldecisionsaremade. Itprovidesanunbiasedestimateofthe
+model’sfinalperformanceonnew,unseendata.
+2.3.2 DataLeakage
+Acrucialrule:
+Thetestsetmustremaincompletelyunseen.
+Examplesofleakage:
+• normalizingusingthefulldatasetinsteadofthetrainingset,
+• choosinghyperparametersusingthetestset,
+• extractingfeaturesusingalldata(e.g.,PCAonthewholedataset).
+Thesemistakesartificiallyinflateperformanceandbreakgeneralization.
+k-FoldCross-Validation
+When the dataset is small, we cannot afford to hold out a large validation set. Instead, we use k-fold cross-
+validation.
+Procedure:
+1. Splitthedatasetintokequalfolds.
+2. Foreachfold:
+• trainonk−1folds,
+• validateontheremainingfold.
+NotesforUnderstandingMachineLearning 37
+3. Averagethevalidationresults.
+Typicalchoices: k=5ork=10.
+Cross-validationisessentialfor:
+• robusthyperparametertuning,
+• modelselection,
+• reducingvarianceinevaluation,
+• avoidingoverfittingonasinglevalidationset.
+Summary
+• Trainingset: learnparameters.
+• Validationset: tunehyperparametersandchoosethemodel.
+• Testset: final,unbiasedevaluationofgeneralization.
+• Cross-validation: astablevalidationmethodwhendataislimited.
+Splitting the data correctly is essential to ensure that a model truly generalizes and is not simply memorizing
+thetrainingexamples.
+2.4 Python Ecosystem
+Modern machine learning relies on a small collection of powerful Python libraries that provide efficient nu-
+merical computation, data handling, visualization, and ready-to-use learning algorithms. In this section, we
+introducetheessentialtoolsthatwillbeusedthroughouttherestofthistextbook.
+2.4.1 CoreScientificLibraries
+NumPy
+NumPyprovidessupportfor:
+• multidimensionalarrays,
+• vectorizedoperations,
+• randomnumbergeneration,
+• linearalgebraroutines.
+NotesforUnderstandingMachineLearning 38
+MostmachinelearningalgorithmsworkwithnumericaldatastoredinNumPyarrays. Avectorofnobservations
+isrepresentedas:
+x=(x ,x ,...,x ).
+1 2 n
+˛ Code Example
+(cid:7) BasicOperationswithNumPy (cid:4)
+import numpy as np
+# Create an array
+x = np.array([1.0, 2.0, 3.0, 4.0])
+# Compute statistics
+mean_x = np.mean(x)
+var_x = np.var(x)
+# Vector operations
+y = x * 2 + 1
+print("Mean:", mean_x, "Variance:", var_x)
+print("Transformed vector:", y)
+(cid:6) (cid:5)
+Pandas
+Pandasisthestandardtoolforworkingwithtabulardata. ItprovidestheDataFramestructure,convenientfor:
+• loadingdatasets,
+• inspectingdata,
+• handlingmissingvalues,
+• featureselection.
+˛ Code Example
+(cid:7) PandasDataFrameExample (cid:4)
+import pandas as pd
+# Create a simple DataFrame
+df = pd.DataFrame({
+"size": [50, 60, 80],
+"rooms": [2, 3, 4],
+"price": [150, 180, 240]
+})
+print(df.head()) # Inspect top rows
+print(df.describe()) # Summary statistics
+(cid:6) (cid:5)
+NotesforUnderstandingMachineLearning 39
+2.4.2 VisualizationTools
+Visualizingdatahelpsusunderstandpatterns,detectoutliers,andformhypotheses. Themostcommonchoice
+ismatplotlib,oftenusedtogetherwithseabornforhigher-levelstatisticalplots.
+˛ Code Example
+(cid:7) BasicMatplotlibPlot (cid:4)
+import matplotlib.pyplot as plt
+import numpy as np
+x = np.linspace(0, 2*np.pi, 100)
+y = np.sin(x)
+plt.plot(x, y)
+plt.title("Sine Wave")
+plt.xlabel("x")
+plt.ylabel("sin(x)")
+plt.show()
+(cid:6) (cid:5)
+2.4.3 scikit-learn: TheStandardMLToolkit
+scikit-learnprovides:
+• implementationsofclassicalmachinelearningalgorithms,
+• toolsforpreprocessing,
+• modelevaluationfunctions,
+• utilitiesfordatasetsplittingandcross-validation.
+Thebasicworkflowforanysupervisedlearningmodelinscikit-learnis:
+1. Loadorpreparethedataset.
+2. Splitintotrainingandtestsets.
+3. Createamodelobject.
+4. Fitthemodelonthetrainingdata.
+5. Predictonunseendata.
+6. Evaluateperformance.
+Belowisacompleteexamplefollowingthisworkflow.
+NotesforUnderstandingMachineLearning 40
+˛ Code Example
+(cid:7) LinearRegressionontheCaliforniaHousingDataset (cid:4)
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+from sklearn.datasets import fetch_california_housing
+# 1. Load the California housing dataset
+data = fetch_california_housing()
+X = data.data # features (2D array)
+y = data.target # target (1D array)
+# 2. Split the data into train and test sets
+X_train, X_test, y_train, y_test = train_test_split(
+X, y, test_size=0.2, random_state=42
+)
+# 3. Create the model
+model = LinearRegression()
+# 4. Train the model
+model.fit(X_train, y_train)
+# 5. Predict on the test set
+y_pred = model.predict(X_test)
+# 6. Evaluate the model using MSE (mean squared error)
+mse = mean_squared_error(y_test, y_pred)
+print("MSE:", mse)
+(cid:6) (cid:5)
+Thisexampledemonstratesthefundamentalstructurethatwillbereusedforregression,classification,decision
+trees,ensemblemethods,anddeeplearningmodels.
+2.4.4 LinearandLogisticRegressioninPython
+Inthepreviouschapter(seechapter1),wedevelopedthestatisticalfoundationsoflinearandlogisticregression.
+We now complement the theory with practical Python implementations using scikit-learn. The goal is to
+understandhowthesemodelsaretrainedinpractice,howpredictionsareproduced,andhowmodelperformance
+isevaluated.
+LinearRegression
+LinearregressionmodelsacontinuoustargetvariablebyfittingalinearrelationshipbetweenafeaturematrixX
+andanoutputvectory. Themodelistrainedbyminimizingthemeansquarederror(MSE),exactlyasderived
+intheLeastSquaressolution.
+NotesforUnderstandingMachineLearning 41
+˛ Code Example
+(cid:7) LinearRegressiononaSimpleSyntheticDataset(PedagogicalExample) (cid:4)
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+# ---------------------------------------------------------
+# 1. Create a simple synthetic dataset
+# ---------------------------------------------------------
+# We assume the true relationship is:
+# y = 3*x + 5 + noise
+# where noise ~ Normal(0, 1).
+np.random.seed(0)
+X = 2 * np.random.rand(100, 1) # 100 samples, 1 feature
+y = 3 * X[:, 0] + 5 + np.random.randn(100) # true line + noise
+# ---------------------------------------------------------
+# 2. Train-test split
+# ---------------------------------------------------------
+# test_size=0.2 means:
+# - 80 samples go to training (80%)
+# - 20 samples go to testing (20%)
+#
+# random_state=42 ensures reproducible shuffling of the data.
+X_train, X_test, y_train, y_test = train_test_split(
+X, y, test_size=0.2, random_state=42
+)
+# ---------------------------------------------------------
+# 3. Create the linear regression model
+# ---------------------------------------------------------
+# LinearRegression() fits:
+# y_hat = w*x + b
+# to minimize the Mean Squared Error.
+model = LinearRegression()
+# ---------------------------------------------------------
+# 4. Train the model
+# ---------------------------------------------------------
+# The model learns w (slope) and b (intercept)
+# from the training data by solving the least-squares problem.
+model.fit(X_train, y_train)
+NotesforUnderstandingMachineLearning 42
+# Inspect learned parameters
+print("Estimated slope (w): ", model.coef_[0])
+print("Estimated intercept (b): ", model.intercept_)
+# ---------------------------------------------------------
+# 5. Predict on the test set
+# ---------------------------------------------------------
+y_pred = model.predict(X_test)
+# ---------------------------------------------------------
+# 6. Compute the test MSE
+# ---------------------------------------------------------
+mse = mean_squared_error(y_test, y_pred)
+print("Test MSE:", mse)
+(cid:6) (cid:5)
+The workflow follows the standard pattern of scikit-learn: loading the dataset, splitting it, fitting the model,
+makingpredictions,andcomputingtheMSE.
+LogisticRegression
+Logistic regression is used for binary classification. It models the probability of the positive class using the
+sigmoidfunctionandistrainedbymaximizingthelog-likelihood(equivalently,minimizingcross-entropyloss).
+˛ Code Example
+(cid:7) LogisticRegression(scikit-learn) (cid:4)
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.datasets import load_breast_cancer
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+# 1. Load dataset (binary classification)
+data = load_breast_cancer()
+X = data.data # features
+y = data.target # labels (0 or 1)
+# 2. Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+X, y, test_size=0.2, random_state=47
+)
+# 3. Build a pipeline: Standardize features -> Logistic Regression
+# StandardScaler:
+# - subtracts the mean of each feature
+NotesforUnderstandingMachineLearning 43
+# - divides by the standard deviation
+# => each feature has mean 0 and variance 1
+#
+# LogisticRegression:
+# - now runs on scaled data
+# - we allow more iterations (max_iter=1000)
+model = make_pipeline(
+StandardScaler(),
+LogisticRegression(max_iter=1000)
+)
+# 4. Train (fit) the model
+model.fit(X_train, y_train)
+# 5. Predict labels on the test set
+y_pred = model.predict(X_test)
+# 6. Evaluate with accuracy
+acc = accuracy_score(y_test, y_pred)
+print("Accuracy:", acc)
+(cid:6) (cid:5)
+Thisimplementationmatchesthestatisticalmodeldescribedearlierinthenotes: themodellearnsweightswso
+thatσ(w⊤x)approximatesP(y=1|x).
+ComparisonofLinearvsLogisticRegression
+• LinearRegressionpredictsreal-valuedoutputsusingalinearmodelandthemeansquarederrorloss. It
+issuitableforregressiontaskssuchaspricepredictionorforecasting.
+• LogisticRegressionpredictsprobabilitiesusingthesigmoidfunctionandistrainedusingcross-entropy
+loss. Itissuitableforbinaryclassificationtaskssuchasmedicaldiagnosisorspamdetection.
+• BothmodelsfitintotheEmpiricalRiskMinimizationframeworkdescribedearlier:
+1 n
+θˆ =argmin ∑L(y,f (x)).
+i θ i
+θ n
+i=1
+• Both appear as special cases of Maximum Likelihood Estimation (Linear regression under Gaussian
+noise,logisticregressionunderaBernoullimodel).
+3
+Machine Learning Algorithms
+InthepreviouschapterswedevelopedthestatisticalfoundationsandlearnedhowtousePythontoimplement
+linearandlogisticregression. Wenowmovetoapowerfulfamilyofmodelsthatarewidelyusedinpractice:
+• DecisionTrees
+• RandomForests
+• GradientBoosting
+• XGBoost(includingXGBRegressor)
+Allthesemethodsarebasedondecisiontrees,buttheyusethemindifferentways. Understandingthetreefirst
+willmaketherestmucheasier.
+High-Level Picture
+(cid:15)KeyIdea
+Scheme: Howthealgorithmsrelate
+• DecisionTreeOnetreethatsplitsthedataintoregionsandmakesapredictionineachregion.
+• Random Forest Many trees, each trained on a random subset of the data and features. Final
+prediction=average(regression)ormajorityvote(classification).
+1 T
+RandomForest(x)= ∑ f (x) (3.1)
+t
+T
+t=1
+where
+– x: anewinputwewanttopredict
+– T: numberoftreeforest
+– f : thepredictionoftreet andoutputx.
+t
+• Gradient Boosting Trees are added one after another, each new tree tries to correct the errors
+(residuals)oftheprevioustrees.
+F (x)=F (x)+ν·h (x) (3.2)
+M M−1 M
+44
+NotesforUnderstandingMachineLearning 45
+where:
+– x: anewinputwewanttopredict.
+– F (x): theboostedmodelafterM trees.
+M
+– F (x): themodelbuiltsofar,usingthefirstM−1trees.
+M−1
+– h (x): thepredictionofthenewtreeM (asmallcorrection).
+M
+– ν: the learning rate, a small number (e.g. 0.1) that controls how much the new tree influ-
+encesthemodel.
+• XGBoost A highly optimized implementation of gradient boosting with regularization, sec-
+ond–ordergradients,andmanyengineeringimprovements. Thisiswhyitissostronginpractice.
+Sumup:
+Algorithm MainIdea KeyEffect
+DecisionTree Singletree Flexiblebutunstable
+RandomForest Manytreesinparallel(bagging) Reducesvariance
+GradientBoosting Treesinsequence(boosting) Reducesbias
+XGBoost Optimizedgradientboosting Highaccuracy
+Inthefollowingsectionswestudyeachalgorithmindetail,bothconceptuallyandwithPythoncode.
+3.1 Decision Trees
+A decision tree is a model that makes predictions by asking a sequence of simple questions about the input
+features. Eachquestionsplitsthedataintotwoparts,andthissplittingcontinuesuntilwereachaleaf.
+Intuition
+Thinkofaflowchart:
+if rooms < 3→goleftelse→goright
+Attheendofthepath,thetreeoutputs:
+• anumber(averageofyinthatleaf)forregression,or
+• aclass(majorityclassinthatleaf)forclassification.
+Thus,adecisiontreedividesthefeaturespaceintorectangularregionsandassignsasimplepredictiontoeach
+region.
+NotesforUnderstandingMachineLearning 46
+FormalView
+A regression tree predicts continuous values by recursively splitting the input space into regions that are as
+“pure”(homogeneous)aspossible. Thelearningprocessfollowsawell-definedmathematicalprocedure.
+Ateachnodeofthetree:
+• Wehaveasubsetofthetrainingdata(x,y)thathasreachedthisnode.
+i i
+• Weconsiderbinarysplitsoftheform
+x ≤t vs. x >t,
+j j
+wherex isonefeatureandt isathreshold.
+j
+• Foreverycandidatepair(j,t),wecomputehowmuchtheimpuritywoulddecreaseifwesplitthenode
+accordingtothatrule.
+Impurity measure for regression. For regression, impurity is typically measured using the Mean Squared
+Error(MSE)withinthenode:
+MSE(node)=
+1
+∑
+(cid:0)
+y −y¯
+(cid:1)2
+,
+i node
+n
+nodei∈node
+where:
+• n isthenumberofsamplesinthenode,
+node
+• y¯ istheaveragetargetvalueofthesamplesinthenode,
+node
+• y isthetruetargetofsamplei.
+i
+Interpretation: AnodehaslowMSEwhenally valuesareclosetotheirmean. Thismeansthenodeispure:
+i
+allexamplesinsideitbehavesimilarly.
+Choosingthebestsplit. Foreachcandidatesplit(j,t),thealgorithmcomputestheimpurityaftersplitting:
+n n
+L R
+Impurity_after= MSE(L)+ MSE(R),
+n n
+where:
+• LandRaretheleftandrightchildnodes,
+• n=n +n isthenumberofsamplesintheparentnode.
+L R
+NotesforUnderstandingMachineLearning 47
+Theimpurityreduction(alsocalledthe“gain”)is:
+(cid:104)n n (cid:105)
+L R
+∆=MSE(parent)− MSE(L)+ MSE(R) .
+n n
+Thealgorithmchoosesthesplit(j,t)thatmaximizes∆. Alarge∆meansthesplitcreatestwochildrenthat
+aremorehomogeneous(pure)thantheparent.
+Recursivegrowth. Afterchoosingthebestsplit:
+1. Assignsamplestotheleftorrightchilddependingonthesplit.
+2. Repeatthesameprocedurerecursivelyoneachchildnode.
+Theprocessstopswhenastoppingconditionismet,suchas:
+• thenodecontainstoofewsamples,
+• theimpurityisalreadyverylow,
+• themaximumdepthhasbeenreached.
+Eachterminalnode(leaf)storesapredictionequaltothemeanofthey valuesinthatleaf.
+i
+1Note
+A regression tree searches for feature thresholds that create child nodes where the target values are as
+similaraspossible. Theobjectiveisalwaysthesame:
+makeeachregionpure =⇒ reduceMSEasmuchaspossible.
+Hyperparameters(Whatcontrolsatree?)
+Commonhyperparameters:
+• max_depth: maximumdepthofthetree.
+• min_samples_split: minimumsamplestosplitanode.
+• min_samples_leaf: minimumsamplesinaleaf.
+(cid:15)KeyIdea
+Shallowtree(smalldepth)⇒highbias,lowvariance.
+Deeptree(largedepth)⇒lowbias,highvariance(easytooverfit).
+NotesforUnderstandingMachineLearning 48
+AdvantagesandDisadvantages
+• Advantages
+– Easytovisualizeandinterpret.
+– Cancapturenonlinearrelationshipsandinteractions.
+– Noneedforfeaturescaling.
+• Disadvantages
+– Verysensitivetosmallchangesinthedata.
+– Easilyoverfitsifgrowntoodeep.
+– Usuallynotasaccurateasensemblemethods.
+PythonExample: DecisionTreeRegression
+˛ Code Example
+(cid:7) DecisionTreeRegressionExample (cid:4)
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import mean_squared_error
+# Load dataset
+data = fetch_california_housing()
+X, y = data.data, data.target
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(
+X, y, test_size=0.2, random_state=42
+)
+# Train model
+tree = DecisionTreeRegressor(max_depth=5)
+# We decided to specify only that hyperparameter.
+# All other hyperparameters take their default values.
+tree.fit(X_train, y_train)
+# Predict
+y_pred = tree.predict(X_test)
+# Evaluate
+mse = mean_squared_error(y_test, y_pred)
+print("Decision Tree MSE:", mse)
+(cid:6) (cid:5)
+NotesforUnderstandingMachineLearning 49
+1Note
+Markov Chain Monte Carlo (MCMC): A Bayesian Inference Tool
+Although not a machine learning model, Markov Chain Monte Carlo (MCMC) is often mentioned in
+statisticallearningcontexts. ItbelongstoBayesianstatistics,notpredictivemodelling. Itspurposeisto
+approximateprobabilitydistributions,nottomakepredictions.
+WhatMCMCDoes
+MCMCisusedwhenwewanttocomputeaposteriordistribution
+P(θ |x)∝P(x|θ)P(θ),
+butthedenominator
+(cid:90)
+P(x)= P(x|θ)P(θ)dθ
+istoodifficulttocomputeanalytically.
+Instead of solving the integral, MCMC constructs a Markov chain whose long-run behavior approxi-
+matestheposteriordistribution. Aftermanyiterations,thesamples
+θ(1), θ(2), ..., θ(M)
+actasdrawsfromP(θ |x).
+Thisallowsustocomputeexpectations,medians,quantiles,andcredibleintervals.
+Example: PosteriorOveraPoissonRateλ
+SupposedatafollowsaPoissonmodel:
+x ∼Poisson(λ).
+i
+WechooseaGammaprior:
+λ ∼Gamma(α,β).
+Theposterioris:
+P(λ |x)∝λ∑i xi+α−1exp[−λ(n+β)].
+Rather than computing this posterior analytically, MCMC generates many samples λ(1),λ(2),... that
+approximateitsshape. Fromthese,weestimate:
+1 M
+E[λ |x]≈ ∑ λ(m).
+M
+m=1
+ConceptualUnderstandingofMCMC
+• Startataninitialguessθ(0).
+• Proposeanearbyvalue.
+• Acceptorrejectbasedonhowplausibleitisundertheposterior.
+NotesforUnderstandingMachineLearning 50
+• Repeattoexplorethedistribution.
+Commonalgorithms: Metropolis–Hastings,GibbsSampling.
+HowMCMCDiffersfromDecisionTrees
+• DecisionTree:
+– Asupervisedlearningmodel.
+– Learnsafunction f(x)topredicty.
+– Buildssplittingrulestoreduceimpurity(MSEorGini).
+– Producespredictions.
+• MCMC:
+– ABayesiansamplingmethod.
+– ApproximatesaposteriordistributionP(θ |x).
+– Doesnotcreateapredictivemodel.
+– Producessamplesrepresentinguncertaintyinparameters.
+KeyDifference
+DecisionTreespredictoutcomes. MCMCquantifiesuncertaintyinparameters. Oneisamodel;
+theotherisasamplingalgorithm.
+3.2 Random Forest
+A random forest is an ensemble of decision trees. Instead of relying on one tree, we train many trees and
+averagetheirpredictions.
+Intuition
+Theideaissimilartoaskingmanydifferentexpertsandaveragingtheiranswers.
+(cid:15)KeyIdea
+Asingletreehashighvariance. Aforestofmanytrees,eachslightlydifferent,haslowervariance.
+Howdowemakethetreesdifferent?
+• Bootstrap sampling (bagging): each tree is trained on a different random sample of the training data,
+sampledwithreplacement.
+• Randomfeatureselection: ateachsplit,thetreeconsidersarandomsubsetoffeaturesinsteadofallof
+them.
+NotesforUnderstandingMachineLearning 51
+PredictionRule
+Forregression:
+1 T
+yˆ(x)= ∑ f (x),
+t
+T
+t=1
+where f isthepredictionoftreet.
+t
+Forclassification:
+yˆ(x)=majorityvoteofthetrees.
+Figure3.1: DiagramillustratingtheRandomForestalgorithmandmajorityvotingprocess.
+EffectonBiasandVariance
+• Eachtreeisahigh-variance,low-biasmodel.
+• Averagingmanytreesreducesvariancewhilekeepingbiasroughlythesame.
+• Thisusuallyimprovesgeneralizationsignificantly.
+ImportantHyperparameters
+• n_estimators: Controlsthenumberoftreesintheforest. Thisaffectstheensemblelevel: moretrees
+usuallyreducevarianceandimprovestability.
+• max_depth: Limitsthemaximumdepthofeachindividualtree. Actsatthetreelevel. Smallerdepth
+→simplertrees→lessoverfitting.
+NotesforUnderstandingMachineLearning 52
+• max_features: Controls how many features are considered when searching for the best split at each
+node. Actsatthesplitlevel. Addingrandomnessherereducescorrelationbetweentrees.
+• min_samples_leaf: Setstheminimumnumberofsamplesrequiredtoformaleaf. Actsattheleaflevel.
+Largervaluesforceleavestocontainmoredata→smootherpredictions.
+PythonExample: RandomForestRegression
+˛ Code Example
+(cid:7) RandomForestRegressionExample (cid:4)
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+# Load dataset
+data = fetch_california_housing()
+X, y = data.data, data.target
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(
+X, y, test_size=0.2, random_state=42
+)
+# Train model
+forest = RandomForestRegressor(
+n_estimators=200,
+max_depth=None,
+random_state=42
+)
+forest.fit(X_train, y_train)
+#forest = RandomForestRegressor(
+# n_estimators=300, # number of trees
+# max_depth=12, # maximum depth of each tree
+# max_features="sqrt", # number of features tested at each split
+# min_samples_leaf=3, # minimum samples per leaf
+# min_samples_split=4, # minimum samples required to #split a
+node
+# random_state=42 # reproducibility
+#)
+# Predict
+y_pred = forest.predict(X_test)
+# Evaluate
+mse = mean_squared_error(y_test, y_pred)
+NotesforUnderstandingMachineLearning 53
+print("Random Forest MSE:", mse)
+(cid:6) (cid:5)
+˛ Code Example
+(cid:7)
+RandomForestRegressiononSyntheticsin(x)Data(withPlot)
+(cid:4)
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+# ---------------------------------------------------------
+# 1. Create synthetic data for y = sin(x) + noise
+# ---------------------------------------------------------
+np.random.seed(0)
+n_samples = 200
+X = np.linspace(0, 2*np.pi, n_samples).reshape(-1, 1)
+y_true_function = np.sin(X[:, 0])
+noise = 0.1 * np.random.randn(n_samples)
+y = y_true_function + noise
+# ---------------------------------------------------------
+# 2. Train-test split
+# ---------------------------------------------------------
+X_train, X_test, y_train, y_test = train_test_split(
+X, y, test_size=0.2, random_state=42
+)
+# ---------------------------------------------------------
+# 3. Random Forest model
+# ---------------------------------------------------------
+forest = RandomForestRegressor(
+n_estimators=200,
+max_depth=8,
+random_state=42
+)
+# ---------------------------------------------------------
+# 4. Train the model
+# ---------------------------------------------------------
+forest.fit(X_train, y_train)
+# ---------------------------------------------------------
+# 5. Predict on test set
+# ---------------------------------------------------------
+NotesforUnderstandingMachineLearning 54
+y_pred = forest.predict(X_test)
+mse = mean_squared_error(y_test, y_pred)
+print("Test MSE (Random Forest on sin(x)):", mse)
+# ---------------------------------------------------------
+# 6. Plot: true function, noisy data, and model predictions
+# ---------------------------------------------------------
+# Sort for nice plotting
+sort_idx = np.argsort(X_test[:, 0])
+X_test_sorted = X_test[sort_idx]
+y_test_sorted = y_test[sort_idx]
+y_pred_sorted = y_pred[sort_idx]
+# High-resolution grid for smooth model curve
+X_grid = np.linspace(0, 2*np.pi, 1000).reshape(-1, 1)
+y_grid_pred = forest.predict(X_grid)
+plt.figure(figsize=(10, 5))
+# True function (smooth)
+plt.plot(X[:, 0], y_true_function, label="True sin(x)", color="black",
+linewidth=2)
+# Noisy training data
+plt.scatter(X_train[:, 0], y_train, label="Noisy training data", alpha
+=0.5)
+# Random Forest smooth prediction
+plt.plot(X_grid[:, 0], y_grid_pred, label="Random Forest prediction",
+color="red", linewidth=2)
+plt.legend()
+plt.title("Random Forest Regression on Noisy $\sin(x)$ Data")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.grid(True)
+plt.show()
+# ---------------------------------------------------------
+# 7. Print a small table: true vs predicted
+# ---------------------------------------------------------
+print("\nFirst 10 test points: true vs predicted")
+for x_val, y_t, y_p in zip(X_test_sorted[:10, 0],
+y_test_sorted[:10],
+y_pred_sorted[:10]):
+print(f"x = {x_val:.2f}, y_true = {y_t:.3f}, y_pred = {y_p:.3f}")
+(cid:6) (cid:5)
+NotesforUnderstandingMachineLearning 55
+3.3 Gradient Boosting
+Randomforestsbuildtreesinparallel. Gradientboostingbuildstreessequentially: eachnewtreecorrectsthe
+errorsofthepreviousmodel.
+Intuition
+We start with a simple model F (x) (for example a constant). At each step m=1,2,...,M we add a new tree
+0
+h (x):
+m
+F (x)=F (x)+νh (x),
+m m−1 m
+whereν isthelearningrate.
+Figure3.2: DiagramillustratingtheGradientBoosting.
+Whatdoesh (x)learn? Itistrainedtofittheresidualsofthepreviousmodel:
+m
+(m)
+r =y −F (x).
+i i m−1 i
+Soeachtreefocusesonwhatthecurrentmodelisdoingbadly.
+(cid:15)KeyIdea
+Randomforest: manyindependenttreesaveraged. Gradientboosting: asequenceoftrees,eachcorrect-
+ingthepreviousones.
+NotesforUnderstandingMachineLearning 56
+OptimizationView
+More generally, gradient boosting fits trees to the negative gradient of the loss function with respect to the
+currentpredictions. Thisiswhyitiscalledgradientboosting.
+Toseethismathematically,supposeourmodelatiterationmisF (x),andwewanttominimizetheempirical
+m−1
+risk
+1 n (cid:0) (cid:1)
+R(F)= ∑L y,F(x) .
+i i
+n
+i=1
+Thegradientofthelosswithrespecttothemodel’spredictionatpointx is:
+i
+(cid:12)
+(m)
+∂L(y
+i
+,F(x
+i
+))(cid:12)
+g = (cid:12) .
+i ∂F(x) (cid:12)
+i F=Fm−1
+Gradientboostingusesthenegativegradientasapseudo-target:
+(m) (m)
+r =−g .
+i i
+1Note
+(m)
+Thenegativegradientr givesthedirectioninwhichthelossdecreasesthefastest. Forsquaredloss,
+i
+L(y,F)=(y −F)2, =⇒ r (m) =y −F (x),
+i i i i m−1 i
+sothenegativegradientisexactlytheresidual.
+Thenewtreeh (x)istrainedtoapproximatethesepseudo-targets:
+m
+h (x)≈r(m).
+m
+Themodelisthenupdatedbytakingasmallstepinthatdirection:
+F (x)=F (x)+νh (x),
+m m−1 m
+where0<ν ≤1isthelearningrate.
+(cid:15)KeyIdea
+Gradient boosting is gradient descent in function space: each tree h points in the direction that most
+m
+reducestheloss,andthelearningrateν controlshowbigthatstepis.
+Hyperparameters
+• n_estimators: numberofboostingiterations(trees).
+• learning_rateν: stepsize;smallervaluesneedmoretrees.
+NotesforUnderstandingMachineLearning 57
+• max_depth: depthofeachindividualtree(usuallysmall,e.g.3–5).
+PythonExample: GradientBoostingRegression
+˛ Code Example
+(cid:7) GradientBoostingRegression (cid:4)
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+data = fetch_california_housing()
+X, y = data.data, data.target
+X_train, X_test, y_train, y_test = train_test_split(
+X, y, test_size=0.2, random_state=42
+)
+gbr = GradientBoostingRegressor(
+n_estimators=300,
+learning_rate=0.05,
+max_depth=3
+)
+gbr.fit(X_train, y_train)
+y_pred = gbr.predict(X_test)
+print("GBR MSE:", mean_squared_error(y_test, y_pred))
+(cid:6) (cid:5)
+˛ Code Example
+(cid:7)
+GradientBoostingRegressiononSyntheticsin(x)Data(withPlot)
+(cid:4)
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.metrics import mean_squared_error
+# ---------------------------------------------------------
+# 1. Create synthetic data for y = sin(x) + noise
+# (same setup as for the Random Forest example)
+# ---------------------------------------------------------
+np.random.seed(0)
+n_samples = 200
+X = np.linspace(0, 2*np.pi, n_samples).reshape(-1, 1)
+NotesforUnderstandingMachineLearning 58
+y_true_function = np.sin(X[:, 0])
+noise = 0.1 * np.random.randn(n_samples)
+y = y_true_function + noise
+# ---------------------------------------------------------
+# 2. Train-test split
+# ---------------------------------------------------------
+X_train, X_test, y_train, y_test = train_test_split(
+X, y, test_size=0.2, random_state=42
+)
+# ---------------------------------------------------------
+# 3. Gradient Boosting model
+# ---------------------------------------------------------
+# n_estimators : number of boosting stages (trees)
+# learning_rate : step size for each tree’s contribution
+# max_depth : depth of individual regression trees
+# random_state : reproducibility
+gboost = GradientBoostingRegressor(
+n_estimators=300,
+learning_rate=0.05,
+max_depth=3,
+random_state=42
+)
+# ---------------------------------------------------------
+# 4. Train the model
+# ---------------------------------------------------------
+gboost.fit(X_train, y_train)
+# ---------------------------------------------------------
+# 5. Predict on test set and compute MSE
+# ---------------------------------------------------------
+y_pred = gboost.predict(X_test)
+mse = mean_squared_error(y_test, y_pred)
+print("Test MSE (Gradient Boosting on sin(x)):", mse)
+# ---------------------------------------------------------
+# 6. Plot: true function, noisy data, and GB prediction
+# ---------------------------------------------------------
+# Sort for nice plotting
+sort_idx = np.argsort(X_test[:, 0])
+X_test_sorted = X_test[sort_idx]
+y_test_sorted = y_test[sort_idx]
+y_pred_sorted = y_pred[sort_idx]
+# High-resolution grid for smooth model curve
+NotesforUnderstandingMachineLearning 59
+X_grid = np.linspace(0, 2*np.pi, 1000).reshape(-1, 1)
+y_grid_pred = gboost.predict(X_grid)
+plt.figure(figsize=(10, 5))
+# True function (smooth)
+plt.plot(X[:, 0], y_true_function, label="True sin(x)", color="black",
+linewidth=2)
+# Noisy training data
+plt.scatter(X_train[:, 0], y_train, label="Noisy training data", alpha
+=0.5)
+# Gradient Boosting prediction
+plt.plot(X_grid[:, 0], y_grid_pred, label="Gradient Boosting prediction",
+color="green", linewidth=2)
+plt.legend()
+plt.title("Gradient Boosting Regression on Noisy $\sin(x)$ Data")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.grid(True)
+plt.show()
+# ---------------------------------------------------------
+# 7. Print a small table: true vs predicted
+# ---------------------------------------------------------
+print("\nFirst 10 test points: true vs predicted (Gradient Boosting)")
+for x_val, y_t, y_p in zip(X_test_sorted[:10, 0],
+y_test_sorted[:10],
+y_pred_sorted[:10]):
+print(f"x = {x_val:.2f}, y_true = {y_t:.3f}, y_pred = {y_p:.3f}")
+(cid:6) (cid:5)
+3.4 XGBoost: Extreme Gradient Boosting
+Nowwecanfinallyanswer: WhatisXGBoost?
+XGBoost is a specific, highly optimized implementation of gradient boosting for decision trees. It uses the
+samebasicidea(addtreessequentiallytocorrecterrors),butintroduces:
+• strongregularizationoftrees,
+• second-order(Hessian)information,
+• efficienthandlingofsparseinputs,
+• parallelizationandsystemoptimizations.
+NotesforUnderstandingMachineLearning 60
+Becauseoftheseimprovements,XGBoosttendstobe:
+• fastertotrain,
+• moreaccurate,
+• betteratcontrollingoverfitting,
+thananaivegradientboostingimplementation.
+ObjectiveFunction
+Themodelatiterationt is:
+t
+yˆ (t) = ∑ f (x),
+i k i
+k=1
+whereeach f isadecisiontree.
+k
+XGBoostminimizestheregularizedobjective:
+n
+L(t)= ∑L (cid:0) y,yˆ (t−1) + f (x) (cid:1) +Ω(f ),
+i i t i t
+i=1
+withregularizationterm:
+1 T
+Ω(f )=γT+ λ ∑w2,
+t 2 j
+j=1
+where:
+• T =numberofleavesinthetree,
+• w =weight(value)assignedtoleaf j,
+j
+• γ andλ areregularizationhyperparameters.
+This penalizes both the size of the tree (number of leaves) and the magnitude of leaf weights, which helps
+preventoverfitting.
+Second-OrderApproximation
+Toefficientlychoosesplitsandleafvalues, XGBoostusesasecond-orderTaylorexpansionofthelossaround
+thecurrentpredictions:
+1
+L(y,yˆ (t−1) + f (x))≈L(y,yˆ (t−1) )+g f (x)+ h f (x)2,
+i i t i i i i t i 2 i t i
+where:
+NotesforUnderstandingMachineLearning 61
+(t−1)
+• g =∂ L(y,yˆ )(gradient),
+i yˆ i i
+• h =∂2L(y,yˆ (t−1) )(Hessian).
+i yˆ i i
+Thissecond-orderinformationmakestreeconstructionmoreaccurateandefficient.
+KeyHyperparameters(Whatyoutuneinpractice)
+• n_estimators: numberofboostingrounds(trees).
+• learning_rate: shrinkagefactorforeachtreecontribution.
+• max_depth: maximumdepthofeachtree.
+• subsample: fractionoftrainingdatausedpertree.
+• colsample_bytree: fractionoffeaturesusedpertree.
+• reg_lambda,reg_alpha: L2andL1regularizationonleafweights.
+XGBoostClassificationExample
+˛ Code Example
+(cid:7) XGBoostClassifier (cid:4)
+from xgboost import XGBClassifier
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+data = load_breast_cancer()
+X, y = data.data, data.target
+X_train, X_test, y_train, y_test = train_test_split(
+X, y, test_size=0.2, random_state=42
+)
+model = XGBClassifier(
+n_estimators=300,
+learning_rate=0.05,
+max_depth=4,
+subsample=0.8,
+colsample_bytree=0.8,
+eval_metric="logloss"
+)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+print("XGBoost Accuracy:", accuracy_score(y_test, y_pred))
+NotesforUnderstandingMachineLearning 62
+(cid:6) (cid:5)
+XGBoostRegressionExample
+˛ Code Example
+(cid:7) XGBoostRegressor (cid:4)
+from xgboost import XGBRegressor
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+data = fetch_california_housing()
+X, y = data.data, data.target
+X_train, X_test, y_train, y_test = train_test_split(
+X, y, test_size=0.2, random_state=42
+)
+model = XGBRegressor(
+n_estimators=400,
+learning_rate=0.05,
+max_depth=5,
+subsample=0.8,
+colsample_bytree=0.8,
+eval_metric="rmse"
+)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+print("XGBRegressor MSE:", mean_squared_error(y_test, y_pred))
+(cid:6) (cid:5)
+˛ Code Example
+(cid:7)
+XGBoostRegressiononSyntheticsin(x)Data(withPlot)
+(cid:4)
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+from xgboost import XGBRegressor # pip install xgboost
+# ---------------------------------------------------------
+# 1. Create synthetic data for y = sin(x) + noise
+NotesforUnderstandingMachineLearning 63
+# (same setup as RF and Gradient Boosting examples)
+# ---------------------------------------------------------
+np.random.seed(0)
+n_samples = 200
+X = np.linspace(0, 2*np.pi, n_samples).reshape(-1, 1)
+y_true_function = np.sin(X[:, 0])
+noise = 0.1 * np.random.randn(n_samples)
+y = y_true_function + noise
+# ---------------------------------------------------------
+# 2. Train-test split
+# ---------------------------------------------------------
+X_train, X_test, y_train, y_test = train_test_split(
+X, y, test_size=0.2, random_state=42
+)
+# ---------------------------------------------------------
+# 3. XGBoost model
+# ---------------------------------------------------------
+# n_estimators : number of boosting trees
+# learning_rate : step size (eta)
+# max_depth : depth of individual trees
+# subsample : fraction of rows used per tree (stochasticity)
+# colsample_bytree : fraction of features used per tree
+# reg_lambda : L2 regularization
+# objective : regression with squared loss
+xgb_model = XGBRegressor(
+n_estimators=400,
+learning_rate=0.05,
+max_depth=3,
+subsample=0.9,
+colsample_bytree=0.9,
+reg_lambda=1.0,
+objective="reg:squarederror",
+random_state=42
+)
+# ---------------------------------------------------------
+# 4. Train the model
+# ---------------------------------------------------------
+xgb_model.fit(X_train, y_train)
+# ---------------------------------------------------------
+# 5. Predict on test set and compute MSE
+# ---------------------------------------------------------
+y_pred = xgb_model.predict(X_test)
+NotesforUnderstandingMachineLearning 64
+mse = mean_squared_error(y_test, y_pred)
+print("Test MSE (XGBoost on sin(x)):", mse)
+# ---------------------------------------------------------
+# 6. Plot: true function, noisy data, and XGBoost prediction
+# ---------------------------------------------------------
+# Sort test data for nicer display
+sort_idx = np.argsort(X_test[:, 0])
+X_test_sorted = X_test[sort_idx]
+y_test_sorted = y_test[sort_idx]
+y_pred_sorted = y_pred[sort_idx]
+# High-resolution grid for smooth model curve
+X_grid = np.linspace(0, 2*np.pi, 1000).reshape(-1, 1)
+y_grid_pred = xgb_model.predict(X_grid)
+plt.figure(figsize=(10, 5))
+# True function
+plt.plot(X[:, 0], y_true_function, label="True sin(x)",
+color="black", linewidth=2)
+# Noisy training data
+plt.scatter(X_train[:, 0], y_train, label="Noisy training data",
+alpha=0.5)
+# XGBoost prediction
+plt.plot(X_grid[:, 0], y_grid_pred, label="XGBoost prediction",
+color="purple", linewidth=2)
+plt.legend()
+plt.title("XGBoost Regression on Noisy $\sin(x)$ Data")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.grid(True)
+plt.show()
+# ---------------------------------------------------------
+# 7. Print a small table: true vs predicted
+# ---------------------------------------------------------
+print("\nFirst 10 test points: true vs predicted (XGBoost)")
+for x_val, y_t, y_p in zip(X_test_sorted[:10, 0],
+y_test_sorted[:10],
+y_pred_sorted[:10]):
+print(f"x = {x_val:.2f}, y_true = {y_t:.3f}, y_pred = {y_p:.3f}")
+(cid:6) (cid:5)
+NotesforUnderstandingMachineLearning 65
+3.5 Summary: Recognizing and Distinguishing the Algorithms
+YExample-Recap
+Howtoquicklyidentifyeachmodel
+• DecisionTree
+– Singletree,flowchart-likestructure.
+– Splitsthedatabasedonfeaturethresholds.
+– Veryinterpretablebutcanoverfiteasily.
+• RandomForest
+– Manytreestrainedonbootstrapsamplesandrandomsubsetsoffeatures.
+– Predictionsareaveraged(regression)orvoted(classification).
+– Reducesvarianceandisrobust;defaultstrongbaseline.
+• GradientBoosting
+– Treesareaddedoneafteranother.
+– Eachnewtreefocusesonresiduals/gradientsofthepreviousmodel.
+– Canfitcomplexpatternswithrelativelyshallowtrees.
+• XGBoost/XGBRegressor
+– Aparticularimplementationoftree-basedgradientboosting.
+– Usesregularization,second-ordergradients,andmanyoptimizations.
+– Oftenachievesstate-of-the-artperformanceontabulardatasets.
+Ruleofthumb:
+• Needinterpretabilityandaquickidea? Tryasingledecisiontree.
+• Needastrong,robustmodelwithlittletuning? Usearandomforest.
+• Need maximum performance and are willing to tune hyperparameters? Use gradient boosting or
+XGBoost.
+4
+Neural Networks & Deep Learning
+Neural networks are among the most powerful and widely used models in modern machine learning. They
+are capable of learning highly nonlinear relationships, complex patterns in images, speech, text, and even
+reinforcement-learningtasks.
+This chapter presents the essential ideas behind neural networks and deep learning in a clear, intuitive, and
+mathematicallygroundedway.
+What Makes Neural Networks Special?
+Neural networks do not rely on manually–designed features. Instead, they learn representations directly from
+data.
+(cid:15)KeyIdea
+Neuralnetworkslearnhierarchiesoffeatures: simplepatternsatshallowlayers,morecomplexpatterns
+atdeeperlayers.
+Theyareversatileenoughtosolve:
+• regressionproblems,
+• classificationproblems,
+• imageanalysis(CNNs),
+• sequentialmodelling(RNNs,LSTMs,Transformers),
+• reinforcementlearning,
+• generativemodelling.
+Inthischapterwefocusonthefoundationsneededtounderstandallthesemodels.
+4.1 The Perceptron: The Simplest Neural Unit
+The basic building block of a neural network is the neuron (or node). The simplest neuron is the classical
+perceptron.
+66
+NotesforUnderstandingMachineLearning 67
+MathematicalForm
+Givenaninputvectorx∈Rd:
+z=w⊤x+b
+andanactivation:
+yˆ=σ(z)
+where:
+• w=weights,
+• b=bias,
+• σ(·)=activationfunction.
+ActivationFunctions
+σ(z)introducesnonlinearity.
+Commonfunctions:
+• Sigmoid:
+1
+σ(z)=
+1+e−z
+• ReLU:
+σ(z)=max(0,z)
+• Tanh:
+σ(z)=tanh(z)
+(cid:15)KeyIdea
+Ifweremoveactivationfunctions,aneuralnetworkcollapsesintoalinearregressionmodel. Nonlinear
+activationsgiveneuralnetworkstheirexpressivepower.
+4.2 Multi–Layer Perceptron (MLP)
+AMulti–LayerPerceptronisasequenceoflayers:
+input→hiddenlayers→output.
+Eachlayertransformsthepreviouslayervialinearcombination+activation.
+NotesforUnderstandingMachineLearning 68
+Structure
+(cid:16) (cid:17)
+h(1)=σ W(1)x+b(1) ,
+(cid:16) (cid:17)
+h(2)=σ W(2)h(1)+b(2) ,
+.
+.
+.
+yˆ=W(L)h(L−1)+b(L).
+Input → Layer 1 → Layer 2 → ... → Output
+Eachlayerincreasesthemodel’sabilitytocapturepatterns.
+1Note
+Aneuralnetworkwithonehiddenlayerandenoughneuronscanapproximateanycontinuousfunction.
+ThisistheUniversalApproximationTheorem.
+4.3 Forward Pass and Loss Function
+Duringtraining,thenetworkperforms:
+1. Forwardpass: computepredictionsyˆ.
+2. Computeloss: measurehowwrongthepredictionsare.
+3. Backwardpass: computegradientsofthelosswithrespecttoeachparameter.
+4. Parameterupdate: adjustweightstoreducetheloss.
+Forregression,thelossisMSE:
+1
+L= ∑(y −yˆ)2.
+i i
+n
+Forclassification,thelossiscross–entropy:
+L=−∑y log(pˆ).
+i i
+4.4 Backpropagation: How Neural Networks Learn
+Backpropagationisthealgorithmthatcomputesallgradientsefficiently.
+NotesforUnderstandingMachineLearning 69
+ChainRule
+Backpropusesthechainrulerepeatedly:
+∂L ∂L ∂h(l) ∂z(l)
+= · · .
+∂W(l) ∂h(l) ∂z(l) ∂W(l)
+Thisallowsgradientstoflowfromtheoutputbackward.
+(cid:15)KeyIdea
+Backpropagation=computationallyefficientapplicationofthechainrule.
+4.5 Training with Gradient Descent
+Oncewehavegradients,weupdateeachparameter:
+∂L
+W ←W−η ,
+∂W
+whereη isthelearningrate.
+Variantsinclude:
+• SGD(stochasticgradientdescent)
+• Adam
+• RMSProp
+• Momentummethods
+1Note
+Thelearningrateisoneofthemostimportanthyperparameters. Toolarge→divergence. Toosmall→
+veryslowlearning.
+4.6 Why Deep Networks Work
+Deepnetworksworkbecauseeachlayerextractsmoreabstractinformation:
+• shallowlayerslearnlocal,simplepatterns,
+• deeperlayerslearnmorecomplexconcepts.
+Inimageclassification:
+NotesforUnderstandingMachineLearning 70
+• layer1learnsedges,
+• layer2learnstextures,
+• layer3learnsobjectparts,
+• finallayerslearnentireobjects.
+Deeplearning=stackingmanylayersofrepresentationlearning.
+4.7 Overfitting and Regularization in Neural Networks
+Neuralnetworkshavemanyparameters,sooverfittingiscommon.
+Regularizationtechniques
+• L2weightdecay
+• Dropout
+• Earlystopping
+• BatchNormalization
+(cid:15)KeyIdea
+Dropoutrandomlydisablesneuronsduringtrainingtopreventco-adaptation. Thisforcesthenetworkto
+learnmorerobustrepresentations.
+NotesforUnderstandingMachineLearning 71
+Figure 4.1: From Neuron to Network: The Anatomy of Deep Learning. Visualizing the hierarchy of a
+neural network: individual inputs (x) are processed by neurons using weights (w) and biases (b), then stacked
+intolayerstoformacompleteDeepLearningarchitecture.
+4.8 Python Example: Neural Network for Classification (Keras)
+Belowisaminimalneuralnetworkforbinaryclassification(breastcancerdataset).
+˛ Code Example
+(cid:7) NeuralNetwork(Keras) (cid:4)
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.optimizers import Adam
+# Load data
+data = load_breast_cancer()
+NotesforUnderstandingMachineLearning 72
+X, y = data.data, data.target
+# Scale features
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+X, y, test_size=0.2, random_state=42
+)
+# Build model
+model = Sequential([
+Dense(16, activation=’relu’, input_shape=(X_train.shape[1],)),
+Dense(8, activation=’relu’),
+Dense(1, activation=’sigmoid’)
+])
+# Compile model
+model.compile(
+optimizer=Adam(learning_rate=0.001),
+loss=’binary_crossentropy’,
+metrics=[’accuracy’]
+)
+# Train
+model.fit(X_train, y_train, epochs=20, batch_size=16, verbose=1)
+# Evaluate
+loss, acc = model.evaluate(X_test, y_test)
+print("Accuracy:", acc)
+(cid:6) (cid:5)
+4.9 Summary: Recognizing Neural Networks
+YExample-Recap
+NeuralnetworksvsotherMLmodels
+• DecisionTree/RandomForest/XGBoostinterpretability,tabulardata,low–dimensionalprob-
+lems.
+• NeuralNetworksexcelwhen:
+– largedatasets,
+– high-dimensionalinputs(images,audio,text),
+– complexnonlinearpatterns,
+NotesforUnderstandingMachineLearning 73
+– end-to-endlearningisimportant.
+• DeepLearningsimplymeans: manylayers→hierarchicalrepresentations.
+Keystrength: automaticfeaturelearning. Keychallenge: requireslargedata,carefultuning,andGPUs
+forlargemodels.
+5
+Practical ML
+74

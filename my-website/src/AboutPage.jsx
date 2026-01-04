@@ -30,7 +30,7 @@ function AboutPage() {
           }}
         >
           <img
-            src="/IMVVV.jpg"
+            src="/img_001_002_004_008.jpg"
             alt="Ioanna Stamou"
             style={{
               width: "160px",
@@ -71,7 +71,7 @@ function AboutPage() {
           marginTop: "0px"
         }}
       >
-        Expertise
+        Fields of Interest
       </h2>
 
       <div
@@ -84,7 +84,7 @@ function AboutPage() {
           margin: "0 auto"
         }}
       >
-        {['Python', 'Java & Spring Boot', 'Machine Learning', 'Numerical Analysis', 'Physics', 'DevOps (Docker/K8s)'].map((skill) => {
+        {['Physics','Python', 'Java & Spring Boot', 'Machine Learning', 'Numerical Analysis',  'DevOps (Docker/K8s)'].map((skill) => {
           const skillUrl = `/skill/${encodeURIComponent(skill)}`;
           return (
             <Link

@@ -276,9 +276,9 @@ Categorical variables must be encoded (one-hot, label encoding, etc.).
 
 \subsection{Mean}
 The mean (average) of $n$ observations is:
-\[
+\begin{equation}
 \mu = \frac{1}{n} \sum_{i=1}^n x_i.
-\]
+\end{equation}
 
 \subsection{Median}
 The median is the middle value of the sorted data.  
@@ -286,15 +286,17 @@ It is more robust to outliers than the mean.
 
 \subsection{Variance}
 Variance measures how far the values are spread from the mean:
-\[
+\begin{equation}
 \mathrm{Var}(X) = \frac{1}{n}\sum_{i=1}^n (x_i - \mu)^2.
-\]
+\end{equation}
+
 
 \subsection{Standard Deviation}
 Standard deviation is the square root of the variance:
-\[
+\begin{equation}
 \sigma = \sqrt{\mathrm{Var}(X)}.
-\]
+\end{equation}
+
 It measures the typical deviation from the mean.
 
 \subsection{Covariance}
@@ -302,9 +304,9 @@ It measures the typical deviation from the mean.
 Variance tells us how a single variable varies.  
 Covariance tells us how \emph{two} variables vary \emph{together}.
 
-\[
+\begin{equation}
 \mathrm{Cov}(X, Y) = \mathbb{E}\left[(X - \mu_X)(Y - \mu_Y)\right].
-\]
+\end{equation}
 
 Interpretation:
 
@@ -315,7 +317,7 @@ Interpretation:
 \end{itemize}
 % ------------------------------------------------------
 
-\section{Correlation}
+\subsection{Correlation}
 
 Correlation measures the strength of linear dependence between two variables.
 
@@ -324,9 +326,9 @@ Correlation measures the strength of linear dependence between two variables.
     \item Indicates how two variables move together
 \end{itemize}
 
-\[
+\begin{equation}
 \rho_{XY} = \frac{\mathrm{Cov}(X,Y)}{\sigma_X \sigma_Y}.
-\]
+\end{equation}
 
 \begin{itemize}
     \item $+1$: perfect positive relationship  
@@ -343,42 +345,97 @@ Machine learning uses correlation to select and weight relevant features.
 Machine learning models predict probabilities.  
 Even regression models assume probabilistic noise.
 
-Key ideas:
-\begin{itemize}
-    \item \textbf{Joint probabilities}: describe combined events.
-    \item \textbf{Conditional probabilities}: describe relationships.
-    \item \textbf{Marginal probabilities}: describe overall tendencies.
-\end{itemize}
+\subsection*{1. Joint Probability — “two events happening together”}
 
-This logic becomes the backbone of all ML algorithms.
+Joint probability describes the probability of two events occurring at the same time.
 
-% ------------------------------------------------------
-
-\subsection{Joint Probability}
 For events $A$ and $B$:
 \[
 P(A,B) = P(A \cap B).
 \]
 
-\subsection{Conditional Probability}
+\textbf{Intuition.}  
+Joint probability answers the question:  
+\emph{“What is the probability that $A$ happens \textbf{and} $B$ happens?”}
+
+%\textbf{Example.}
+%\begin{itemize}
+%    \item $A =$ “It rains”
+%    \item $B =$ “You take an umbrella”
+%\end{itemize}
+
+%The joint probability $P(A,B)$ is:  
+%\emph{“What is the probability that it rains and you take an umbrella?”}
+
+{In Machine Learning.}
+\begin{itemize}
+    \item Generative models learn the full joint distribution $P(x,y)$, which allows them to generate new data and compute conditional probabilities.
+    \item Naive Bayes uses the joint distribution in a simplified form, computing $P(x,y)$ under conditional independence assumptions between features.
+\end{itemize}
+
+
+
+
+\subsection*{2. Conditional Probability — “probability of $A$ given that $B$ is true”}
+
+Conditional probability formalizes how one event influences another:
 \[
 P(A \mid B) = \frac{P(A,B)}{P(B)}.
 \]
 
-\subsection{Marginal Probability}
+\textbf{Intuition.}  
+Think of “filtering the world” to only the situations where $B$ is true.  
+Then ask:
+\emph{“If we restrict attention to situations where $B$ happens, how often do we see $A$ as well?”}
 
-\textbf{Discrete:}
+{In Machine Learning.}
+\begin{itemize}
+    \item Classification models learn $P(y \mid x)$.
+    \item Regression assumes a probabilistic noise model for $P(y \mid x)$.
+    \item Bayesian models update beliefs through conditional probabilities.
+\end{itemize}
+
+Conditional probability expresses \emph{relationships, correlations, and dependencies} between variables.
+
+
+
+\subsection*{3. Marginal Probability — “probability of an event ignoring everything else”}
+
+Marginalization means “summing out” or “integrating out” variables we do not care about.
+
+\textbf{Discrete case:}
 \[
-P(A) = \sum_b P(A,b).
+P(A) = \sum_{b} P(A,b).
 \]
 
-\textbf{Continuous:}
+\textbf{Continuous case:}
 \[
 P(A) = \int P(A,b)\, db.
 \]
 
-Probability quantifies uncertainty.  
-Conditional probability expresses relationships between events.
+\textbf{Intuition.}  
+Marginal probability represents the \emph{overall tendency} of an event.  
+It ignores other variables by summing or integrating over them.
+
+\textbf{In Machine Learning.}
+\begin{itemize}
+    \item In Bayesian inference, the denominator $P(B)$ in Bayes’ theorem is a marginal probability.
+    \item In generative models, marginalization is needed to compute likelihoods.
+    \item In hidden-variable models (e.g., latent factor models, mixture models), marginalization is essential.
+\end{itemize}
+
+\textbf{Example (discrete).}
+\[
+P(\text{rain}) = P(\text{rain},\text{cold}) + P(\text{rain},\text{warm}).
+\]
+
+This sums over all the ways rain can occur, regardless of temperature.
+
+
+% ------------------------------------------------------
+
+
+
 
 % ------------------------------------------------------
 
@@ -389,9 +446,11 @@ Conditional probability expresses relationships between events.
 Bayes' theorem describes how we update our belief about an event $A$
 after observing some evidence $B$:
 
-\[
+\begin{equation}
 P(A \mid B) = \frac{P(B \mid A) \, P(A)}{P(B)}.
-\]
+\end{equation}
+%P(A \mid B) = \frac{P(B \mid A) \, P(A)}{P(B)}.
+%\]
 
 \subsection*{What does this mean?}
 
@@ -416,14 +475,15 @@ P(A \mid B)
 \]
 
 \begin{itemize}
-    \item $P(A)$ [ \textbf{prior}]  :
-          What we believed before seeing any data.
-    \item $P(B \mid A)$ [\textbf{likelihood}]  :
-          How compatible the observed data $B$ is with our hypothesis $A$.
-    \item $P(B)$ [\textbf{evidence}]  :
-          The probability of seeing the data under all possible explanations.
-    \item $P(A \mid B)$  [\textbf{posterior}]  :
-          Our updated belief about $A$ after incorporating evidence $B$.
+    \item $P(A)$ [ \textbf{prior}]: our initial belief about the hypothesis $A$
+          before observing any data.
+    \item $P(B \mid A)$ [\textbf{likelihood}]: how well hypothesis $A$
+          explains or predicts the observed data $B$.
+    \item $P(B)$ [\textbf{evidence} or \textbf{marginal likelihood}]:
+          the total probability of seeing the data $B$ under \emph{all}
+          possible hypotheses.
+    \item $P(A \mid B)$ [\textbf{posterior}]: our updated belief about $A$
+          after incorporating the information from $B$.
 \end{itemize}
 \end{mlidea}
 
@@ -596,9 +656,9 @@ from a finite or countable set (e.g., 0, 1, 2, 3, ...).
 
 A Bernoulli variable represents a single binary outcome:
 
-\[
+\begin{equation}
 P(X = x) = p^x (1-p)^{1-x}, \qquad x \in \{0,1\}.
-\]
+\end{equation}
 
 Interpretation:
 
@@ -614,9 +674,9 @@ Interpretation:
 The binomial distribution models the number of successes in $n$
 independent Bernoulli trials:
 
-\[
+\begin{equation}
 P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}.
-\]
+\end{equation}
 
 Interpretation:
 
@@ -633,9 +693,9 @@ Interpretation:
 The Poisson distribution models the number of events occurring
 in a fixed time or space interval:
 
-\[
+\begin{equation}
 P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}.
-\]
+\end{equation}
 
 Interpretation:
 
@@ -656,10 +716,10 @@ Continuous distributions describe variables that take real-number values
 % -------------------
 \paragraph{Gaussian (Normal Distribution)}
 
-\[
+\begin{equation}
 f(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}}
 \exp\left( -\frac{(x-\mu)^2}{2\sigma^{2}} \right)
-\]
+\end{equation}
 
 Interpretation:
 
@@ -673,9 +733,9 @@ Interpretation:
 % -------------------
 \paragraph{Exponential Distribution}
 
-\[
+\begin{equation}
 f(x) = \lambda e^{-\lambda x}
-\]
+\end{equation}
 
 Interpretation:
 
@@ -688,10 +748,10 @@ Interpretation:
 % -------------------
 \paragraph{Multivariate Gaussian}
 
-\[
+\begin{equation}
 f(x) = \frac{1}{(2\pi)^{d/2} |\Sigma|^{1/2}}
 \exp\left( -\frac{1}{2}(x - \mu)^T \Sigma^{-1}(x - \mu) \right)
-\]
+\end{equation}
 
 Interpretation:
 
@@ -753,9 +813,9 @@ MLE answers a simple question:
 If $x = (x_1, \dots, x_n)$ is the observed data and $\theta$ is an unknown parameter,
 the MLE estimate is \footnote{max $\rightarrow$ what is the highest value. argmax $\rightarrow$ where is the highest value}:
 
-\[
+\begin{equation}
 \hat{\theta}_{\mathrm{MLE}} = \arg\max_{\theta} L(\theta \mid x)
-\]
+\end{equation}
 
 where
 
@@ -816,10 +876,10 @@ we ask:
 
 The MAP estimate is:
 
-\[
+\begin{equation}
 \hat{\theta}_{\mathrm{MAP}}
 = \arg\max_{\theta} P(\theta \mid x)
-\]
+\end{equation}
 
 Using Bayes’ theorem:
 
@@ -915,9 +975,9 @@ continuous output.
 
 We assume the data is generated according to:
 
-\[
+\begin{equation}
 y = X\beta + \varepsilon
-\]
+\end{equation}
 
 \begin{itemize}
     \item $X$ is the matrix of input features.
@@ -993,10 +1053,14 @@ Thus:
 \end{itemize}
 
 Linear regression is therefore both:
-\begin{itemize}
-    \item a geometric projection problem,
-    \item a probabilistic parameter estimation problem.
-\end{itemize}
+
+    \[
+    \text{a geometric projection problem} \quad \text{and} \quad \text{a probabilistic parameter estimation problem.}.
+    \]
+%\begin{itemize}
+  %  \item a geometric projection problem,
+ %   \item a probabilistic parameter estimation problem.
+%\end{itemize}
 
 \begin{mlidea}
 \textbf{What is linear regression?}
@@ -1047,9 +1111,9 @@ binary outcomes (0 or 1).
 
 We model the probability of the outcome being 1 as:
 
-\[
+\begin{equation}
 P(y=1 \mid x) = \sigma(w^T x)
-\]
+\end{equation}
 
 using the sigmoid function:
 
@@ -1144,12 +1208,12 @@ the true output $y$. A key question in machine learning is:
 
 The answer is given by the bias–variance decomposition:
 
-\[
+\begin{equation}
 \mathbb{E}[(y - \hat{f}(x))^2]
 = \underbrace{\text{Bias}[\hat{f}(x)]^2}_{\text{model too simple}}
 + \underbrace{\text{Var}[\hat{f}(x)]}_{\text{model too complex}}
 + \sigma^2_{\text{noise}}.
-\]
+\end{equation}
 
 This formula says that prediction error comes from \emph{three} different sources.
 
@@ -1446,53 +1510,47 @@ Suppose our prior is:
 \theta \sim \mathrm{Beta}(5,5),
 \]
 which expresses the idea that the coin is probably close to fair ($\theta \approx 0.5$).\footnote{
-\textbf{About the Beta distribution and the meaning of $\alpha$ and $\beta$.}
+\textbf{The Beta distribution and the meaning of $\alpha$ and $\beta$.}
 
-The \emph{Beta distribution} is a probability distribution defined on the interval
-$[0,1]$. It is widely used as a prior for unknown probabilities such as the bias
-$\theta$ of a coin, because it can represent many shapes: peaked, flat, symmetric,
-or skewed. It is written
+The \emph{Beta distribution} is a probability distribution on the interval $[0,1]$,
+commonly used as a prior for unknown probabilities such as the bias $\theta$ of a coin.
+Its density is
 \[
-\theta \sim \mathrm{Beta}(\alpha,\beta),
+f(\theta \mid \alpha,\beta)
+=
+\frac{1}{B(\alpha,\beta)}\,
+\theta^{\alpha-1}(1-\theta)^{\beta-1},
+\qquad 0 \le \theta \le 1,
 \]
-where the two parameters $\alpha$ and $\beta$ control the shape.
+where the normalising constant
+\[
+B(\alpha,\beta)
+=
+\int_0^1 t^{\alpha-1}(1-t)^{\beta-1}\, dt
+=
+\frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)}
+\]
+is the \emph{Beta function}.
 
-A simple and intuitive interpretation is:
+A useful interpretation is:
 \begin{itemize}
-    \item $\alpha$ behaves like a ``prior count of heads'' $+ 1$,
-    \item $\beta$ behaves like a ``prior count of tails'' $+ 1$.
+    \item $\alpha - 1$ acts like a prior count of heads,
+    \item $\beta - 1$ acts like a prior count of tails.
 \end{itemize}
 
-Thus, a Beta$(\alpha,\beta)$ prior acts as if, \emph{before observing any real
-data}, we had already seen:
-\[
-\alpha - 1 \text{ imaginary heads}, \qquad \beta - 1 \text{ imaginary tails}.
-\]
+Thus a $\mathrm{Beta}(\alpha,\beta)$ prior encodes the belief that,
+before seeing any real data, we have already observed
+$(\alpha-1)$ heads and $(\beta-1)$ tails.
 
-For example, the prior
+The Beta distribution is a conjugate prior for the binomial likelihood.
+If $\theta \sim \mathrm{Beta}(\alpha,\beta)$ and we observe
+$k$ heads in $n$ flips, then the posterior is
 \[
-\mathrm{Beta}(5,5)
+\theta \mid x \sim \mathrm{Beta}(\alpha + k,\; \beta + n - k),
 \]
-acts as if we had already seen $4$ heads and $4$ tails. This expresses a belief
-that the coin is probably close to fair ($\theta \approx 0.5$), but we are not
-completely certain.
-
-The Beta distribution is important because it is a \emph{conjugate prior} for the
-binomial model: if the prior is Beta$(\alpha,\beta)$ and we observe $k$ heads and
-$n-k$ tails, then the posterior is also a Beta distribution:
-\[
-\theta \mid x \sim \mathrm{Beta}(\alpha + k,\; \beta + n - k).
-\]
-
-This makes Bayesian updating very simple: we just add the new counts to the old
-ones. In our example:
-\[
-\mathrm{Beta}(5,5) \xrightarrow{k=7} \mathrm{Beta}(12,8).
-\]
-
-The updated parameters $\alpha'=12$ and $\beta'=8$ summarize how our prior belief
-and the new data combine to form the posterior.
+so Bayesian updating simply adds the observed counts to the prior counts.
 }
+
 
 
 After seeing the data (7 heads out of 10), the posterior becomes:
@@ -3273,7 +3331,7 @@ where $\nu$ is the learning rate.
     % \linewidth makes it as wide as the current text block.
     \includegraphics[width=0.9\linewidth]{gradient.jpg}
     \caption{Diagram illustrating the Gradient Boosting. }
-    \label{fig:gradient_boosting_diagram}
+    \label{fig:randomforest_diagram}
 \end{figure}
 
 What does $h_m(x)$ learn?  
@@ -3832,6 +3890,8 @@ In this chapter we focus on the foundations needed to understand all these model
 The basic building block of a neural network is the \textbf{neuron} (or node).
 The simplest neuron is the classical \textbf{perceptron}.
 
+
+
 \subsection*{Mathematical Form}
 
 Given an input vector $x \in \mathbb{R}^d$:
@@ -3853,50 +3913,192 @@ where:
     \item $\sigma(\cdot)$ = activation function.
 \end{itemize}
 
+\begin{mlidea}
+\textbf{Intuition: What is a neural network?}
+
+A neural network is best understood as a \emph{chain of transformations}.  
+It takes the raw input $x$ and gradually transforms it into more useful
+representations:
+
+\[
+x 
+\;\longrightarrow\; h^{(1)}
+\;\longrightarrow\; h^{(2)}
+\;\longrightarrow\; h^{(3)}
+\;\longrightarrow\; \hat{y}.
+\]
+
+Each layer computes
+\[
+h^{(1)} = \sigma\!\left(W^{(1)} x + b^{(1)}\right), \qquad
+h^{(2)} = \sigma\!\left(W^{(2)} h^{(1)} + b^{(2)}\right),
+\]
+and so on.
+
+\medskip
+\textbf{What does this mean intuitively?}
+
+\begin{itemize}
+    \item The input $x$ is the raw data (pixels, temperature, salary, age, etc.).
+    \item The first layer $h^{(1)}$ becomes a new description of the data:
+    \[
+    h^{(1)} = (\text{“edge on the left?”},\; \text{“is it big?”},\; \text{“is it bright?”},\dots)
+    \]
+    \item The second layer $h^{(2)}$ detects more complex features built from $h^{(1)}$:
+    \[
+    h^{(2)} = (\text{“is there a vertical shape?”},\; 
+               \text{“does this look like an eye?”},\dots)
+    \]
+    \item Deeper layers combine simpler patterns into abstract concepts:
+    \[
+    \text{edges} \to \text{shapes} \to \text{parts} \to \text{full objects}.
+    \]
+\end{itemize}
+
+\textbf{Hierarchy of features:}
+\[
+\text{Layer 1: simple patterns} \quad
+\text{Layer 2: combinations} \quad
+\text{Layer 3: abstract concepts}
+\]
+
+Each layer’s output is a feature vector built on top of the previous one.
+This progressive “simple $\rightarrow$ complex” structure is called a
+\emph{hierarchy of representations}, and it is the reason neural networks
+can model rich, nonlinear patterns in data.
+\end{mlidea}
+
+
+
 \subsection*{Activation Functions}
 
-\[ \sigma(z) \text{ introduces nonlinearity.} \]
+A neuron computes a weighted sum
+\[
+z = w^\top x + b,
+\]
+and then applies an \emph{activation function} $\sigma(z)$.
 
-Common functions:
+\[
+\sigma(z) \text{ introduces nonlinearity.}
+\]
+
+Without this nonlinearity, every layer of the network would be linear,
+and the entire neural network would collapse into a single linear model.
+Activation functions therefore give neural networks their expressive power.
+
+\medskip
+\textbf{Common activation functions:}
+
 \begin{itemize}
-    \item \textbf{Sigmoid:} 
+    \item \textbf{Sigmoid:}
     \[
     \sigma(z) = \frac{1}{1 + e^{-z}}
     \]
-    \item \textbf{ReLU:}
+    Maps real numbers to $(0,1)$.
+    Useful for probabilities and binary classification.
+
+    \item \textbf{ReLU (Rectified Linear Unit):}
     \[
     \sigma(z) = \max(0, z)
     \]
+    Simple and efficient.
+    Keeps positive values, sets negative values to zero.
+    Helps deep networks learn complex patterns without saturating.
+
     \item \textbf{Tanh:}
     \[
     \sigma(z) = \tanh(z)
     \]
+    Outputs values in $(-1,1)$.
+    Zero-centered and smoother than sigmoid.
 \end{itemize}
 
-\begin{mlidea}
-If we remove activation functions, a neural network collapses into a linear regression model.
+\begin{mlnote}
+\textbf{Intuition: Why do we need activation functions?}
+
+The linear part $w^\top x + b$ can only produce straight-line relationships.
+A stack of linear layers is still just linear.
+
+Activation functions bend and shape these straight lines, allowing the network to
+learn curves, interactions, and complex patterns.
+
+\[
+\text{Linear layers learn combinations of inputs,} \qquad
+\text{activation functions let them learn structure.}
+\]
+
+ReLU detects whether a pattern is present (“is this feature active?”),  
+sigmoid produces smooth probabilities,  
+and tanh gives graded negative/positive activations.
+
+Without $\sigma(\cdot)$, a neural network cannot learn anything nonlinear.
+With activation functions, it becomes a universal function approximator.
+\end{mlnote}
+
+
+\begin{mlnote}
+$\bullet$ If we remove activation functions, a neural network collapses into a linear regression model.
 Nonlinear activations give neural networks their expressive power.
-\end{mlidea}
+\vspace{0.2cm}
+
+\textbf{Why a network without activation is just linear regression}
+
+A neuron computes
+\[
+h = \sigma(w^\top x + b).
+\]
+
+If we remove the activation, i.e.\ $\sigma(z) = z$, it becomes
+\[
+h = w^\top x + b,
+\]
+a purely linear transformation.
+
+A second layer without activation gives:
+\[
+w_2^\top h + b_2 = 
+w_2^\top (w_1^\top x + b_1) + b_2
+= (W x) + b,
+\]
+which is still linear in $x$.
+
+Thus, stacking any number of linear layers yields another linear function:
+\[
+f(x) = W^\ast x + b^\ast,
+\]
+exactly the form of linear regression.
+
+\textbf{Only nonlinear activations (ReLU, sigmoid, tanh) allow neural networks to represent nonlinear functions.}
+\end{mlnote}
+
 
 
 % ============================================================
-\section{Multi–Layer Perceptron (MLP)}
+\section{Multi--Layer Perceptron (MLP)}
 
-A \textbf{Multi–Layer Perceptron} is a sequence of layers:
+A \textbf{Multi--Layer Perceptron} is the simplest form of a neural network
+consisting of layers stacked one after another:
 
 \[
-\text{input} \to \text{hidden layers} \to \text{output}.
+\text{input} \;\longrightarrow\; \text{hidden layers} \;\longrightarrow\; \text{output}.
 \]
 
-Each layer transforms the previous layer via linear combination + activation.
+Each layer takes the output of the previous layer, applies a linear
+transformation, and then a nonlinearity (activation). A \textbf{hidden layer} (or hidden sector) is a part of the neural network where
+intermediate computations take place: it receives the input from the previous
+layer, transforms it into a new feature representation, and passes it forward—
+but these intermediate values are never observed in the dataset, which is why
+they are called “hidden.”
+
 
 \subsection*{Structure}
 
+Formally, for an input $x$:
 \[
 \begin{aligned}
-h^{(1)} &= \sigma\left(W^{(1)} x + b^{(1)}\right), \\
-h^{(2)} &= \sigma\left(W^{(2)} h^{(1)} + b^{(2)}\right), \\
-\vdots  \\
+h^{(1)} &= \sigma\!\left(W^{(1)} x + b^{(1)}\right), \\
+h^{(2)} &= \sigma\!\left(W^{(2)} h^{(1)} + b^{(2)}\right), \\
+&\;\;\vdots \\
 \hat{y} &= W^{(L)} h^{(L-1)} + b^{(L)}.
 \end{aligned}
 \]
@@ -3907,12 +4109,61 @@ Input → Layer 1 → Layer 2 → ... → Output
 }
 \end{center}
 
-Each layer increases the model’s ability to capture patterns.
+Each additional layer increases the expressiveness of the model.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{multi_neural.jpg}
+    \caption{
+        This composite diagram illustrates the three levels of a Deep Learning model:
+        \emph{(Left)} The architecture of a Multi-Layer Perceptron (MLP) with input ($x$),
+        hidden ($h$), and output ($y$) layers.
+        \emph{(Top Right)} The internal mechanism of a single perceptron,
+        computing the weighted sum $z = w^\top x + b$ followed by an activation.
+        \emph{(Bottom Right)} Common activation functions ($\sigma$)---Sigmoid, Tanh,
+        and ReLU---that introduce the necessary nonlinearity into the network.
+    }
+    \label{fig:randomforest_diagram}
+\end{figure}
+
+\begin{mlidea}
+\textbf{Intuition: What is a multi--layer network?}
+
+Think of an MLP as a \emph{chain of transformations} applied to the input.
+Each hidden layer produces a new “version” of the data:
+
+\[
+x \;\rightarrow\; h^{(1)} \;\rightarrow\; h^{(2)} \;\rightarrow\; h^{(3)} \;\rightarrow\; \hat{y}.
+\]
+
+Each transformation has the form:
+\[
+h^{(\ell)} = \sigma\!\left(W^{(\ell)} h^{(\ell-1)} + b^{(\ell)}\right).
+\]
+
+\begin{itemize}
+    \item The input $x$ is raw information (pixels, temperature, age, salary, etc.).
+    \item The first hidden layer $h^{(1)}$ extracts \textbf{simple features}  
+          (edges, brightness, linear combinations, basic correlations).
+    \item The second layer $h^{(2)}$ combines those simple features into  
+          \textbf{more complex patterns} (shapes, textures, interactions).
+    \item Deeper layers form \textbf{abstract concepts}  
+          (object parts, objects, categories, high-level decisions).
+\end{itemize}
+
+This progressive “simple $\rightarrow$ complex” structure is what we call
+a \textbf{hierarchy of representations}. Each layer builds on the one before it.
+This is why deep networks can model extremely rich, nonlinear patterns.
+\end{mlidea}
+
+
 
 \begin{mlnote}
-A neural network with one hidden layer and enough neurons can approximate \emph{any continuous function}.  
+A neural network with one hidden layer and enough neurons can approximate
+\emph{any continuous function}.  
 This is the \textbf{Universal Approximation Theorem}.
 \end{mlnote}
+
 
 % ============================================================
 \section{Forward Pass and Loss Function}
@@ -3958,7 +4209,50 @@ Backprop uses the chain rule repeatedly:
 \frac{\partial z^{(l)}}{\partial W^{(l)}}.
 \]
 
-This allows gradients to flow from the output backward.
+This allows gradients to flow from the output backward. Here is the meaning of each term:
+
+\begin{itemize}
+    \item ${ \frac{\partial L}{\partial h^{(l)}}}$  
+    measures \emph{how much the loss would change} if the output of layer $l$
+    (the activations $h^{(l)}$) changed a little bit.  
+    This gradient comes from the layer above (layer $l+1$).
+
+    \item $ \frac{\partial h^{(l)}}{\partial z^{(l)}}$  
+    is the derivative of the activation function $\sigma(z)$.  
+    It measures how sensitive the neuron output is to changes in its input:
+    \[
+    h^{(l)} = \sigma(z^{(l)}).
+    \]
+
+    \item $\ \frac{\partial z^{(l)}}{\partial W^{(l)}}$  
+    comes from the linear part
+    \[
+    z^{(l)} = W^{(l)} h^{(l-1)} + b^{(l)}.
+    \]
+    It tells us how much $z^{(l)}$ changes when we change the weights
+    $W^{(l)}$.  
+    For fully connected layers:
+    \[
+    \frac{\partial z^{(l)}}{\partial W^{(l)}} = h^{(l-1)}.
+    \]
+\end{itemize}
+
+Putting these pieces together:
+
+\[
+\frac{\partial L}{\partial W^{(l)}}
+= 
+\underbrace{\frac{\partial L}{\partial h^{(l)}}}_{\text{error coming from next layer}}
+\cdot
+\underbrace{\sigma'(z^{(l)})}_{\text{activation derivative}}
+\cdot
+\underbrace{h^{(l-1)}}_{\text{input to the layer}}.
+\]
+
+This is exactly the update signal used to adjust the weights.
+
+\textbf{Backpropagation consists of applying this formula layer by layer,
+from the output layer back toward the input.}
 
 \begin{mlidea}
 Backpropagation = computationally efficient application of the chain rule.
@@ -3968,78 +4262,283 @@ Backpropagation = computationally efficient application of the chain rule.
 % ============================================================
 \section{Training with Gradient Descent}
 
-Once we have gradients, we update each parameter:
+Once backpropagation has computed all required gradients, the parameters of the
+network are updated using \textbf{gradient descent}.  
+Each parameter moves in the direction that most reduces the loss:
 
 \[
 W \leftarrow W - \eta \, \frac{\partial L}{\partial W},
 \]
 
-where $\eta$ is the learning rate.
+where $\eta$ (eta) is the \emph{learning rate}.  
+This simple rule means:
 
-Variants include:
 \begin{itemize}
-    \item SGD (stochastic gradient descent)
-    \item Adam
-    \item RMSProp
-    \item Momentum methods
+    \item $\frac{\partial L}{\partial W}$ tells us how the loss changes if $W$ changes.
+    \item The update subtracts this quantity, meaning we move the parameter in the
+          direction that reduces the loss.
+    \item The learning rate $\eta$ controls how big each step is.
+\end{itemize}
+
+In practice, many variations of gradient descent exist. They differ in how they
+compute the update direction and step size, but they all follow the same basic
+idea: use gradients to iteratively improve the parameters.
+
+%\newpage
+\begin{figure}[htbp]
+    \centering
+    % Adjust the width fraction (e.g., 0.9) to suit your page layout.
+    % \linewidth makes it as wide as the current text block.
+    \includegraphics[width=0.9\linewidth]{neuralall.png}
+\caption{\textbf{From Neuron to Network: The Anatomy of Deep Learning.} Visualizing the hierarchy of a neural network: individual inputs ($x$) are processed by neurons using weights ($w$) and biases ($b$), then stacked into layers to form a complete Deep Learning architecture.}
+    \label{fig:randomforest_diagram}
+\end{figure}
+
+\subsection*{Common Optimizers}
+
+\begin{itemize}
+    \item \textbf{SGD (Stochastic Gradient Descent)}  
+    Updates parameters using a small batch (or even a single example).  
+    Faster per-step and introduces helpful randomness.
+
+    \item \textbf{Momentum}  
+    Accumulates past gradients to smooth updates and accelerate learning.
+
+    \item \textbf{RMSProp}  
+    Adapts the learning rate for each parameter based on recent gradient magnitudes.
+
+    \item \textbf{Adam}  
+    Combines Momentum and RMSProp.  
+    One of the most widely used optimizers in deep learning.
 \end{itemize}
 
 \begin{mlnote}
 The learning rate is one of the most important hyperparameters.  
-Too large → divergence.  
-Too small → very slow learning.
+If it is too large, the updates overshoot and training diverges.  
+If it is too small, training becomes extremely slow.
 \end{mlnote}
 
 
 % ============================================================
+
+
+%=========================================
+
 \section{Why Deep Networks Work}
 
-Deep networks work because each layer extracts more abstract information:
+The strength of deep networks comes from their ability to build a
+\emph{hierarchy of representations}.  
+Each layer transforms the data into a more useful and abstract form.
 
 \begin{itemize}
-    \item shallow layers learn local, simple patterns,
-    \item deeper layers learn more complex concepts.
+    \item \textbf{Shallow layers} detect simple, local patterns  
+          (edges, corners, brightness changes).
+    \item \textbf{Intermediate layers} combine these into richer features  
+          (textures, contours, repeated patterns).
+    \item \textbf{Deeper layers} assemble high-level concepts  
+          (shapes, object parts, or semantic relationships).
+    \item \textbf{Final layers} recognize full objects or produce
+          task-specific predictions.
 \end{itemize}
 
-In image classification:
+This progressive ``simple $\rightarrow$ structured $\rightarrow$ abstract''
+pipeline explains why depth matters:  
+\textbf{each additional layer gives the network more expressive power}.
+
+
+\begin{figure}[htbp]
+    \centering
+    % Adjust the width fraction (e.g., 0.9) to suit your page layout.
+    % \linewidth makes it as wide as the current text block.
+    \includegraphics[width=0.85\linewidth]{deep_learnig.jpg}
+\caption{\textbf{Deep Learning as a Hierarchy of Representations.} 
+    Visualizing the "Simple $\rightarrow$ Abstract" pipeline. 
+    While the Input Layer receives raw data ($x$), the sequence of Hidden Layers functions as a progressive filter. 
+    Early layers detect simple patterns (like edges), while deeper layers combine these into high-level concepts, allowing the network to learn a complex representation of the data before making a final prediction ($y$).}
+    \label{fig:hierarchy_of_representations}
+\end{figure}
+
+In image (    \ref{fig:hierarchy_of_representations}
+) classification, this hierarchy often looks like:
 \begin{itemize}
-    \item layer 1 learns edges,
-    \item layer 2 learns textures,
-    \item layer 3 learns object parts,
-    \item final layers learn entire objects.
+    \item Layer 1: horizontal/vertical edges  
+    \item Layer 2: patterns, textures  
+    \item Layer 3: motifs and object parts  
+    \item Layer 4+: full objects (cat, dog, car, etc.)
 \end{itemize}
 
-Deep learning = \textbf{stacking many layers of representation learning}.
+Deep learning therefore means:
+\[
+\textbf{representation learning} \;\;+\;\; \textbf{many layers}.
+\]
 
+The network is not just fitting a function; it is \emph{learning a sequence of
+increasingly meaningful representations of the data}.
+
+
+%
+
+\section{Initialization and Training Dynamics}
+
+Before training begins, all weights in a neural network must be initialized\footnote{
+This discussion follows the presentation in 
+J.\,D.~Prince, \emph{Understanding Deep Learning} (2023), Chapters~11--12.}.
+Proper initialization is \textbf{not a minor technical detail}:
+it determines whether gradients propagate correctly, whether activations explode or vanish,
+and whether learning remains stable throughout the network.
+A poorly initialized network may fail to learn \emph{even if the architecture is correct}.
+
+\subsection*{Why initialization matters}
+
+Consider a layer:
+\[
+z^{(l)} = W^{(l)} h^{(l-1)} + b^{(l)}, \qquad
+h^{(l)} = \sigma\!\left( z^{(l)} \right).
+\]
+
+If the weights in $W^{(l)}$ are:
+\begin{itemize}
+    \item \textbf{too small}:  
+    then all $z^{(l)} \approx 0$, and activations saturate or collapse.  
+    Gradients become tiny → \emph{vanishing gradients}.
+    
+    \item \textbf{too large}:  
+    then $z^{(l)}$ becomes very large, pushing activations into extreme values.  
+    Gradients explode → training becomes unstable.
+\end{itemize}
+
+Thus, initialization must keep:
+\[
+\mathrm{Var}(h^{(l)}) \quad \text{and} \quad \mathrm{Var}(z^{(l)})
+\]
+approximately constant across layers.
+
+\begin{mlidea}
+Proper initialization keeps the signal (forward pass) and gradients (backward pass)
+within a healthy range throughout the network.
+\end{mlidea}
+
+\subsection*{Xavier and He Initialization}
+
+Modern initialization schemes choose the variance of the weights so that
+activations neither shrink nor blow up when passing through many layers.
+
+\paragraph{Xavier (Glorot) Initialization}
+
+Designed for sigmoid/tanh networks.  
+Weights are drawn such that:
+\[
+W^{(l)}_{ij} \sim \mathcal{N}\left(0,\;
+\frac{2}{n_{\text{in}} + n_{\text{out}}}\right)
+\]
+or uniformly in a symmetric interval with the same variance.
+
+This keeps the forward and backward variances roughly balanced.
+
+\paragraph{He Initialization}
+
+Designed for ReLU networks.  
+ReLU discards half of the inputs, so we need larger variance:
+\[
+W^{(l)}_{ij} \sim \mathcal{N}\left(0,\;
+\frac{2}{n_{\text{in}}}\right).
+\]
+
+Used in almost all modern CNNs and MLPs with ReLU.
+
+\begin{mlnote}
+Choice of activation → choice of initialization.  
+Xavier: sigmoid / tanh  
+He: ReLU and variants (LeakyReLU, GELU)
+\end{mlnote}
+
+\subsection*{Dynamics During Training}
+
+Training is governed by gradient descent, but the \emph{geometry of the loss
+landscape} strongly affects convergence. Prince identifies three phenomena:
+
+\begin{itemize}
+    \item \textbf{Shattered gradients}  
+    In deep random networks, gradients may become uncorrelated across layers.
+    Proper initialization mitigates this.
+
+    \item \textbf{Saddle points}  
+    Points where the gradient is nearly zero but the model is not optimal.  
+    Common in high-dimensional spaces.
+
+    \item \textbf{Flat and sharp minima}  
+    Flat minima generalize better; sharp minima tend to overfit.  
+    Large-batch training often leads to sharp minima; small batches help find flatter ones.
+\end{itemize}
+
+\begin{mlidea}
+Training dynamics depend on the interplay between initialization, activation
+functions, the optimizer, and the loss landscape.  
+Initialization sets the learning trajectory before the first gradient step.
+\end{mlidea}
+
+\subsection*{Practical Guidelines}
+
+\begin{itemize}
+    \item Use \textbf{He initialization} for ReLU networks.
+    \item Use \textbf{Xavier initialization} for tanh/sigmoid networks.
+    \item Always check whether gradients vanish or explode in early iterations.
+    \item If training diverges, reduce learning rate or inspect initialization.
+    \item Monitor variance of activations across layers (Prince calls this \emph{activation diagnostics}).
+\end{itemize}
+
+\begin{mlnote}
+A deep model may fail not because of architecture or data,  
+but because the initial weights sent gradients into a bad regime.
+Correct initialization is the first step of successful training.
+\end{mlnote}
 
 % ============================================================
 \section{Overfitting and Regularization in Neural Networks}
 
-Neural networks have many parameters, so overfitting is common.
+Neural networks often contain millions of parameters.  
+This makes them extremely flexible, but also highly prone to \textbf{overfitting}:
+the network may memorize the training data instead of learning the underlying
+patterns.  
+When this happens, training loss becomes very small while test loss increases.
 
-\subsection*{Regularization techniques}
+To prevent overfitting, several regularization strategies are commonly used.
+
+\subsection*{Regularization Techniques}
 
 \begin{itemize}
-    \item \textbf{L2 weight decay}
-    \item \textbf{Dropout}
-    \item \textbf{Early stopping}
-    \item \textbf{Batch Normalization}
+    \item \textbf{L2 Weight Decay}  
+    Adds a penalty term $\lambda \|W\|_2^2$ to the loss.  
+    This discourages large weights and encourages smoother, simpler models.  
+    It is mathematically equivalent to a Gaussian prior over the parameters.
+
+    \item \textbf{Dropout}  
+    During training, each neuron is randomly ``dropped'' (set to zero) with a
+    fixed probability $p$.  
+    This prevents neurons from relying too strongly on one another, forcing the
+    network to learn redundant and more robust features.
+
+    \item \textbf{Early Stopping}  
+    Training is halted when the validation loss stops improving.  
+    This prevents the model from continuing to fit noise in the training set
+    after it has already learned the useful structure.
+
+    \item \textbf{Batch Normalization}  
+    Normalizes activations within each mini-batch.  
+    This reduces internal covariate shift, stabilizes gradients, and often has a
+    regularizing effect by adding small noise due to batch statistics.
+
 \end{itemize}
 
 \begin{mlidea}
-Dropout randomly disables neurons during training to prevent co-adaptation.  
-This forces the network to learn more robust representations.
+Dropout works by randomly disabling neurons during training.
+A neuron is kept with probability $(1-p)$ and removed with probability $p$.  
+Because each training pass uses a different subset of neurons, the network
+cannot rely on specific activations and must learn more stable, general features.
 \end{mlidea}
 
-\newpage
-\begin{figure}[h!]
-    \centering
-    % Adjust the width fraction (e.g., 0.9) to suit your page layout.
-    % \linewidth makes it as wide as the current text block.
-    \includegraphics[width=0.99\linewidth]{neuralall.png}
-\caption{\textbf{From Neuron to Network: The Anatomy of Deep Learning.} Visualizing the hierarchy of a neural network: individual inputs ($x$) are processed by neurons using weights ($w$) and biases ($b$), then stacked into layers to form a complete Deep Learning architecture.}
-    \label{fig:neural_network_diagram}
-\end{figure}
+
+
 
 % ============================================================
 \section{Python Example: Neural Network for Classification (Keras)}
@@ -4090,35 +4589,171 @@ loss, acc = model.evaluate(X_test, y_test)
 print("Accuracy:", acc)
 \end{lstlisting}
 \end{mlcode}
+%==========================================
 
+The following example illustrates a \textbf{Deep Learning} model, specifically a
+\textbf{Convolutional Neural Network (CNN)}, which is widely used in image
+processing. Unlike a simple MLP, a CNN exploits the spatial structure of images.
+
+\begin{itemize}
+    \item \textbf{Conv2D layers} detect patterns such as edges, corners, textures.
+    \item \textbf{MaxPooling} reduces spatial resolution while keeping important features.
+    \item \textbf{Flatten} converts the feature maps into a vector.
+    \item \textbf{Dense layers} perform the final classification into digits (0–9).
+\end{itemize}
+
+Deep networks learn features automatically, layer by layer:
+from pixels \(\to\) edges \(\to\) shapes \(\to\) digits.
+\begin{mlcode}
+\begin{lstlisting}[style=pystyle, language=Python, title=Deep Learning Example — Convolutional Neural Network (MNIST)]
+from tensorflow.keras.datasets import mnist
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+from tensorflow.keras.optimizers import Adam
+
+# 1. Load dataset
+(X_train, y_train), (X_test, y_test) = mnist.load_data()
+
+# 2. Preprocessing
+# CNNs expect 4D inputs: (batch, height, width, channels)
+X_train = X_train.reshape(-1, 28, 28, 1) / 255.0
+X_test  = X_test.reshape(-1, 28, 28, 1) / 255.0
+
+# Convert labels to one-hot vectors (10 classes: 0-9)
+y_train = to_categorical(y_train, 10)
+y_test  = to_categorical(y_test, 10)
+
+# 3. Build CNN model
+model = Sequential([
+    Conv2D(32, (3, 3), activation='relu', input_shape=(28, 28, 1)),
+    MaxPooling2D((2, 2)),
+    
+    Conv2D(64, (3, 3), activation='relu'),
+    MaxPooling2D((2, 2)),
+    
+    Flatten(),
+    Dense(64, activation='relu'),
+    Dense(10, activation='softmax')
+])
+
+# 4. Compile
+model.compile(
+    optimizer=Adam(learning_rate=0.001),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"]
+)
+
+# 5. Train
+model.fit(X_train, y_train, epochs=5, batch_size=64, verbose=1)
+
+# 6. Evaluate
+loss, acc = model.evaluate(X_test, y_test)
+print("Test accuracy:", acc)
+\end{lstlisting}
+\end{mlcode}
 
 
 % ============================================================
 \section{Summary: Recognizing Neural Networks}
 
 \begin{mlexample1}
-\textbf{Neural networks vs other ML models}
+\textbf{Neural Networks vs.\ Classical Machine Learning Models}
+
+The models presented in the previous chapters (Decision Trees, Random Forests, Gradient Boosting, XGBoost) follow very different principles than neural networks.  
+This comparison clarifies \emph{when} each family of models is appropriate and \emph{what makes them fundamentally different}.
 
 \begin{itemize}
-    \item \textbf{Decision Tree / Random Forest / XGBoost}  
-          interpretability, tabular data, low–dimensional problems.
 
-    \item \textbf{Neural Networks}  
-          excel when:
-          \begin{itemize}
-              \item large datasets,
-              \item high-dimensional inputs (images, audio, text),
-              \item complex nonlinear patterns,
-              \item end-to-end learning is important.
-          \end{itemize}
+    \item \textbf{Decision Trees}  
+    \begin{itemize}
+        \item split the feature space using simple rules ($x_j \le t$),  
+        \item easy to interpret and visualize,  
+        \item operate well on tabular data with mixed data types,  
+        \item but unstable (small changes in data → different tree).
+    \end{itemize}
+
+    \item \textbf{Random Forest}  
+    \begin{itemize}
+        \item an ensemble of many decision trees trained on random subsets of data and features,  
+        \item reduces variance and overfitting,  
+        \item robust, reliable baseline for structured/tabular datasets,  
+        \item still limited in modelling very complex high-dimensional data.
+    \end{itemize}
+
+    \item \textbf{Gradient Boosting / XGBoost}  
+    \begin{itemize}
+        \item sequentially build trees that correct previous errors,  
+        \item often state-of-the-art for regression and classification on tabular datasets,  
+        \item excellent performance with good hyperparameter tuning,  
+        \item very strong on small/medium datasets where deep learning may overfit.
+    \end{itemize}
+    
+    \item \textbf{Neural Networks (MLP)}  
+    \begin{itemize}
+        \item learn \emph{representations} through multiple layers,  
+        \item handle high-dimensional and dense input spaces (e.g.\ 1000+ features),  
+        \item approximate complex nonlinear functions (Universal Approximation Theorem),  
+        \item require careful training (initialization, learning rate, normalization).
+    \end{itemize}
 
     \item \textbf{Deep Learning}  
-          simply means: many layers → hierarchical representations.
+    \begin{itemize}
+        \item simply means: \emph{many layers} (deep architectures),  
+        \item hierarchical learned features:
+            \[
+            \text{raw input} \rightarrow \text{simple features} \rightarrow \text{complex patterns}
+            \]
+        \item excels in images (CNNs), audio, text (Transformers), and large-scale problems,  
+        \item needs:
+            \begin{itemize}
+                \item large training datasets,  
+                \item high computational power (GPUs),  
+                \item regularization (dropout, weight decay),  
+                \item careful tuning of optimization and architecture.
+            \end{itemize}
+    \end{itemize}
+
 \end{itemize}
 
-\textbf{Key strength:} automatic feature learning.  
-\textbf{Key challenge:} requires large data, careful tuning, and GPUs for large models.
+\textbf{Summary of strengths:}
+\begin{itemize}
+    \item Decision Trees / Random Forest / XGBoost → best for \textbf{structured tabular data}, interpretable rules, smaller datasets.  
+    \item Neural Networks → best for \textbf{unstructured high-dimensional data} (images, audio, text) and complex nonlinear relationships.  
+    \item Deep Learning → automatic feature learning, powerful scaling, but requires data and computation.
+\end{itemize}
+
+\textbf{Summary of challenges:}
+\begin{itemize}
+    \item tree-based models: can struggle with extremely high-dimensional continuous inputs,  
+    \item neural networks: sensitive to initialization, learning rate, overfitting; harder to interpret, need more data.
+\end{itemize}
 \end{mlexample1}
+
+
+%\begin{mlexample1}
+%\textbf{Neural networks vs other ML models}
+%
+%\begin{itemize}
+%    \item \textbf{Decision Tree / Random Forest / XGBoost}  
+%          interpretability, tabular data, low–dimensional %problems.
+%
+ %   \item \textbf{Neural Networks}  
+ %         excel when:
+%          \begin{itemize}
+%              \item large datasets,
+%              \item high-dimensional inputs (images, audio, text),
+%              \item complex nonlinear patterns,
+%              \item end-to-end learning is important.
+%          \end{itemize}
+%
+%    \item \textbf{Deep Learning}  
+%          simply means: many layers → hierarchical %representations.
+%\end{itemize}
+%
+%\textbf{Key strength:} automatic feature learning.  
+%\textbf{Key challenge:} requires large data, careful tuning, %and GPUs for large models.
+%\end{mlexample1}
 
 
 
@@ -4129,8 +4764,660 @@ print("Accuracy:", acc)
 \chapter{Practical ML}
 
 
+\section{The Practical Machine Learning Pipeline}
+
+Machine learning is not just about choosing an algorithm.  
+A complete ML project follows a structured workflow:
+
+\begin{enumerate}
+    \item \textbf{Define the problem} (regression, classification, forecasting, ranking, etc.).
+    \item \textbf{Collect data} and ensure it represents the real task.
+    \item \textbf{Explore the data} (summary statistics, correlations, distributions).
+    \item \textbf{Preprocess}:
+        \begin{itemize}
+            \item handle missing values,
+            \item encode categorical variables,
+            \item scale or normalize features when required,
+            \item remove or cap outliers.
+        \end{itemize}
+    \item \textbf{Split} into train / validation / test.
+    \item \textbf{Choose a baseline model} (linear, tree-based, etc.).
+    \item \textbf{Train the model} using the training set.
+    \item \textbf{Tune hyperparameters} using the validation set or cross-validation.
+    \item \textbf{Evaluate} using appropriate metrics.
+    \item \textbf{Deploy} and monitor performance over time.
+\end{enumerate}
+
+\begin{mlidea}
+A practical ML project is mostly data work, not model selection.
+Choosing the algorithm is often less important than preparing the data well.
+\end{mlidea}
+
+\section{Evaluation Metrics}
+
+Different tasks require different metrics.  
+Choosing the wrong metric leads to misleading conclusions.
+
+\subsection*{Regression Metrics}
+\begin{itemize}
+    \item \textbf{MSE} (mean squared error): penalizes large errors strongly.
+    \item \textbf{RMSE}: interpretable in the same units as the target.
+    \item \textbf{MAE}: more robust to outliers.
+    \item \textbf{$R^2$}: proportion of variance explained by the model.
+\end{itemize}
+
+\subsection*{Classification Metrics}
+\begin{itemize}
+    \item \textbf{Accuracy}: fraction of correctly classified samples.
+    \item \textbf{Precision}: out of positive predictions, how many were correct?
+    \item \textbf{Recall}: out of actual positives, how many were detected?
+    \item \textbf{F1-score}: harmonic mean of precision and recall.
+    \item \textbf{ROC--AUC}: probability that the classifier ranks a random positive
+    higher than a random negative.
+\end{itemize}
+
+\begin{mlnote}
+In imbalanced datasets (fraud detection, medical diagnosis), accuracy is misleading.
+Recall, precision, and F1-score are essential.
+\end{mlnote}
 
 
+\section{Hyperparameter Tuning and Model Selection}
+
+Hyperparameters control how a model learns.  
+Examples:
+\begin{itemize}
+    \item learning rate (neural networks, boosting),
+    \item max\_depth (trees, forests, boosting),
+    \item regularization strength (ridge, lasso, logistic regression).
+\end{itemize}
+
+\subsection*{Search Strategies}
+
+\paragraph{Grid Search}
+Tests all combinations of hyperparameters.
+
+\paragraph{Random Search}
+Samples random configurations; often more efficient.
+
+\paragraph{Bayesian Optimization}
+Builds a probabilistic model of performance and explores promising regions.
+Useful for expensive models (deep learning, XGBoost).
+
+\begin{mlidea}
+Hyperparameters are not learned from data.
+They must be chosen using the validation set or cross-validation.
+\end{mlidea}
+
+
+\section{Data Preprocessing Cheatsheet}
+
+\subsection*{Scaling}
+Needed for: linear models, logistic regression, SVMs, neural networks.  
+Not needed for: trees, random forests, boosting.
+
+\subsection*{Encoding Categorical Features}
+\begin{itemize}
+    \item One-hot encoding (most common).
+    \item Ordinal encoding (when categories have natural order).
+    \item Target encoding (careful: risk of leakage).
+\end{itemize}
+
+\subsection*{Handling Missing Data}
+\begin{itemize}
+    \item mean/median imputation,
+    \item KNN imputation,
+    \item model-based imputation,
+    \item using ``missing'' as its own category (trees often benefit).
+\end{itemize}
+
+\begin{mlnote}
+Most ML performance differences come from preprocessing, not from the choice of algorithm.
+\end{mlnote}
+
+
+% ===========================
+% ANNEX: INTERVIEW Q & A
+% ===========================
+\appendix
+\chapter*{Annex: Machine Learning Interview Q\&A}
+\addcontentsline{toc}{chapter}{Annex: Machine Learning Interview Q\&A}
+
+This annex collects short question-and-answer pairs on key concepts from these
+notes. 
+
+%--------------------------
+\section*{1. Foundations}
+
+\subsection*{Q1. What is the difference between supervised and unsupervised learning?}
+
+\textbf{A:}
+Supervised learning uses labelled data \((x_i, y_i)\) to learn a function
+\(f_{\theta}(x)\) that predicts \(y\) from \(x\).
+Unsupervised learning only uses inputs \(x_i\) and tries to discover structure
+in the data (clusters, low-dimensional representations, density).
+
+\subsection*{Q2. Explain the bias–variance tradeoff.}
+
+\textbf{A:}
+The expected squared prediction error decomposes as
+\[
+\mathbb{E}[(y - \hat{f}(x))^2]
+= \text{Bias}[\hat{f}(x)]^2 + \text{Var}[\hat{f}(x)] + \sigma_{\text{noise}}^2 .
+\]
+\begin{itemize}
+    \item High bias: model too simple, underfits.
+    \item High variance: model too flexible, overfits.
+\end{itemize}
+Good models balance both.
+
+\subsection*{Q3. What assumptions does linear regression make?}
+
+\textbf{A:}
+\begin{itemize}
+    \item The true relationship is approximately linear:
+          \( y = X\beta + \varepsilon \).
+    \item Errors \(\varepsilon\) are independent, zero mean,
+          constant variance, often assumed Gaussian.
+    \item Features are not perfectly collinear.
+\end{itemize}
+
+%--------------------------
+\section*{2. Loss, Risk, and Optimization}
+
+\subsection*{Q4. What is a loss function?}
+
+\textbf{A:}
+A loss function \(L(y, \hat{y})\) measures how far a prediction \(\hat{y}\)
+is from the true target \(y\).  
+Training means choosing \(\theta\) to minimise the average loss over the data.
+
+\subsection*{Q5. What is empirical risk?}
+
+\textbf{A:}
+For data \((x_i,y_i)_{i=1}^n\) and model \(f_{\theta}\),
+\[
+R_{\text{emp}}(\theta)
+= \frac{1}{n}\sum_{i=1}^n \ell\bigl(y_i, f_{\theta}(x_i)\bigr)
+\]
+is the empirical risk, the average loss on the training set.  
+We minimise \(R_{\text{emp}}\) because the true risk
+\(R(\theta) = \mathbb{E}_{(x,y)\sim P_{\text{data}}}
+[\ell(y,f_{\theta}(x))]\) is not directly observable.
+
+\subsection*{Q6. Why is cross-entropy used for classification?}
+
+\textbf{A:}
+For a Bernoulli or categorical model, cross-entropy is exactly the negative
+log-likelihood of the correct class. Minimising cross-entropy is equivalent
+to maximising likelihood and encourages the model to place high probability
+on the true label.
+
+\subsection*{Q7. What is gradient descent?}
+
+\textbf{A:}
+An iterative optimisation method:
+\[
+\theta \leftarrow \theta - \eta \nabla_{\theta} L(\theta),
+\]
+where \(\eta\) is the learning rate. Variants: stochastic gradient descent
+(SGD), Adam, RMSProp, momentum.
+
+%--------------------------
+\section*{3. Train / Validation / Test and Evaluation}
+
+\subsection*{Q8. Why do we split data into train, validation, and test sets?}
+
+\textbf{A:}
+\begin{itemize}
+    \item Train set: fit model parameters.
+    \item Validation set: tune hyperparameters, choose the model.
+    \item Test set: estimate final performance on unseen data.
+\end{itemize}
+This prevents using the same data both for fitting and for evaluation,
+which would give an over-optimistic estimate.
+
+\subsection*{Q9. What is \(k\)-fold cross-validation?}
+
+\textbf{A:}
+We split the data into \(k\) folds.  
+For each fold:
+train on \(k-1\) folds and validate on the remaining fold.  
+Average the validation scores.  
+This gives a more stable estimate, especially when data is limited.
+
+%--------------------------
+\section*{4. Trees, Random Forests, and Boosting}
+
+\subsection*{Q10. How does a decision tree choose a split?}
+
+\textbf{A:}
+At each node, it considers candidate splits of the form \(x_j \le t\) and
+chooses the split that maximises impurity reduction:
+\begin{itemize}
+    \item classification: reduce Gini or entropy,
+    \item regression: reduce mean squared error.
+\end{itemize}
+
+\subsection*{Q11. Why are random forests effective?}
+
+\textbf{A:}
+They average many de-correlated trees:
+\begin{itemize}
+    \item each tree is trained on a bootstrap sample of the data,
+    \item at each split, only a random subset of features is considered.
+\end{itemize}
+This reduces variance and overfitting compared to a single tree.
+
+\subsection*{Q12. What is gradient boosting in simple terms?}
+
+\textbf{A:}
+Gradient boosting builds a sequence of trees
+\[
+F_m(x) = F_{m-1}(x) + \nu h_m(x),
+\]
+where each new tree \(h_m\) is trained to fit the residuals (or negative
+gradient of the loss) of the current model.  
+Each step corrects errors of the previous steps.
+
+\subsection*{Q13. What makes XGBoost special compared to basic gradient boosting?}
+
+\textbf{A:}
+\begin{itemize}
+    \item Uses second-order Taylor expansion of the loss (gradients and Hessians).
+    \item Includes explicit regularisation on tree complexity (L1 and L2).
+    \item Very efficient implementation: sparse-aware, parallel, out-of-core.
+    \item Handles missing values and column subsampling.
+\end{itemize}
+
+%--------------------------
+\section*{5. Neural Networks and Deep Learning}
+
+\subsection*{Q14. What is the role of an activation function?}
+
+\textbf{A:}
+Activation functions \(\sigma(z)\) introduce nonlinearity into each neuron.
+Without them, stacking layers would still yield a linear function
+\(f(x) = W x + b\), equivalent to linear regression.
+
+\subsection*{Q15. What is backpropagation?}
+
+\textbf{A:}
+Backpropagation is an efficient application of the chain rule to compute
+gradients of the loss with respect to all parameters in a network.  
+For layer \(l\),
+\[
+\frac{\partial L}{\partial W^{(l)}} =
+\frac{\partial L}{\partial h^{(l)}}
+\cdot
+\frac{\partial h^{(l)}}{\partial z^{(l)}}
+\cdot
+\frac{\partial z^{(l)}}{\partial W^{(l)}}.
+\]
+
+\subsection*{Q16. Why is weight initialization important in deep networks?}
+
+\textbf{A:}
+If initial weights are too small, activations and gradients vanish.
+If too large, they explode. Proper schemes (Xavier, He initialization)
+keep the variance of activations and gradients roughly stable across layers,
+allowing effective training.
+
+\subsection*{Q17. Name common regularisation techniques for neural networks.}
+
+\textbf{A:}
+\begin{itemize}
+    \item L2 weight decay,
+    \item dropout,
+    \item early stopping using validation loss,
+    \item batch normalization (indirect regularisation).
+\end{itemize}
+
+%--------------------------
+\section*{6. Practical Interview Scenarios}
+
+\subsection*{Q18. Your model has low training error but high test error. What does this indicate?}
+
+\textbf{A:}
+This suggests overfitting. Possible actions:
+\begin{itemize}
+    \item add regularisation (L2, dropout),
+    \item gather more data or augment existing data,
+    \item simplify the model (fewer parameters, smaller depth),
+    \item improve train/validation split and cross-validation.
+\end{itemize}
+
+\subsection*{Q19. Your model has high training and high test error. What does this indicate?}
+
+\textbf{A:}
+This suggests underfitting. Possible actions:
+\begin{itemize}
+    \item use a more expressive model,
+    \item add features or use feature engineering,
+    \item reduce regularisation,
+    \item check data preprocessing and labels for errors.
+\end{itemize}
+
+\subsection*{Q20. You have a small tabular dataset. Would you use deep learning or XGBoost?}
+
+\textbf{A:}
+Usually XGBoost or Random Forest is preferred:
+\begin{itemize}
+    \item tree-based models handle small datasets well,
+    \item they need less tuning and less data,
+    \item deep networks tend to overfit and need more data and computation.
+\end{itemize}
+Deep learning becomes attractive for large, high-dimensional, or unstructured data.
+
+%--------------------------
+\section*{7. Advanced / Difficult Interview Questions}
+
+\subsection*{Q21. What is the difference between MLE and MAP in simple terms?}
+
+\textbf{A:}
+\begin{itemize}
+    \item MLE chooses the parameter \(\theta\) that makes the observed data most likely.
+    \item MAP chooses the parameter \(\theta\) that is most likely \emph{after combining}
+          the data (likelihood) and prior knowledge (prior).
+\end{itemize}
+MAP = MLE + regularisation.
+
+\subsection*{Q22. What is the KL divergence and why is it important?}
+
+\textbf{A:}
+The Kullback–Leibler divergence measures how different two probability
+distributions are:
+\[
+D_{\mathrm{KL}}(P \| Q)
+= \mathbb{E}_{x\sim P} \left[\log \frac{P(x)}{Q(x)}\right].
+\]
+It appears in variational inference, VAEs, reinforcement learning, and regularisation.
+
+\subsection*{Q23. What is the vanishing gradient problem?}
+
+\textbf{A:}
+During backpropagation, gradients are products of many derivatives.
+If these derivatives are small (for example using sigmoid or tanh),
+their products shrink exponentially, so early layers receive almost zero gradient
+and stop learning.
+
+\subsection*{Q24. Why does batch normalisation help training?}
+
+\textbf{A:}
+It rescales activations inside the network to have stable mean and variance.
+This:
+\begin{itemize}
+    \item reduces internal covariate shift,
+    \item stabilises the gradient flow,
+    \item allows higher learning rates,
+    \item provides regularisation.
+\end{itemize}
+
+\subsection*{Q25. What is the difference between bagging and boosting?}
+
+\textbf{A:}
+\begin{itemize}
+    \item Bagging (Random Forest): trains many models independently on bootstrapped
+          samples and averages them to reduce variance.
+    \item Boosting (Gradient Boosting/XGBoost): builds models \emph{sequentially},
+          each correcting errors of the previous model.
+\end{itemize}
+
+\subsection*{Q26. When is deep learning a bad choice?}
+
+\textbf{A:}
+\begin{itemize}
+    \item small datasets,
+    \item tabular data with strong feature semantics,
+    \item limited compute or tight latency constraints,
+    \item when interpretability is essential.
+\end{itemize}
+
+\subsection*{Q27. What is regularisation from an optimisation viewpoint?}
+
+\textbf{A:}
+Regularisation adds a penalty \(\lambda \Omega(\theta)\) to the loss function.
+This constrains the parameter search space and reduces variance by discouraging
+complex solutions.
+
+\subsection*{Q28. Why is XGBoost faster than traditional gradient boosting?}
+
+\textbf{A:}
+\begin{itemize}
+    \item parallelised tree construction,
+    \item efficient cache-aware implementation,
+    \item handling of sparsity and missing values,
+    \item second-order gradients (both gradient and Hessian),
+    \item regularisation built into tree growth.
+\end{itemize}
+
+\subsection*{Q29. How do neural networks approximate arbitrary functions?}
+
+\textbf{A:}
+With enough neurons and a nonlinear activation, a single hidden layer can
+approximate any continuous function (Universal Approximation Theorem).
+Depth allows more efficient and structured representations.
+
+\subsection*{Q30. What is early stopping and why does it work?}
+
+\textbf{A:}
+It stops training when validation loss stops improving.
+This prevents the model from overfitting the training data and acts as an
+implicit regulariser.
+
+
+%--------------------------
+
+\subsection*{Q31. Mathematically, why does minimizing Mean Squared Error (MSE) correspond to maximizing the likelihood of Gaussian data?}
+
+\textbf{A:}
+Assume the target $y$ is generated by a deterministic function of $x$ plus Gaussian noise:
+\[ y_i = f(x_i; \theta) + \varepsilon_i, \quad \varepsilon_i \sim \mathcal{N}(0, \sigma^2). \]
+The probability density for a single observation is:
+\[ p(y_i | x_i; \theta) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left( -\frac{(y_i - f(x_i;\theta))^2}{2\sigma^2} \right). \]
+The log-likelihood for $n$ independent samples is:
+\[ \log \mathcal{L}(\theta) = \sum_{i=1}^n \left[ -\frac{1}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}(y_i - f(x_i;\theta))^2 \right]. \]
+To maximize this, we must minimize the term with the negative sign. Since $\sigma$ is constant, this is equivalent to minimizing:
+\[ \sum_{i=1}^n (y_i - f(x_i;\theta))^2, \]
+which is the Sum of Squared Errors.
+
+\subsection*{Q32. Why does L1 regularization (Lasso) yield sparse solutions (zeros), while L2 (Ridge) does not?}
+
+\textbf{A:}
+\begin{itemize}
+    \item \textbf{Geometric view:} L1 regularization constrains the parameters to a diamond shape ($|\theta_1| + |\theta_2| \le C$). The error contours (ellipses) of the loss function are likely to touch the "comers" of this diamond, where coefficients are exactly zero. L2 constrains to a circle ($\theta_1^2 + \theta_2^2 \le C$), where the touch point is rarely on an axis.
+    \item \textbf{Probabilistic view:} L1 corresponds to a \textbf{Laplace prior} (sharp peak at zero). L2 corresponds to a \textbf{Gaussian prior} (smooth bell curve). The sharp peak pulls the MAP estimate strongly to exactly zero.
+\end{itemize}
+
+\subsection*{Q33. In an ensemble, why does Bagging reduce variance while Boosting reduces bias?}
+
+\textbf{A:}
+\begin{itemize}
+    \item \textbf{Bagging (e.g., Random Forest):} Averages $T$ independent low-bias, high-variance models.
+    If errors are uncorrelated with variance $\sigma^2$, averaging reduces variance to $\sigma^2/T$. It cannot reduce bias because the average of biased models is still biased.
+    \item \textbf{Boosting:} Starts with a high-bias model (weak learner). Each subsequent model attempts to correct the residual error of the previous ones. This iterative correction progressively reduces the systematic error (bias), though it can increase variance if it overfits the noise.
+\end{itemize}
+
+\subsection*{Q34. How does Batch Normalization behave differently during training vs.\ prediction (inference)?}
+
+\textbf{A:}
+\begin{itemize}
+    \item \textbf{During Training:} It normalizes the layer inputs using the mean $\mu_B$ and variance $\sigma^2_B$ of the \emph{current mini-batch}. This allows the network to learn stable distributions.
+    \item \textbf{During Inference:} We process single samples, so we cannot compute a batch mean. Instead, we use the \emph{running average} of the means and variances collected during training.
+\end{itemize}
+A common interview failure is forgetting that inference uses fixed population statistics, not batch statistics.
+
+\subsection*{Q35. Why are saddle points a bigger problem than local minima in high-dimensional optimization?}
+
+\textbf{A:}
+In high dimensions, it is statistically very unlikely for a critical point (zero gradient) to be a local minimum. For a point to be a minimum, the curvature (eigenvalues of the Hessian) must be positive in \emph{all} dimensions.
+It is much more likely that the curvature is positive in some directions and negative in others (a saddle point). Gradient descent can get "stuck" slowing down near saddle points, which is why momentum-based optimizers are useful.
+
+\subsection*{Q36. Why do Sigmoid and Tanh activations cause the "Vanishing Gradient" problem?}
+
+\textbf{A:}
+The derivative of the Sigmoid function is $\sigma'(z) = \sigma(z)(1-\sigma(z))$. The maximum value of this derivative is $0.25$ (at $z=0$).
+In a deep network, backpropagation multiplies these derivatives via the chain rule.
+\[ \text{Gradient} \propto 0.25 \times 0.25 \times 0.25 \dots \]
+As depth increases, the gradient exponentially decays to zero, stopping the weights in early layers from updating. ReLU solves this because its derivative is exactly 1 for positive inputs.
+
+\subsection*{Q37. How would you handle an extremely imbalanced dataset (e.g., 1\% fraud)?}
+
+\textbf{A:}
+Accuracy is a useless metric here. Strategies include:
+\begin{itemize}
+    \item \textbf{Metrics:} Use Precision, Recall, F1-Score, or AUC-PR (Area Under Precision-Recall Curve).
+    \item \textbf{Resampling:} Undersample the majority class or oversample the minority class (SMOTE).
+    \item \textbf{Cost-sensitive learning:} Modify the loss function to penalize errors on the minority class more heavily (e.g., \texttt{class\_weight='balanced'} in scikit-learn).
+    \item \textbf{Focal Loss:} A specific loss function (popular in object detection) that down-weights easy examples and focuses training on hard (minority) examples.
+\end{itemize}
+
+\subsection*{Q38. What is the complexity of the Self-Attention mechanism in Transformers?}
+
+\textbf{A:}
+For a sequence of length $N$ and dimension $d$:
+Calculating the attention scores involves multiplying matrices $(N \times d)$ and $(d \times N)$, resulting in an $(N \times N)$ matrix.
+Therefore, the time and memory complexity is **$O(N^2)$** (quadratic).
+This is why standard Transformers struggle with very long documents compared to RNNs (linear $O(N)$) or CNNs.
+
+%--------------------------
+\section*{8. High-Technical Questions (for Deep Understanding)}
+
+\subsection*{Q39. Show that least–squares linear regression is the MLE under Gaussian noise.}
+
+\textbf{A:}
+Assume the model
+\[
+y_i = f_{\theta}(x_i) + \varepsilon_i, \qquad
+\varepsilon_i \sim \mathcal{N}(0,\sigma^2), \text{ independent}.
+\]
+For linear regression, \(f_{\theta}(x_i) = x_i^\top w\).  
+The likelihood of the data is
+\[
+p(y \mid X,w)
+= \prod_{i=1}^n
+\frac{1}{\sqrt{2\pi\sigma^2}}
+\exp\!\left(
+-\frac{(y_i - x_i^\top w)^2}{2\sigma^2}
+\right).
+\]
+The log-likelihood is
+\[
+\log p(y \mid X,w)
+= -\frac{n}{2}\log(2\pi\sigma^2)
+-\frac{1}{2\sigma^2}\sum_{i=1}^n (y_i - x_i^\top w)^2.
+\]
+Maximising this over \(w\) is equivalent to minimising
+\[
+\sum_{i=1}^n (y_i - x_i^\top w)^2,
+\]
+which is exactly the least–squares objective.  
+Therefore OLS is the maximum likelihood estimator under Gaussian noise.
+
+\subsection*{Q40. Why is cross-entropy equal to negative log-likelihood in logistic regression?}
+
+\textbf{A:}
+For a binary label \(y_i \in \{0,1\}\) and predicted probability
+\(\hat{p}_i = \sigma(w^\top x_i)\), the Bernoulli likelihood is
+\[
+p(y_i \mid x_i,w)
+= \hat{p}_i^{\,y_i} (1-\hat{p}_i)^{1-y_i}.
+\]
+The log-likelihood of the dataset is
+\[
+\log \mathcal{L}(w)
+= \sum_{i=1}^n
+\left[
+y_i \log \hat{p}_i
++ (1-y_i)\log(1-\hat{p}_i)
+\right].
+\]
+The cross-entropy loss is defined as
+\[
+\mathcal{L}_{\text{CE}}(w)
+= -\sum_{i=1}^n
+\left[
+y_i \log \hat{p}_i
++ (1-y_i)\log(1-\hat{p}_i)
+\right]
+= -\log \mathcal{L}(w).
+\]
+Thus minimising cross-entropy is exactly the same as maximising the log-likelihood.
+
+\subsection*{Q33. Show that logistic regression has a linear decision boundary.}
+
+\textbf{A:}
+Logistic regression predicts
+\[
+P(y=1 \mid x) = \sigma(w^\top x + b).
+\]
+A common decision rule is to predict class 1 if this probability is at least \(0.5\):
+\[
+P(y=1\mid x) \ge 0.5
+\quad\Longleftrightarrow\quad
+\sigma(w^\top x + b) \ge 0.5.
+\]
+Since \(\sigma(z)\) is strictly increasing and \(\sigma(0)=0.5\),
+this is equivalent to
+\[
+w^\top x + b \ge 0.
+\]
+The set of points satisfying \(w^\top x + b = 0\) is a hyperplane in feature space,
+so the decision boundary is linear.
+
+\subsection*{Q41. In gradient boosting, how does “fit the negative gradient” generalise the idea of fitting residuals?}
+
+\textbf{A:}
+Let the model at step \(m\) be \(F_{m-1}(x)\). We want to minimise an empirical risk
+\[
+R(F) = \frac{1}{n}\sum_{i=1}^n L\bigl(y_i, F(x_i)\bigr).
+\]
+The functional gradient with respect to the current predictions at the points
+\(x_i\) is
+\[
+g_i^{(m)}
+= \left.
+\frac{\partial L(y_i, F(x_i))}{\partial F(x_i)}
+\right|_{F=F_{m-1}}.
+\]
+Gradient descent in function space would update
+\[
+F_m(x_i)
+= F_{m-1}(x_i) - \nu\, g_i^{(m)}.
+\]
+Gradient boosting approximates the negative gradient \(-g_i^{(m)}\) by a tree
+\(h_m(x)\) fitted to the targets \(-g_i^{(m)}\). For squared error,
+\[
+L(y,F(x)) = (y - F(x))^2
+\quad\Rightarrow\quad
+g_i^{(m)} = -2\,(y_i - F_{m-1}(x_i)),
+\]
+so fitting \(-g_i^{(m)}\) is equivalent to fitting the residuals
+\(y_i - F_{m-1}(x_i)\). Thus “fit residuals” is a special case of
+“fit negative gradients”.
+
+\subsection*{Q42. Why does a network without activation functions reduce to linear regression, even with many layers?}
+
+\textbf{A:}
+Consider a network with \(L\) layers and no nonlinearities:
+\[
+\begin{aligned}
+h^{(1)} &= W^{(1)} x + b^{(1)}, \\
+h^{(2)} &= W^{(2)} h^{(1)} + b^{(2)}, \\
+&\ \ \vdots \\
+\hat{y} &= W^{(L)} h^{(L-1)} + b^{(L)}.
+\end{aligned}
+\]
+By substituting step by step, we obtain
+\[
+\hat{y}
+= W^{(L)} W^{(L-1)} \cdots W^{(1)} x + b^{\ast}
+= W^{\ast} x + b^{\ast},
+\]
+for some effective weight matrix \(W^{\ast}\) and bias \(b^{\ast}\).  
+This is again just a linear map from \(x\) to \(\hat{y}\), the same form as linear
+regression. Nonlinear activation functions are therefore essential to obtain
+nonlinear decision boundaries and expressive power.
 
 
 % =======================

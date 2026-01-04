@@ -1,0 +1,11 @@
+\contentsline {section}{\numberline {1}What is React?}{2}{section.1}%
+\contentsline {section}{\numberline {2}Commands for React Development}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Create React project using Vite}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Common npm Commands}{2}{subsection.2.2}%
+\contentsline {section}{\numberline {3}React Project Structure}{2}{section.3}%
+\contentsline {section}{\numberline {4}Analysis of main.jsx}{3}{section.4}%
+\contentsline {section}{\numberline {5}Example App.jsx}{3}{section.5}%
+\contentsline {section}{\numberline {6}Components Example}{4}{section.6}%
+\contentsline {section}{\numberline {7}Todo List Example}{4}{section.7}%
+\contentsline {section}{\numberline {8}Fetching Data from a Backend}{5}{section.8}%
+\contentsline {section}{\numberline {9}Summary}{6}{section.9}%

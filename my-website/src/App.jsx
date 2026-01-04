@@ -45,23 +45,24 @@ function App() {
         position: "relative"
       }}
     >
-      {/* MOBILE MENU BUTTON */}
+      {/* MENU BUTTON */}
       <button
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         className="mobile-menu-button"
         style={{
-          display: "none",
+          display: "block",
           position: "fixed",
           top: "20px",
           left: "20px",
           zIndex: 1001,
-          backgroundColor: "#00857A",
+          backgroundColor: "#00F5C4",
           border: "none",
-          color: "white",
+          color: "#111",
           padding: "12px",
           borderRadius: "8px",
           cursor: "pointer",
-          fontSize: "24px"
+          fontSize: "24px",
+          boxShadow: "0 2px 8px rgba(0, 245, 196, 0.3)"
         }}
         aria-label="Toggle menu"
       >
@@ -100,28 +101,32 @@ function App() {
           flexShrink: 0
         }}
       >
-        <div style={{ textAlign: "center", marginBottom: "20px" }}>
+        <div style={{ 
+          display: "flex", 
+          alignItems: "center", 
+          justifyContent: "center", 
+          gap: "12px",
+          marginBottom: "24px"
+        }}>
           <img 
             src="/unnamed1.jpg" 
             alt="Eagle Logo" 
             style={{
-              width: "100px",
-              height: "100px",
+              width: "40px",
+              height: "40px",
               objectFit: "contain"
             }}
           />
+          <h2
+            style={{
+              color: "#00F5C4",
+              fontSize: "26px",
+              margin: 0
+            }}
+          >
+            Menu
+          </h2>
         </div>
-        <h2
-          style={{
-            color: "#00F5C4",
-            textAlign: "center",
-            fontSize: "26px",
-            marginTop: 0,
-            marginBottom: "24px"
-          }}
-        >
-          Menu
-        </h2>
 
         <div style={{ marginTop: "10px" }}>
           <Link 

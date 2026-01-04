@@ -1,0 +1,791 @@
+\documentclass[11pt]{article}
+
+% -------------------------------------------------------------
+% PACKAGES
+% -------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{listings}
+
+% -------------------------------------------------------------
+% PAGE GEOMETRY
+% -------------------------------------------------------------
+\geometry{
+    a4paper,
+    margin=2.5cm
+}
+
+% -------------------------------------------------------------
+% COLORS
+% -------------------------------------------------------------
+\definecolor{mainblue}{HTML}{0059B3}
+\definecolor{lightblue}{HTML}{E6F0FF}
+\definecolor{darkgray}{HTML}{2E2E2E}
+
+% -------------------------------------------------------------
+% SECTION FORMAT
+% -------------------------------------------------------------
+\titleformat{\section}{\Large\bfseries\color{mainblue}}{}{0pt}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgray}}{}{0pt}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{darkgray}}{}{0pt}{}
+
+% -------------------------------------------------------------
+% CUSTOM BOXES
+% -------------------------------------------------------------
+\newtcolorbox{infobox}{
+    colback=lightblue,
+    colframe=mainblue,
+    boxrule=0.8pt,
+    arc=3pt,
+    left=8pt, right=8pt, top=6pt, bottom=6pt
+}
+
+\newtcolorbox{ideabox}{
+    colback=white,
+    colframe=mainblue,
+    boxrule=1pt,
+    arc=2pt,
+    left=8pt, right=8pt, top=6pt, bottom=6pt
+}
+
+\newtcolorbox{examplebox}{
+    colback=white,
+    colframe=darkgray,
+    boxrule=0.6pt,
+    arc=2pt,
+    left=8pt, right=8pt, top=6pt, bottom=6pt
+}
+
+% -------------------------------------------------------------
+% LISTINGS STYLE (PYTHON)
+% -------------------------------------------------------------
+\lstdefinestyle{python}{
+    language=Python,
+    backgroundcolor=\color{lightblue},
+    keywordstyle=\color{mainblue}\bfseries,
+    stringstyle=\color{darkgray},
+    commentstyle=\color{gray},
+    basicstyle=\ttfamily\small,
+    frame=single,
+    rulecolor=\color{mainblue},
+    breaklines=true,
+    showstringspaces=false
+}
+
+% -------------------------------------------------------------
+% TITLE
+% -------------------------------------------------------------
+\title{\textbf{\Huge Big Data Analytics with Hadoop \& Apache Spark}}
+\author{}
+\date{}
+
+% -------------------------------------------------------------
+% DOCUMENT START
+% -------------------------------------------------------------
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+% =============================================================
+\section{Introduction to Big Data}
+% =============================================================
+
+\begin{infobox}
+\textbf{Big Data} refers to datasets that are too large, too fast, or too complex for traditional data-processing tools.
+\end{infobox}
+
+The famous \textbf{5 V's}:
+
+\begin{itemize}
+    \item \textbf{Volume} – massive amounts of data (GB → TB → PB).
+    \item \textbf{Velocity} – fast incoming data (real-time streams).
+    \item \textbf{Variety} – structured, semi-structured, unstructured.
+    \item \textbf{Veracity} – noise, uncertainty in data.
+    \item \textbf{Value} – extracting useful insights.
+\end{itemize}
+
+\begin{ideabox}
+Big Data exists when \emph{your current tools are insufficient} to store or process the data in a reasonable time.
+\end{ideabox}
+
+% =============================================================
+\section{Hadoop Ecosystem}
+% =============================================================
+
+\subsection{What is Hadoop?}
+
+\begin{infobox}
+Hadoop is an open-source ecosystem enabling distributed storage and processing of massive datasets.
+\end{infobox}
+
+Main components:
+
+\begin{itemize}
+    \item \textbf{HDFS} – distributed storage
+    \item \textbf{MapReduce} – batch computation model
+    \item \textbf{YARN} – cluster resource manager
+\end{itemize}
+
+% -------------------------------------------------------------
+\subsection{HDFS Architecture}
+% -------------------------------------------------------------
+
+\begin{ideabox}
+HDFS stores files by splitting them into large blocks (default: 128MB) distributed across multiple machines.
+\end{ideabox}
+
+Key parts:
+
+\begin{itemize}
+    \item \textbf{NameNode} – stores metadata (filesystem tree).
+    \item \textbf{DataNode} – stores actual data blocks.
+    \item \textbf{Replication} – default 3 copies per block.
+\end{itemize}
+
+% -------------------------------------------------------------
+\subsection{MapReduce Model}
+% -------------------------------------------------------------
+
+\begin{infobox}
+MapReduce is a two-step programming model:  
+\textbf{Map → Shuffle → Reduce}
+\end{infobox}
+
+Example: Word Count
+
+\begin{itemize}
+    \item Map: Output (word, 1)
+    \item Reduce: Sum counts for each word
+\end{itemize}
+
+% =============================================================
+\section{Apache Spark}
+% =============================================================
+
+\subsection{Why Spark is Faster}
+
+\begin{ideabox}
+Spark keeps data \textbf{in-memory} and executes workflows using an optimized \textbf{DAG} engine — often up to 100× faster than classic MapReduce.
+\end{ideabox}
+
+Advantages:
+
+\begin{itemize}
+    \item In-memory computing
+    \item Lazy evaluation
+    \item Rich APIs (DataFrames, SQL, MLlib, GraphX)
+    \item Works with HDFS, S3, Kafka
+\end{itemize}
+
+\subsection{Spark Programming Model}
+
+Types of operations:
+
+\begin{itemize}
+    \item \textbf{Transformations} (lazy): \texttt{map}, \texttt{filter}, \texttt{groupBy}
+    \item \textbf{Actions}: \texttt{count()}, \texttt{collect()}, \texttt{show()}
+\end{itemize}
+
+% =============================================================
+\section{PySpark Examples (Python)}
+% =============================================================
+
+\subsection{Creating a Spark Session}
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName("BigDataNotes") \
+    .master("local[*]") \
+    .getOrCreate()
+\end{lstlisting}
+\end{examplebox}
+
+\subsection{Reading CSV Data}
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+df = spark.read.csv("data/people.csv", 
+                    header=True, inferSchema=True)
+
+df.show()
+df.printSchema()
+\end{lstlisting}
+\end{examplebox}
+
+\subsection{Filtering and Selecting Data}
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+adults = df.filter(df.age > 30).select("name", "age")
+adults.show()
+\end{lstlisting}
+\end{examplebox}
+
+\subsection{Group By Aggregation}
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+from pyspark.sql import functions as F
+
+city_counts = df.groupBy("city").agg(
+    F.count("*").alias("population")
+)
+
+city_counts.show()
+\end{lstlisting}
+\end{examplebox}
+
+\subsection{Word Count with RDDs}
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+text = spark.sparkContext.textFile("data/book.txt")
+
+counts = (text.flatMap(lambda line: line.split())
+              .map(lambda w: (w.lower(), 1))
+              .reduceByKey(lambda a, b: a + b))
+
+counts.take(10)
+\end{lstlisting}
+\end{examplebox}
+
+% =============================================================
+\section{Spark SQL Example}
+% =============================================================
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+df.createOrReplaceTempView("people")
+
+result = spark.sql("""
+    SELECT city, AVG(age) as avg_age
+    FROM people
+    GROUP BY city
+""")
+
+result.show()
+\end{lstlisting}
+\end{examplebox}
+
+% =============================================================
+\section{Summary}
+% =============================================================
+
+\begin{ideabox}
+\textbf{Hadoop} = distributed storage + batch processing  
+\textbf{Spark} = fast, in-memory distributed computation  
+Together they form the backbone of modern Big Data systems.
+\end{ideabox}
+
+% =============================================================
+\section{Additional Pedagogical Notes and Code Examples}
+% =============================================================
+
+\begin{infobox}
+This section contains extra explanations and many code examples in PySpark to help you learn by doing.
+\end{infobox}
+
+% -------------------------------------------------------------
+\subsection{Big Data and HDFS in Practice}
+% -------------------------------------------------------------
+
+\begin{ideabox}
+Idea: Instead of one ``super'' machine, we use many cheap machines that work together and store data in HDFS.
+\end{ideabox}
+
+Conceptual steps when storing a large file in HDFS:
+
+\begin{enumerate}
+    \item File is split into blocks (e.g.\ 128MB).
+    \item Each block is replicated (default 3 copies).
+    \item Blocks are distributed across several DataNodes.
+    \item NameNode keeps metadata: which file has which blocks and on which nodes.
+\end{enumerate}
+
+Typical HDFS shell commands:
+
+\begin{examplebox}
+\begin{lstlisting}
+# List root directory in HDFS
+hdfs dfs -ls /
+
+# Make a directory in HDFS
+hdfs dfs -mkdir -p /user/gianna/data
+
+# Upload a local file into HDFS
+hdfs dfs -put people.csv /user/gianna/data/
+
+# Show the file content from HDFS
+hdfs dfs -cat /user/gianna/data/people.csv
+
+# Remove a file
+hdfs dfs -rm /user/gianna/data/people.csv
+\end{lstlisting}
+\end{examplebox}
+
+% -------------------------------------------------------------
+\subsection{Working with RDDs (Low-Level API)}
+% -------------------------------------------------------------
+
+\begin{infobox}
+RDD = Resilient Distributed Dataset. It is a distributed list of objects that you can transform with \texttt{map}, \texttt{filter}, \texttt{reduceByKey}, etc.
+\end{infobox}
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+# Create RDD from a Python list
+numbers = spark.sparkContext.parallelize([1, 2, 3, 4, 5])
+
+# Map: multiply each number by 10
+times_ten = numbers.map(lambda x: x * 10)
+
+# Filter: keep only even numbers
+even_numbers = times_ten.filter(lambda x: x % 2 == 0)
+
+print("Even numbers:", even_numbers.collect())
+\end{lstlisting}
+\end{examplebox}
+
+Word count with RDDs (similar to MapReduce):
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+text_rdd = spark.sparkContext.textFile("data/book.txt")
+
+wc = (text_rdd
+      .flatMap(lambda line: line.split())
+      .map(lambda w: (w.lower(), 1))
+      .reduceByKey(lambda a, b: a + b))
+
+# Show first 20 (word, count) pairs
+for word, count in wc.take(20):
+    print(word, count)
+\end{lstlisting}
+\end{examplebox}
+
+% -------------------------------------------------------------
+\subsection{Creating DataFrames in Different Ways}
+% -------------------------------------------------------------
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+from pyspark.sql import Row
+
+# 1) From a list of Python dicts
+data = [
+    {"name": "Alice", "age": 30, "city": "Brussels"},
+    {"name": "Bob",   "age": 25, "city": "Paris"},
+    {"name": "Chloe", "age": 35, "city": "Brussels"},
+]
+
+df1 = spark.createDataFrame(data)
+df1.show()
+
+# 2) From a list of Rows
+rows = [
+    Row(name="David", age=40, city="Madrid"),
+    Row(name="Eva",   age=28, city="Athens")
+]
+df2 = spark.createDataFrame(rows)
+df2.show()
+
+# 3) From CSV file with inferred schema
+df3 = (spark.read
+             .option("header", True)
+             .option("inferSchema", True)
+             .csv("data/people.csv"))
+df3.show()
+df3.printSchema()
+\end{lstlisting}
+\end{examplebox}
+
+% -------------------------------------------------------------
+\subsection{DataFrame: Select, Filter, New Columns}
+% -------------------------------------------------------------
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+from pyspark.sql import functions as F
+
+df = df3  # assuming df3 from previous example
+
+# Select a subset of columns
+df.select("name", "age").show()
+
+# Filter rows: age > 30
+df.filter(df.age > 30).show()
+
+# Multiple conditions (AND / OR)
+df.filter((df.age > 25) & (df.city == "Brussels")).show()
+
+# Add a new column (computed)
+df2 = df.withColumn("age_in_10_years", df.age + 10)
+df2.show()
+
+# Rename a column
+df_renamed = df2.withColumnRenamed("age", "current_age")
+df_renamed.show()
+\end{lstlisting}
+\end{examplebox}
+
+% -------------------------------------------------------------
+\subsection{GroupBy \& Aggregations (More Examples)}
+% -------------------------------------------------------------
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+from pyspark.sql import functions as F
+
+# Count how many people per city
+df.groupBy("city").agg(
+    F.count("*").alias("n_people")
+).show()
+
+# Average and max age per city
+df.groupBy("city").agg(
+    F.avg("age").alias("avg_age"),
+    F.max("age").alias("max_age")
+).show()
+
+# Filter on aggregated result (e.g. cities with avg_age > 30)
+agg = df.groupBy("city").agg(
+    F.avg("age").alias("avg_age")
+)
+
+agg.filter(agg.avg_age > 30).show()
+\end{lstlisting}
+\end{examplebox}
+
+% -------------------------------------------------------------
+\subsection{Joins Between DataFrames}
+% -------------------------------------------------------------
+
+Imagine two datasets:
+
+\begin{itemize}
+    \item \texttt{customers(id, name, city)}
+    \item \texttt{orders(order\_id, customer\_id, amount)}
+\end{itemize}
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+customers = spark.read.csv("data/customers.csv",
+                           header=True, inferSchema=True)
+orders = spark.read.csv("data/orders.csv",
+                        header=True, inferSchema=True)
+
+# Inner join on customer id
+joined = orders.join(customers,
+                     orders.customer_id == customers.id,
+                     "inner")
+
+joined.select("order_id", "name", "amount", "city").show()
+
+# Left join: keep all orders even if no customer match
+left_join = orders.join(customers,
+                        orders.customer_id == customers.id,
+                        "left")
+
+left_join.show()
+\end{lstlisting}
+\end{examplebox}
+
+% -------------------------------------------------------------
+\subsection{User-Defined Functions (UDFs)}
+% -------------------------------------------------------------
+
+\begin{infobox}
+Use a UDF when a transformation cannot easily be expressed with built-in functions.
+\end{infobox}
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+from pyspark.sql.functions import udf, col
+from pyspark.sql.types import StringType
+
+# Python function
+def categorize_age(age):
+    if age is None:
+        return "unknown"
+    if age < 18:
+        return "child"
+    elif age < 30:
+        return "young adult"
+    elif age < 60:
+        return "adult"
+    else:
+        return "senior"
+
+# Convert Python function to UDF
+age_category_udf = udf(categorize_age, StringType())
+
+df_with_cat = df.withColumn("age_category",
+                            age_category_udf(col("age")))
+
+df_with_cat.select("name", "age", "age_category").show()
+\end{lstlisting}
+\end{examplebox}
+
+% -------------------------------------------------------------
+\subsection{Window Functions (Running Totals, Rankings)}
+% -------------------------------------------------------------
+
+\begin{infobox}
+Window functions let you compute things like ``running sum'', ``rank per group'', ``previous value'', etc.
+\end{infobox}
+
+Example: sales per day and running total per city.
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+from pyspark.sql import functions as F
+from pyspark.sql.window import Window
+
+sales = spark.read.csv("data/daily_sales.csv",
+                       header=True, inferSchema=True)
+# Columns: date, city, amount
+
+w = Window.partitionBy("city").orderBy("date")
+
+sales_with_running = sales.withColumn(
+    "running_total",
+    F.sum("amount").over(w)
+)
+
+sales_with_running.show()
+\end{lstlisting}
+\end{examplebox}
+
+% -------------------------------------------------------------
+\subsection{Spark SQL: More Complex Queries}
+% -------------------------------------------------------------
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+df.createOrReplaceTempView("people")
+
+# Cities with at least 2 people and average age > 30
+result = spark.sql("""
+    SELECT city,
+           COUNT(*) AS n_people,
+           AVG(age) AS avg_age
+    FROM people
+    GROUP BY city
+    HAVING COUNT(*) >= 2 AND AVG(age) > 30
+    ORDER BY avg_age DESC
+""")
+
+result.show()
+\end{lstlisting}
+\end{examplebox}
+
+% -------------------------------------------------------------
+\subsection{Machine Learning with MLlib: Classification}
+% -------------------------------------------------------------
+
+\begin{infobox}
+Workflow idea: 
+\textbf{DataFrame} → \textbf{features vector} → \textbf{model fit} → \textbf{predictions}.
+\end{infobox}
+
+Example: simple logistic regression.
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+from pyspark.ml.feature import VectorAssembler, StringIndexer
+from pyspark.ml.classification import LogisticRegression
+from pyspark.ml import Pipeline
+
+# Suppose df has: label (0/1), age, income, balance
+data = spark.read.csv("data/bank.csv",
+                      header=True, inferSchema=True)
+
+# Features into one vector column
+assembler = VectorAssembler(
+    inputCols=["age", "income", "balance"],
+    outputCol="features"
+)
+
+# Model
+lr = LogisticRegression(featuresCol="features",
+                        labelCol="label")
+
+pipeline = Pipeline(stages=[assembler, lr])
+
+train, test = data.randomSplit([0.7, 0.3], seed=42)
+
+model = pipeline.fit(train)
+
+predictions = model.transform(test)
+
+predictions.select("age", "income", "balance",
+                   "label", "prediction", "probability").show(20, truncate=False)
+\end{lstlisting}
+\end{examplebox}
+
+% -------------------------------------------------------------
+\subsection{MLlib: Regression Example}
+% -------------------------------------------------------------
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+from pyspark.ml.regression import LinearRegression
+
+housing = spark.read.csv("data/housing.csv",
+                         header=True, inferSchema=True)
+# Example columns: price, rooms, size, distance_to_center
+
+assembler = VectorAssembler(
+    inputCols=["rooms", "size", "distance_to_center"],
+    outputCol="features"
+)
+
+housing_vec = assembler.transform(housing)
+
+train, test = housing_vec.randomSplit([0.8, 0.2], seed=1)
+
+lr = LinearRegression(featuresCol="features",
+                      labelCol="price")
+
+lr_model = lr.fit(train)
+
+print("Coefficients:", lr_model.coefficients)
+print("Intercept:", lr_model.intercept)
+
+pred = lr_model.transform(test)
+pred.select("rooms", "size", "distance_to_center",
+            "price", "prediction").show(10)
+\end{lstlisting}
+\end{examplebox}
+
+% -------------------------------------------------------------
+\subsection{MLlib: K-Means Clustering}
+% -------------------------------------------------------------
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+from pyspark.ml.clustering import KMeans
+
+points = spark.read.csv("data/points2d.csv",
+                        header=True, inferSchema=True)
+# Columns: x, y
+
+assembler = VectorAssembler(
+    inputCols=["x", "y"],
+    outputCol="features"
+)
+
+points_vec = assembler.transform(points)
+
+kmeans = KMeans(k=3, seed=1)
+model = kmeans.fit(points_vec)
+
+centers = model.clusterCenters()
+print("Cluster centers:")
+for c in centers:
+    print(c)
+
+clustered = model.transform(points_vec)
+clustered.select("x", "y", "prediction").show(20)
+\end{lstlisting}
+\end{examplebox}
+
+% -------------------------------------------------------------
+\subsection{Spark Structured Streaming: Simple Example}
+% -------------------------------------------------------------
+
+\begin{infobox}
+Structured Streaming treats streaming data as an unbounded table.  
+We write queries that are continuously updated.
+\end{infobox}
+
+Example: word count from a socket.
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+from pyspark.sql import functions as F
+
+# In a terminal, run: nc -lk 9999
+# Then type lines of text.
+
+lines = (spark.readStream
+              .format("socket")
+              .option("host", "localhost")
+              .option("port", 9999)
+              .load())
+
+words = lines.select(F.explode(F.split(lines.value, " ")).alias("word"))
+
+word_counts = words.groupBy("word").count()
+
+query = (word_counts.writeStream
+                    .outputMode("complete")
+                    .format("console")
+                    .start())
+
+query.awaitTermination()
+\end{lstlisting}
+\end{examplebox}
+
+% -------------------------------------------------------------
+\subsection{Mini ETL Pipeline Example}
+% -------------------------------------------------------------
+
+\begin{infobox}
+ETL = Extract → Transform → Load.  
+Spark is often used to build ETL pipelines on Big Data.
+\end{infobox}
+
+Goal: Read raw CSV of transactions, clean data, aggregate by customer, and write result as Parquet.
+
+\begin{examplebox}
+\begin{lstlisting}[style=python]
+from pyspark.sql import functions as F
+
+# 1. Extract
+raw = spark.read.csv("data/transactions.csv",
+                     header=True, inferSchema=True)
+# Columns: customer_id, date, amount, country
+
+# 2. Transform
+clean = (raw
+         .filter(raw.amount.isNotNull())
+         .filter(raw.customer_id.isNotNull()))
+
+aggregated = (clean
+              .groupBy("customer_id")
+              .agg(
+                  F.count("*").alias("n_tx"),
+                  F.sum("amount").alias("total_spent"),
+                  F.avg("amount").alias("avg_ticket")
+              ))
+
+# 3. Load (save)
+(aggregated.write
+          .mode("overwrite")
+          .parquet("output/customers_aggregated"))
+
+# You can later read:
+result = spark.read.parquet("output/customers_aggregated")
+result.show()
+\end{lstlisting}
+\end{examplebox}
+
+\begin{ideabox}
+Try to re-run the ETL pipeline with different filters or new columns.  
+You learn Spark best by experimenting and breaking things yourself.
+\end{ideabox}
+
+\end{document}

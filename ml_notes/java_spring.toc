@@ -1,0 +1,22 @@
+\contentsline {section}{\numberline {1}What is Spring Boot?}{2}{section.1}%
+\contentsline {section}{\numberline {2}Basic Commands (Maven \& Spring Boot)}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Create a New Project (via Spring Initializr ZIP)}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Run the Application}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Build a \texttt {.jar} File}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Common Maven Commands}{3}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Project Structure (Analysis of src/)}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Typical Maven Spring Boot Layout}{3}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Analysis of Key Files}{3}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Making a Base Spring Boot Application}{4}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Main Application Class}{4}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Simple REST Controller}{5}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Using a Service Class}{5}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Configuration: application.properties}{6}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Basic Settings}{6}{subsection.5.1}%
+\contentsline {section}{\numberline {6}More Java Examples (CRUD Skeleton)}{7}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Simple Model Class}{7}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Controller with Basic CRUD Endpoints (in-memory list)}{8}{subsection.6.2}%
+\contentsline {section}{\numberline {7}How to Build Your Own Base Project (Step-by-step)}{8}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Checklist}{9}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Minimal Base Example}{9}{subsection.7.2}%
+\contentsline {section}{\numberline {8}Summary}{10}{section.8}%

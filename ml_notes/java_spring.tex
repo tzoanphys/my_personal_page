@@ -1,0 +1,562 @@
+\documentclass[11pt]{article}
+
+% -------------------------------------------------------------
+% PACKAGES
+% -------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{listings}
+
+% -------------------------------------------------------------
+% PAGE GEOMETRY
+% -------------------------------------------------------------
+\geometry{
+    a4paper,
+    margin=2.5cm
+}
+
+% -------------------------------------------------------------
+% COLORS
+% -------------------------------------------------------------
+\definecolor{mainblue}{HTML}{00897B}
+\definecolor{lightblue}{HTML}{E6F0FF}
+\definecolor{darkgray}{HTML}{2E2E2E}
+
+% -------------------------------------------------------------
+% SECTION FORMAT
+% -------------------------------------------------------------
+\titleformat{\section}{\Large\bfseries\color{mainblue}}{}{0pt}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgray}}{}{0pt}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{darkgray}}{}{0pt}{}
+
+% -------------------------------------------------------------
+% CUSTOM BOXES
+% -------------------------------------------------------------
+\newtcolorbox{infobox}{
+    colback=lightblue,
+    colframe=mainblue,
+    boxrule=0.8pt,
+    arc=3pt,
+    left=8pt, right=8pt, top=6pt, bottom=6pt
+}
+
+\newtcolorbox{ideabox}{
+    colback=white,
+    colframe=mainblue,
+    boxrule=1pt,
+    arc=2pt,
+    left=8pt, right=8pt, top=6pt, bottom=6pt
+}
+
+\newtcolorbox{examplebox}{
+    colback=white,
+    colframe=darkgray,
+    boxrule=0.6pt,
+    arc=2pt,
+    left=8pt, right=8pt, top=6pt, bottom=6pt
+}
+
+% -------------------------------------------------------------
+% LISTINGS STYLE (JAVA + SHELL)
+% -------------------------------------------------------------
+\lstdefinestyle{java}{
+    language=Java,
+    backgroundcolor=\color{lightblue},
+    keywordstyle=\color{mainblue}\bfseries,
+    stringstyle=\color{darkgray},
+    commentstyle=\color{gray},
+    basicstyle=\ttfamily\small,
+    frame=single,
+    rulecolor=\color{mainblue},
+    breaklines=true,
+    showstringspaces=false
+}
+
+\lstdefinestyle{shell}{
+    language=bash,
+    backgroundcolor=\color{lightblue},
+    keywordstyle=\color{mainblue}\bfseries,
+    stringstyle=\color{darkgray},
+    commentstyle=\color{gray},
+    basicstyle=\ttfamily\small,
+    frame=single,
+    rulecolor=\color{mainblue},
+    breaklines=true,
+    showstringspaces=false
+}
+
+% -------------------------------------------------------------
+% TITLE
+% -------------------------------------------------------------
+\title{\textbf{\Huge Java Spring Boot Notes}\\[4pt]
+\large Commands, Examples, Project Structure \& Base Application}
+\author{}
+\date{}
+
+% -------------------------------------------------------------
+% DOCUMENT START
+% -------------------------------------------------------------
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+% =============================================================
+\section{What is Spring Boot?}
+% =============================================================
+
+\begin{infobox}
+\textbf{Spring Boot} is a framework for building Java applications quickly.  
+
+It provides:
+\begin{itemize}
+    \item opinionated defaults (\emph{``starter'' dependencies}),
+    \item embedded server (Tomcat/Jetty),
+    \item auto-configuration,
+    \item easy packaging as a \texttt{.jar}.
+\end{itemize}
+\end{infobox}
+
+\begin{ideabox}
+Mental model:  
+You write Java classes (\texttt{@RestController}, \texttt{@Service}, \texttt{@Entity}),  
+Spring Boot wires everything together and runs an HTTP server for you.
+\end{ideabox}
+
+% =============================================================
+\section{Basic Commands (Maven \& Spring Boot)}
+% =============================================================
+
+\subsection{Create a New Project (via Spring Initializr ZIP)}
+
+Often you use the website \texttt{start.spring.io}, download a ZIP, and unzip it.
+
+Alternatively, you can use the CLI (if installed):
+
+\begin{examplebox}
+\begin{lstlisting}[style=shell, title={Generate a new project (Spring CLI)}]
+spring init \
+  --dependencies=web \
+  --groupId=com.example \
+  --artifactId=demo \
+  --name=demo \
+  demo-project
+\end{lstlisting}
+\end{examplebox}
+
+\subsection{Run the Application}
+
+Inside the project root (where \texttt{pom.xml} is):
+
+\begin{examplebox}
+\begin{lstlisting}[style=shell, title={Run Spring Boot app with Maven}]
+# compile and run with embedded Tomcat on default port 8080
+mvn spring-boot:run
+\end{lstlisting}
+\end{examplebox}
+
+\subsection{Build a \texttt{.jar} File}
+
+\begin{examplebox}
+\begin{lstlisting}[style=shell, title={Build executable JAR}]
+mvn clean package
+
+# Then run the jar:
+java -jar target/demo-0.0.1-SNAPSHOT.jar
+\end{lstlisting}
+\end{examplebox}
+
+\subsection{Common Maven Commands}
+
+\begin{examplebox}
+\begin{lstlisting}[style=shell, title={Useful Maven commands}]
+mvn clean           # delete compiled artifacts (target/)
+mvn compile         # compile source code
+mvn test            # run tests
+mvn package         # build JAR/WAR
+mvn spring-boot:run # run Spring Boot application
+\end{lstlisting}
+\end{examplebox}
+
+% =============================================================
+\section{Project Structure (Analysis of src/)}
+% =============================================================
+
+\subsection{Typical Maven Spring Boot Layout}
+
+\begin{examplebox}
+\begin{verbatim}
+demo/
+  pom.xml
+  src/
+    main/
+      java/
+        com/example/demo/
+          DemoApplication.java
+          controller/
+            HelloController.java
+          service/
+            HelloService.java
+          model/
+            User.java
+      resources/
+        application.properties
+        static/
+        templates/
+    test/
+      java/
+        com/example/demo/
+          DemoApplicationTests.java
+\end{verbatim}
+\end{examplebox}
+
+\subsection{Analysis of Key Files}
+
+\begin{itemize}
+    \item \textbf{pom.xml}  
+          Maven configuration: dependencies, plugins, Java version, build info.
+    \item \textbf{DemoApplication.java}  
+          Main class with \texttt{@SpringBootApplication} and \texttt{main()} method.  
+          Entry point of the app.
+    \item \textbf{controller/HelloController.java}  
+          Web layer. Defines HTTP endpoints with \texttt{@RestController}, \texttt{@GetMapping}, etc.
+    \item \textbf{service/HelloService.java}  
+          Business logic. Annotated with \texttt{@Service}.
+    \item \textbf{model/User.java}  
+          Data model / entity class (fields, getters, setters, etc.).
+    \item \textbf{application.properties}  
+          Configuration: server port, DB URL, usernames, etc.
+\end{itemize}
+
+\begin{ideabox}
+Pattern to remember:  
+\textbf{Controller} handles HTTP, \textbf{Service} handles logic, \textbf{Repository} talks to database.
+\end{ideabox}
+
+% =============================================================
+\section{Making a Base Spring Boot Application}
+% =============================================================
+
+\subsection{Main Application Class}
+
+\begin{examplebox}
+\begin{lstlisting}[style=java, title={DemoApplication.java}]
+package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+// @SpringBootApplication = @Configuration + @EnableAutoConfiguration + @ComponentScan
+@SpringBootApplication
+public class DemoApplication {
+
+    public static void main(String[] args) {
+        // Bootstraps the application, starts Spring context and embedded server
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}
+\end{lstlisting}
+\end{examplebox}
+
+\subsubsection*{Line-by-line Analysis}
+
+\begin{itemize}
+    \item \texttt{package com.example.demo;} – defines the Java package (folder structure).
+    \item \texttt{@SpringBootApplication} – tells Spring Boot to:
+          \begin{itemize}
+              \item search for components in this package and subpackages,
+              \item enable auto-configuration,
+              \item treat this class as configuration.
+          \end{itemize}
+    \item \texttt{public static void main(...)} – standard Java entry point.
+    \item \texttt{SpringApplication.run(...)} – starts Spring, creates Beans, runs embedded Tomcat.
+\end{itemize}
+
+% -------------------------------------------------------------
+\subsection{Simple REST Controller}
+% -------------------------------------------------------------
+
+\begin{examplebox}
+\begin{lstlisting}[style=java, title={HelloController.java}]
+package com.example.demo.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController // tells Spring this class handles HTTP requests
+public class HelloController {
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "Hello from Spring Boot!";
+    }
+}
+\end{lstlisting}
+\end{examplebox}
+
+\subsubsection*{What happens when you run the app?}
+
+\begin{ideabox}
+\begin{itemize}
+    \item You start the app with \texttt{mvn spring-boot:run}.
+    \item Spring Boot starts Tomcat on port \texttt{8080}.
+    \item A GET request to \texttt{http://localhost:8080/hello}  
+          is routed to \texttt{hello()}.
+    \item The method returns a \texttt{String} → sent as HTTP response body.
+\end{itemize}
+\end{ideabox}
+
+% -------------------------------------------------------------
+\subsection{Using a Service Class}
+% -------------------------------------------------------------
+
+\begin{examplebox}
+\begin{lstlisting}[style=java, title={HelloService.java}]
+package com.example.demo.service;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class HelloService {
+
+    public String buildMessage(String name) {
+        return "Hello, " + name + "! Welcome to Spring Boot.";
+    }
+}
+\end{lstlisting}
+\end{examplebox}
+
+\begin{examplebox}
+\begin{lstlisting}[style=java, title={HelloController with Service Injection}]
+package com.example.demo.controller;
+
+import com.example.demo.service.HelloService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HelloController {
+
+    private final HelloService helloService;
+
+    // Constructor injection (recommended)
+    public HelloController(HelloService helloService) {
+        this.helloService = helloService;
+    }
+
+    @GetMapping("/hello")
+    public String hello(@RequestParam(defaultValue = "World") String name) {
+        return helloService.buildMessage(name);
+    }
+}
+\end{lstlisting}
+\end{examplebox}
+
+\subsubsection*{Analysis of Dependency Injection}
+
+\begin{itemize}
+    \item \texttt{@Service} on \texttt{HelloService} – Spring manages it as a Bean.
+    \item Constructor parameter \texttt{HelloService helloService} – Spring injects it automatically.
+    \item \texttt{@RequestParam} – reads \texttt{?name=...} from the URL.
+\end{itemize}
+
+% =============================================================
+\section{Configuration: application.properties}
+% =============================================================
+
+\subsection{Basic Settings}
+
+\begin{examplebox}
+\begin{verbatim}
+# src/main/resources/application.properties
+
+# change port (default 8080)
+server.port=8081
+
+# logging level
+logging.level.root=INFO
+
+# example datasource (H2 in-memory)
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.jpa.hibernate.ddl-auto=update
+\end{verbatim}
+\end{examplebox}
+
+\begin{ideabox}
+Spring Boot reads \texttt{application.properties} (or \texttt{application.yml}) on startup  
+and automatically configures many components (server, DB, logging, etc.).
+\end{ideabox}
+
+% =============================================================
+\section{More Java Examples (CRUD Skeleton)}
+% =============================================================
+
+\subsection{Simple Model Class}
+
+\begin{examplebox}
+\begin{lstlisting}[style=java, title={User.java}]
+package com.example.demo.model;
+
+public class User {
+
+    private Long id;
+    private String name;
+    private String email;
+
+    // Constructors
+    public User() {}
+
+    public User(Long id, String name, String email) {
+        this.id    = id;
+        this.name  = name;
+        this.email = email;
+    }
+
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+}
+\end{lstlisting}
+\end{examplebox}
+
+\subsection{Controller with Basic CRUD Endpoints (in-memory list)}
+
+\begin{examplebox}
+\begin{lstlisting}[style=java, title={UserController.java (in-memory)}]
+package com.example.demo.controller;
+
+import com.example.demo.model.User;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+
+    private final List<User> users = new ArrayList<>();
+
+    @GetMapping
+    public List<User> getAllUsers() {
+        return users;
+    }
+
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        // simple id assignment for demo
+        user.setId((long) (users.size() + 1));
+        users.add(user);
+        return user;
+    }
+
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable Long id) {
+        return users.stream()
+                .filter(u -> id.equals(u.getId()))
+                .findFirst()
+                .orElse(null);
+    }
+}
+\end{lstlisting}
+\end{examplebox}
+
+\subsubsection*{What this demonstrates}
+
+\begin{itemize}
+    \item \texttt{@RequestMapping("/users")} – base path for all endpoints in this controller.
+    \item \texttt{@GetMapping} – HTTP GET, returns all users or one user.
+    \item \texttt{@PostMapping} – HTTP POST, creates a new user.
+    \item \texttt{@RequestBody} – maps JSON body → \texttt{User} object.
+    \item \texttt{@PathVariable} – maps \texttt{/users/\{id\}} → method parameter.
+\end{itemize}
+
+% =============================================================
+\section{How to Build Your Own Base Project (Step-by-step)}
+% =============================================================
+
+\subsection{Checklist}
+
+\begin{ideabox}
+To create a base Spring Boot application:
+\begin{enumerate}
+    \item Generate project (Spring Initializr or CLI).
+    \item Implement \texttt{DemoApplication.java} with \texttt{@SpringBootApplication}.
+    \item Add one \textbf{Controller} with \texttt{@RestController}.
+    \item Optionally add a \textbf{Service} class and inject it.
+    \item Configure basic properties in \texttt{application.properties}.
+    \item Run locally with \texttt{mvn spring-boot:run}.
+\end{enumerate}
+\end{ideabox}
+
+\subsection{Minimal Base Example}
+
+\begin{examplebox}
+\begin{lstlisting}[style=java, title={Minimal Base Application: main + controller}]
+package com.example.base;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@SpringBootApplication
+public class BaseApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(BaseApplication.class, args);
+    }
+
+    @RestController
+    static class BaseController {
+
+        @GetMapping("/")
+        public String index() {
+            return "Base Spring Boot app is running!";
+        }
+    }
+}
+\end{lstlisting}
+\end{examplebox}
+
+\subsubsection*{Why this is nice as a base}
+
+\begin{itemize}
+    \item Only one file to start with.
+    \item You can later move \texttt{BaseController} to its own package.
+    \item You already have a health-like endpoint at \texttt{/}.
+\end{itemize}
+
+% =============================================================
+\section{Summary}
+% =============================================================
+
+\begin{ideabox}
+Core ideas to keep in mind:
+\begin{itemize}
+    \item Spring Boot starts an embedded server and auto-configures a lot for you.
+    \item \textbf{Main class} with \texttt{@SpringBootApplication} is the entry point.
+    \item \textbf{Controllers} define HTTP endpoints.
+    \item \textbf{Services} hold business logic.
+    \item \textbf{application.properties} controls behaviour (port, DB, logging, etc.).
+    \item Maven commands: \texttt{mvn spring-boot:run}, \texttt{mvn package}, \texttt{java -jar ...}
+\end{itemize}
+This is enough base to start building real Java Spring Boot applications.
+\end{ideabox}
+
+\end{document}

@@ -22,6 +22,21 @@ body {
   width: 100vw;
 }
 
+/* Desktop: Hide sidebar by default, show when menu is open */
+.sidebar {
+  position: fixed !important;
+  left: -280px !important;
+  top: 0 !important;
+  transition: left 0.3s ease !important;
+  z-index: 1000 !important;
+  height: 100vh !important;
+  overflow-y: auto !important;
+}
+
+.sidebar.mobile-open {
+  left: 0 !important;
+}
+
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
   /* Show mobile menu button */
@@ -29,21 +44,6 @@ body {
     display: block !important;
   }
 
-  /* Hide sidebar by default on mobile */
-  .sidebar {
-    position: fixed !important;
-    left: -280px !important;
-    top: 0 !important;
-    transition: left 0.3s ease !important;
-    z-index: 1000 !important;
-    height: 100vh !important;
-    overflow-y: auto !important;
-  }
-
-  /* Show sidebar when menu is open */
-  .sidebar.mobile-open {
-    left: 0 !important;
-  }
 
   /* Main content takes full width on mobile */
   .main-content {

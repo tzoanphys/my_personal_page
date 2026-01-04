@@ -1,0 +1,169 @@
+\documentclass[a4paper,11pt]{article}
+
+%--- Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{booktabs} % For nicer tables if needed
+
+%--- Color Definitions ---
+\usepackage{xcolor}
+\definecolor{primaryTeal}{RGB}{0, 128, 128}    % Main Header Color
+\definecolor{secondaryGray}{RGB}{80, 80, 80}   % Subheaders / Text
+\definecolor{boxBack}{RGB}{245, 250, 250}      % Light background for boxes
+\definecolor{accentColor}{RGB}{0, 100, 100}    % Darker teal for emphasis
+
+%--- Font and Header Styling ---
+\usepackage{sectsty}
+\sectionfont{\color{primaryTeal}\LARGE\bfseries}
+\subsectionfont{\color{secondaryGray}\Large\bfseries}
+\subsubsectionfont{\color{primaryTeal}\large\itshape}
+
+%--- Fancy Boxes for Definitions/Key Points ---
+\usepackage{tcolorbox}
+\newtcolorbox{conceptbox}[1]{
+  colback=boxBack, 
+  colframe=primaryTeal, 
+  fonttitle=\bfseries, 
+  title=#1, 
+  arc=1mm
+}
+
+%--- Hyperlink Setup ---
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryTeal,
+    urlcolor=primaryTeal,
+    citecolor=secondaryGray
+}
+
+%--- Title Info ---
+\title{\color{primaryTeal}\textbf{Fluctuations in Inflation}}
+\author{\color{secondaryGray}Cosmological Perturbation Theory}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\hrule
+\vspace{1em}
+
+\begin{abstract}
+\noindent \textbf{Note on Units:} Throughout this section, we work in reduced Planck units, where $M_P = 1$.
+\end{abstract}
+
+\section{Introduction}
+We analyze the decomposition of perturbations of the homogeneous metric into scalar, vector, and tensor categories. 
+
+\textbf{Vector perturbations} are governed by a constraint equation relating the gauge-invariant vector metric perturbation to the divergence-free velocity of the fluid. In the presence of scalar fields, this velocity vanishes, and vector modes decay rapidly. Therefore, we focus exclusively on \textbf{scalar} and \textbf{tensor} perturbations.
+
+\section{Scalar Perturbations}
+
+\subsection{Multi-Field Inflation Action}
+We consider the general action $S$ for $n$ scalar fields $\varphi_i$ (where $i=1, \dots, n$):
+\begin{equation}
+S= \int d^4 x \sqrt{-g}\left[\frac{1}{2} G_{ij}\partial_{\mu}\varphi^i\partial^{\mu}\varphi^j -V(\varphi)\right]
+\end{equation}
+Here, $V$ is the scalar potential and $G_{ij}$ is the field space metric. We analyze linear perturbations around a homogeneous unperturbed Universe. The field and metric are decomposed as:
+\begin{align}
+\varphi_i (t,\vec x) &=  \varphi_i (t) + \delta \varphi_i (t,\vec x) \\
+g_{\mu \nu }(t,\vec x) &= \bar{g}_{\mu \nu }(t) + h_{\mu \nu }(t,\vec x)
+\end{align}
+
+\subsection{Background Equations}
+The unperturbed background equations of motion for the $n$ scalar fields are:
+\begin{equation}
+\ddot{\varphi}^i + \Gamma^{i}_{jk}\dot{\varphi}^j\dot{\varphi}^k + 3H\dot{\varphi}^i + G^{ij}V_{,j} = 0
+\label{eq:background_motion}
+\end{equation}
+The Friedmann equations governing the expansion rate $H$ are:
+\begin{equation}
+H^2 = \frac{1}{3} \left[ \frac{1}{2} G_{ij}\dot{\varphi}^i\dot{\varphi}^j + V \right], \quad \quad \dot{H} = -\frac{1}{2} G_{ij}\dot{\varphi}^i\dot{\varphi}^j
+\end{equation}
+
+\subsection{The Newtonian Gauge}
+We adopt the \textbf{Newtonian gauge}, where the scalar metric perturbations $B$ and $E$ vanish. Assuming no anisotropic stress ($\Phi = \Psi$), the perturbed line element is:
+\begin{equation}
+ds^2 = -(1+2\Psi)dt^2 + a^2(1-2\Psi)\delta_{ij}dx^i dx^j
+\end{equation}
+where $\Psi$ represents the Bardeen potential.
+
+\subsubsection{Evolution in e-fold Time}
+It is often convenient to work with the number of e-folds, $N$, rather than cosmic time $t$, defined by $dN = H dt$. The field equations transform as:
+\begin{equation}
+\frac{D^2 \varphi^i}{dN^2} + (3-\epsilon)\frac{D \varphi^i}{dN} + \frac{1}{H^2}G^{ij}V_{,j} = 0
+\end{equation}
+where $\epsilon = -\dot{H}/H^2$.
+
+\subsection{Mukhanov-Sasaki Equation}
+To solve for the perturbations, we utilize the gauge-invariant \textbf{Mukhanov-Sasaki variable} $Q^i$, which combines field and metric perturbations:
+\begin{equation}
+Q^i = \delta \varphi^i + \frac{\dot{\varphi}^i}{H}\Psi
+\end{equation}
+For a single field, the mode equation for $u_k = -a Q_k$ is:
+\begin{equation}
+u_k'' + \left( k^2 - \frac{z''}{z} \right)u_k = 0
+\end{equation}
+where primes denote derivatives with respect to conformal time $\tau$, and $z = a\dot{\varphi}/H$.
+
+\begin{conceptbox}{Initial Conditions: Bunch-Davies Vacuum}
+We assume the fields originate in the \textbf{Bunch-Davies vacuum}. In the remote past, modes were deep inside the horizon ($k \gg aH$). The initial condition for the mode function $u_k$ is:
+\begin{equation}
+u_k(\tau) \to \frac{e^{-ik\tau}}{\sqrt{2k}} \quad \text{as} \quad \tau \to -\infty
+\end{equation}
+\end{conceptbox}
+
+\section{Power Spectrum}
+The primary observable is the power spectrum of the comoving curvature perturbation, $\mathcal{R}$. The dimensionless power spectrum $P_{\mathcal{R}}(k)$ is defined by:
+\begin{equation}
+\langle \mathcal{R}_{\mathbf{k}} \mathcal{R}_{\mathbf{k}'}^* \rangle = (2\pi)^3 \delta(\mathbf{k}-\mathbf{k}') \frac{2\pi^2}{k^3} P_{\mathcal{R}}(k)
+\end{equation}
+Analytically,
+\begin{equation}
+P_{\mathcal{R}}(k) = \frac{k^3}{2\pi^2} |\mathcal{R}_k|^2
+\end{equation}
+where $\mathcal{R}_k$ is evaluated after the mode exits the horizon ($k \ll aH$). In the slow-roll approximation, this simplifies to:
+\begin{equation}
+P_{\mathcal{R}} \approx \frac{H^2}{8\pi^2 \epsilon} \bigg|_{k=aH}
+\end{equation}
+
+\newpage
+\section{Numerical Procedure for Scalar Power Spectrum}
+\label{sec:numerical}
+
+While slow-roll approximations are useful, multi-field models often require exact numerical integration. The procedure to derive the exact power spectrum for $n$ scalar fields is as follows:
+
+\begin{enumerate}
+    \item \textbf{Setup:} Define the number of scalar fields, $n$, and the field metric $G_{ij}$. If $n > 1$, diagonalize the field metric matrix if necessary.
+    
+    \item \textbf{Initial Conditions (Background):} Set the initial field values. Calculate initial velocities assuming the attractor solution:
+    \begin{equation}
+    \dot{\varphi}^i \Big|_{ic} = -\frac{V_{,i}}{3H} \Big|_{ic}
+    \end{equation}
+    
+    \item \textbf{Background Evolution:} Solve the coupled background equations (Eq. \ref{eq:background_motion}) numerically until the end of inflation, defined by the condition $\epsilon_H = 1$.
+    
+    \item \textbf{Mode Definition:} Select the comoving wavenumber $k$ of interest. It is defined relative to the horizon scale:
+    \begin{equation}
+    k = C \cdot (aH)_{ic}
+    \end{equation}
+    where we choose $C \gg 1$ to ensure the mode starts deep inside the horizon (sub-horizon).
+    
+    \item \textbf{Perturbation Integration:} Solve the system of background equations and perturbation equations simultaneously. 
+    \begin{itemize}
+        \item Use the \textbf{Bunch-Davies} conditions (Eq. 24 in previous notes) to set initial values for $\delta \varphi$ and $\Psi$.
+        \item Integrate until the mode is well outside the horizon ($k \ll aH$) and the solution for the curvature perturbation freezes out.
+    \end{itemize}
+    
+    \item \textbf{Evaluate Observables:} Calculate the curvature perturbation $\mathcal{R}$ and isocurvature modes $\mathcal{S}$ at the end of the integration. Compute the power spectrum using:
+    \begin{equation}
+    P_{\mathcal{R}} = \frac{k^3}{2\pi^2}|\mathcal{R}_k|^2
+    \end{equation}
+\end{enumerate}
+
+\end{document}
