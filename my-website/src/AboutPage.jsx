@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import './App.css';
 
 function AboutPage() {
@@ -62,58 +61,6 @@ function AboutPage() {
            Here you'll find my publications, projects, and notes from my work and interests.
           </p>
         </div>
-      </div>
-
-      <h2
-        style={{
-          color: "#00F5C4",
-          marginBottom: "32px",
-          marginTop: "0px"
-        }}
-      >
-        Fields of Interest
-      </h2>
-
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          gap: "16px",
-          maxWidth: "700px",
-          margin: "0 auto"
-        }}
-      >
-        {['Physics','Python', 'Java & Spring Boot', 'Machine Learning', 'Numerical Analysis',  'DevOps (Docker/K8s)'].map((skill) => {
-          const skillUrl = `/skill/${encodeURIComponent(skill)}`;
-          return (
-            <Link
-              key={skill}
-              to={skillUrl}
-              style={{
-                padding: "12px 24px",
-                backgroundColor: "rgba(0, 245, 196, 0.1)",
-                border: "1px solid #00F5C4",
-                borderRadius: "24px",
-                color: "#00F5C4",
-                fontSize: "16px",
-                fontWeight: "500",
-                transition: "all 0.3s ease",
-                cursor: "pointer",
-                textDecoration: "none",
-                display: "inline-block"
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = "rgba(0, 245, 196, 0.2)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "rgba(0, 245, 196, 0.1)";
-              }}
-            >
-              {skill}
-            </Link>
-          );
-        })}
       </div>
     </div>
   );

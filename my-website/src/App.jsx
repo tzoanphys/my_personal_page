@@ -13,22 +13,21 @@ function App() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // helper style for active menu item
-  const menuItemStyle = (path) => {
-    const isActive = location.pathname === path || (path === '/' && (location.pathname === '/' || location.pathname.startsWith('/skill')));
+  // helper style for horizontal nav bar items
+  const navBarItemStyle = (path) => {
+    const isActive = location.pathname === path && !location.pathname.startsWith('/skill');
     return {
-      cursor: "pointer",
-      margin: "10px 0",
-      padding: "8px 12px",
-      borderRadius: "8px",
+      padding: "12px 20px",
       backgroundColor: isActive ? "#00857A" : "transparent",
       color: isActive ? "white" : "#00F5C4",
-      border: "none",
-      textAlign: "left",
-      width: "100%",
-      fontSize: "18px",
       textDecoration: "none",
-      display: "block"
+      fontSize: "16px",
+      fontWeight: isActive ? "600" : "400",
+      borderRadius: "6px",
+      transition: "all 0.3s ease",
+      cursor: "pointer",
+      border: "none",
+      whiteSpace: "nowrap"
     };
   };
 
@@ -128,49 +127,46 @@ function App() {
           </h2>
         </div>
 
+        {/* Fields of Interest Section */}
         <div style={{ marginTop: "10px" }}>
-          <Link 
-            to="/" 
-            style={menuItemStyle('/')}
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            About &amp; Expertise
-          </Link>
-          <Link 
-            to="/workingexperience" 
-            style={menuItemStyle('/workingexperience')}
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Working Experience
-          </Link>
-          <Link 
-            to="/education" 
-            style={menuItemStyle('/education')}
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Education
-          </Link>
-          <Link 
-            to="/projects" 
-            style={menuItemStyle('/projects')}
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Projects
-          </Link>
-          <Link 
-            to="/publications" 
-            style={menuItemStyle('/publications')}
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Publications
-          </Link>
-          <Link 
-            to="/contact" 
-            style={menuItemStyle('/contact')}
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Contact
-          </Link>
+          {['Physics', 'Python', 'Java & Spring Boot', 'Machine Learning', 'Numerical Analysis', 'DevOps (Docker/K8s)'].map((skill) => {
+            const skillUrl = `/skill/${encodeURIComponent(skill)}`;
+            const isActive = location.pathname === skillUrl;
+            return (
+              <Link
+                key={skill}
+                to={skillUrl}
+                style={{
+                  cursor: "pointer",
+                  margin: "8px 0",
+                  padding: "8px 12px",
+                  borderRadius: "8px",
+                  backgroundColor: isActive ? "#00857A" : "transparent",
+                  color: isActive ? "white" : "#00F5C4",
+                  border: "none",
+                  textAlign: "left",
+                  width: "100%",
+                  fontSize: "16px",
+                  textDecoration: "none",
+                  display: "block",
+                  transition: "all 0.3s ease"
+                }}
+                onClick={() => setMobileMenuOpen(false)}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.target.style.backgroundColor = "rgba(0, 245, 196, 0.1)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.target.style.backgroundColor = "transparent";
+                  }
+                }}
+              >
+                {skill}
+              </Link>
+            );
+          })}
         </div>
       </div>
 
@@ -219,6 +215,123 @@ function App() {
           >
             Researcher • Software/ML
           </h2>
+        </div>
+
+        {/* HORIZONTAL NAVIGATION BAR */}
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "1100px",
+            marginBottom: "32px",
+            backgroundColor: "#111",
+            padding: "12px",
+            borderRadius: "10px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "8px",
+            boxSizing: "border-box"
+          }}
+        >
+          <Link
+            to="/"
+            style={navBarItemStyle('/')}
+            onMouseEnter={(e) => {
+              const isActive = location.pathname === '/' && !location.pathname.startsWith('/skill');
+              if (!isActive) {
+                e.target.style.backgroundColor = "rgba(0, 245, 196, 0.1)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              const isActive = location.pathname === '/' && !location.pathname.startsWith('/skill');
+              if (!isActive) {
+                e.target.style.backgroundColor = "transparent";
+              }
+            }}
+          >
+            About
+          </Link>
+          <Link
+            to="/workingexperience"
+            style={navBarItemStyle('/workingexperience')}
+            onMouseEnter={(e) => {
+              if (location.pathname !== '/workingexperience') {
+                e.target.style.backgroundColor = "rgba(0, 245, 196, 0.1)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (location.pathname !== '/workingexperience') {
+                e.target.style.backgroundColor = "transparent";
+              }
+            }}
+          >
+            Working Experience
+          </Link>
+          <Link
+            to="/education"
+            style={navBarItemStyle('/education')}
+            onMouseEnter={(e) => {
+              if (location.pathname !== '/education') {
+                e.target.style.backgroundColor = "rgba(0, 245, 196, 0.1)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (location.pathname !== '/education') {
+                e.target.style.backgroundColor = "transparent";
+              }
+            }}
+          >
+            Education
+          </Link>
+          <Link
+            to="/projects"
+            style={navBarItemStyle('/projects')}
+            onMouseEnter={(e) => {
+              if (location.pathname !== '/projects') {
+                e.target.style.backgroundColor = "rgba(0, 245, 196, 0.1)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (location.pathname !== '/projects') {
+                e.target.style.backgroundColor = "transparent";
+              }
+            }}
+          >
+            Projects
+          </Link>
+          <Link
+            to="/publications"
+            style={navBarItemStyle('/publications')}
+            onMouseEnter={(e) => {
+              if (location.pathname !== '/publications') {
+                e.target.style.backgroundColor = "rgba(0, 245, 196, 0.1)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (location.pathname !== '/publications') {
+                e.target.style.backgroundColor = "transparent";
+              }
+            }}
+          >
+            Publications
+          </Link>
+          <Link
+            to="/contact"
+            style={navBarItemStyle('/contact')}
+            onMouseEnter={(e) => {
+              if (location.pathname !== '/contact') {
+                e.target.style.backgroundColor = "rgba(0, 245, 196, 0.1)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (location.pathname !== '/contact') {
+                e.target.style.backgroundColor = "transparent";
+              }
+            }}
+          >
+            Contact
+          </Link>
         </div>
 
         {/* CONTENT AREA WITH FIXED MIN HEIGHT */}

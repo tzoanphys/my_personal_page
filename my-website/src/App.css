@@ -70,6 +70,18 @@ body {
     padding: 16px !important;
     margin-bottom: 20px !important;
   }
+
+  /* Navigation bar on mobile */
+  .main-content > div:nth-child(2) {
+    padding: 8px !important;
+    gap: 4px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .main-content > div:nth-child(2) a {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
 }
 
 /* Tablet styles */

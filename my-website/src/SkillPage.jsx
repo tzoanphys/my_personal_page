@@ -32,31 +32,6 @@ function SkillPage() {
 
   return (
     <div style={{ width: "100%", textAlign: "center" }}>
-      <div style={{ marginBottom: "32px" }}>
-        <button
-          onClick={() => navigate('/')}
-          style={{
-            backgroundColor: "transparent",
-            border: "1px solid #00F5C4",
-            color: "#00F5C4",
-            borderRadius: "8px",
-            padding: "10px 20px",
-            cursor: "pointer",
-            fontSize: "16px",
-            transition: "all 0.3s ease",
-            marginBottom: "24px"
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.backgroundColor = "rgba(0, 245, 196, 0.1)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.backgroundColor = "transparent";
-          }}
-        >
-          ← Back to Home
-        </button>
-      </div>
-
       <h2
         style={{
           color: "#00F5C4",
@@ -180,6 +155,30 @@ function SkillPage() {
             </p>
           </div>
         )}
+      </div>
+
+      <div style={{ marginTop: "40px" }}>
+        <button
+          onClick={() => navigate('/')}
+          style={{
+            backgroundColor: "transparent",
+            border: "1px solid #00F5C4",
+            color: "#00F5C4",
+            borderRadius: "8px",
+            padding: "10px 20px",
+            cursor: "pointer",
+            fontSize: "16px",
+            transition: "all 0.3s ease"
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = "rgba(0, 245, 196, 0.1)";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = "transparent";
+          }}
+        >
+          ← Back to Home
+        </button>
       </div>
     </div>
   );
