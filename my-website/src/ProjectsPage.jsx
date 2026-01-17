@@ -70,7 +70,7 @@ function ProjectsPage() {
           }}
         >
           <h3 style={{ color: "#00F5C4", marginTop: 0, marginBottom: "12px" }}>
-            BedsWithBenefits
+            BWithB
           </h3>
           <p style={{ marginBottom: "12px", lineHeight: "1.6" }}>
             A full-stack application built with Java and TypeScript.
