@@ -200,7 +200,7 @@ function App() {
             className="header-title"
             style={{
               margin: 0,
-              fontSize: "44px"
+              fontSize: "32px"
             }}
           >
             Ioanna Stamou
@@ -210,7 +210,7 @@ function App() {
             style={{
               margin: "8px 0 0",
               fontWeight: "normal",
-              fontSize: "22px"
+              fontSize: "18px"
             }}
           >
             Researcher • Software/ML
