@@ -47,7 +47,7 @@ const publications = [
     title: "The CMSSM survives Planck, the LHC, LUX-ZEPLIN, Fermi-LAT, H.E.S.S., IceCube",
     authors: "John R. Ellis, Keith A. Olive, V. C. Spanos, I. D. Stamou ",
     arxiv: "2210.16337",
-    journal: "Phys.Rev.D 107 (2023) 1, 015004",
+    journal: "Eur.Phys.J.C 83 (2023) 3, 246",
     year: "2022"
   },
   {
@@ -68,7 +68,7 @@ const publications = [
     title: "Gravitational Waves and Primordial Black Holes from Supersymmetric Hybrid Inflation",
     authors: "V. C. Spanos, I. D. Stamou",
     arxiv: "2108.05671",
-    journal: "Phys. Rev. D 104, 123537",
+    journal: "Eur.Phys.J.C 83 (2023) 1, 4",
     year: "2021"
   },
   {
@@ -102,8 +102,8 @@ const publications = [
   {
     title: "CONFERENCE: Primordial Black Holes & Gravitational Waves Based On No Scale Supergravity",
     authors: "Ioanna D. Stamou",
-    arxiv: null,
-    journal: null,
+    arxiv: "2111.14190",
+    journal: "J.Phys.Conf.Ser. 2105 (2021) 8",
     year: "2021"
   }
 ];

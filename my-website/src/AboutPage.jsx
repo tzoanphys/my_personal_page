@@ -62,6 +62,37 @@ function AboutPage() {
           </p>
         </div>
       </div>
+
+      {/* Footer */}
+      <div
+        style={{
+          marginTop: "200px",
+          paddingTop: "40px",
+          borderTop: "2px solid rgba(0, 245, 196, 0.2)",
+          width: "100%",
+          textAlign: "center"
+        }}
+      >
+        <p
+          style={{
+            color: "#888",
+            fontSize: "16px",
+            margin: 0,
+            fontStyle: "italic",
+            letterSpacing: "0.5px"
+          }}
+        >
+          Created by{" "}
+          <span
+            style={{
+              color: "#00F5C4",
+              fontWeight: "500"
+            }}
+          >
+            Ioanna Stamou
+          </span>
+        </p>
+      </div>
     </div>
   );
 }
