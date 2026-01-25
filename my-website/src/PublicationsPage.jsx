@@ -5,7 +5,7 @@ const publications = [
     title: "Mechanisms for producing Primordial Black Holes from Inflationary Models Beyond Fine-Tuning",
     authors: "Ioanna D. Stamou",
     arxiv: "2404.14321",
-    journal: "Universe 2024, 10(6), 241",
+    journal: "Universe 2024, 10 (6), 241",
     year: "2024"
   },
   {
@@ -61,14 +61,14 @@ const publications = [
     title: "Gravitational Waves From No-Scale Supergravity",
     authors: "V. C. Spanos, I. D. Stamou.",
     arxiv: "2205.05595",
-    journal: "Phys.Rev.D 106 (2022) 4, 043506",
+    journal: "Eur.Phys.J.C 83 (2023) 1, 4",
     year: "2022"
   },
   {
     title: "Gravitational Waves and Primordial Black Holes from Supersymmetric Hybrid Inflation",
     authors: "V. C. Spanos, I. D. Stamou",
     arxiv: "2108.05671",
-    journal: "Eur.Phys.J.C 83 (2023) 1, 4",
+    journal: "Phys.Rev.D 104 (2021) 12, 123537",
     year: "2021"
   },
   {
