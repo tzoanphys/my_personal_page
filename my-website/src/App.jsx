@@ -108,7 +108,7 @@ function App() {
           marginBottom: "24px"
         }}>
           <img 
-            src="/unnamed1.jpg" 
+            src="/unnamed2.jpg" 
             alt="Eagle Logo" 
             style={{
               width: "40px",
