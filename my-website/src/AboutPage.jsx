@@ -29,7 +29,7 @@ function AboutPage() {
           }}
         >
           <img
-            src="/img_001_002_004_008.jpg"
+            src="/img_001_linkdl_002.jpg"
             alt="Ioanna Stamou"
             style={{
               width: "160px",
