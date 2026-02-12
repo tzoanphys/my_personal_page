@@ -27,7 +27,7 @@ function ProjectsPage() {
           <p style={{ marginBottom: "12px", lineHeight: "1.6" }}>
             A full stack app to compute the inflationary cosmological perturbations for n fields
           </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             <a
               href="http://cosmology.ioanna-stamou.com"
               target="_blank"
@@ -88,7 +88,7 @@ function ProjectsPage() {
               >
                 <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"/>
               </svg>
-              View Project's Site
+              (Or alternatively)
             </a>
           </div>
         </div>

@@ -129,7 +129,7 @@ function App() {
 
         {/* Fields of Interest Section */}
         <div style={{ marginTop: "10px" }}>
-          {['Physics', 'Python', 'Java & Spring Boot', 'Machine Learning', 'Numerical Analysis', 'DevOps (Docker/K8s)'].map((skill) => {
+          {['Physics', 'Python', 'Machine Learning', 'Java & Spring Boot', 'Numerical Analysis', 'DevOps (Docker/K8s)'].map((skill) => {
             const skillUrl = `/skill/${encodeURIComponent(skill)}`;
             const isActive = location.pathname === skillUrl;
             return (
