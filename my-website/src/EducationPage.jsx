@@ -12,7 +12,9 @@ function EducationPage() {
           borderLeft: "3px solid #00F5C4",
           borderRadius: "4px"
         }}>
-          Ph.D. Physics — National &amp; Kapodistrian University of Athen, Greece (2021)
+          <span style={{ color: "#00F5C4", fontWeight: 600 }}>Ph.D. Physics</span> — National &amp; Kapodistrian University of Athen, Greece, 
+          <br />
+          Department of Nuclear &amp; Particle Physics
         </li>
         <li style={{ 
           padding: "16px 20px", 
@@ -21,7 +23,9 @@ function EducationPage() {
           borderLeft: "3px solid #00F5C4",
           borderRadius: "4px"
         }}>
-          M.Sc. Physics — National &amp; Kapodistrian University of Athen, Greece (2017)
+          <span style={{ color: "#00F5C4", fontWeight: 600 }}>M.Sc. Physics</span> — National &amp; Kapodistrian University of Athen, Greece, 
+          <br />
+          Department of Nuclear &amp; Particle Physics
         </li>
         <li style={{ 
           padding: "16px 20px", 
@@ -30,7 +34,9 @@ function EducationPage() {
           borderLeft: "3px solid #00F5C4",
           borderRadius: "4px"
         }}>
-          B.Sc. Physics — National &amp; Kapodistrian University of Athen, Greece (2014)
+          <span style={{ color: "#00F5C4", fontWeight: 600 }}>B.Sc. Physics</span> — National &amp; Kapodistrian University of Athen, Greece, 
+          <br />
+          Department of Astrophysics, Astronomy and Mechanics
         </li>
       </ul>
     </>
