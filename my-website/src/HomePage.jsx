@@ -1,47 +1,6 @@
-import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
 import './HomePage.css';
-
-const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-function useCalendarGrid() {
-  return useMemo(() => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const today = now.getDate();
-
-    const first = new Date(year, month, 1);
-    const last = new Date(year, month + 1, 0);
-    const firstDayOfWeek = first.getDay();
-    const daysInMonth = last.getDate();
-    const startOffset = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
-
-    const prevMonth = new Date(year, month, 0);
-    const prevDays = prevMonth.getDate();
-    const cells = [];
-
-    for (let i = 0; i < startOffset; i++) {
-      cells.push({ day: prevDays - startOffset + i + 1, otherMonth: true });
-    }
-    for (let d = 1; d <= daysInMonth; d++) {
-      cells.push({ day: d, otherMonth: false, today: d === today });
-    }
-    const remaining = 42 - cells.length;
-    for (let d = 1; d <= remaining; d++) {
-      cells.push({ day: d, otherMonth: true });
-    }
-
-    return {
-      monthName: MONTHS[month],
-      year,
-      cells: cells.slice(0, 42),
-      today
-    };
-  }, []);
-}
 
 /* News items: each has a stable (fixed) date - does not change daily */
 const NEWS_ITEMS = [
@@ -56,8 +15,6 @@ const NEWS_ITEMS = [
 ];
 
 function HomePage() {
-  const calendar = useCalendarGrid();
-
   return (
     <div className="home-page">
       <h2 className="home-welcome-title">Welcome</h2>
@@ -89,27 +46,6 @@ function HomePage() {
             ))}
           </div>
         </section>
-
-        <div className="home-calendar-wrap">
-          <div className="home-calendar">
-            <div className="home-calendar-header">
-              {calendar.monthName} {calendar.year}
-            </div>
-            <div className="home-calendar-grid">
-              {WEEKDAYS.map((d) => (
-                <div key={d} className="home-calendar-weekday">{d}</div>
-              ))}
-              {calendar.cells.map((cell, i) => (
-                <div
-                  key={i}
-                  className={`home-calendar-day ${cell.otherMonth ? 'other-month' : ''} ${cell.today ? 'today' : ''}`}
-                >
-                  {cell.day}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
